@@ -942,6 +942,542 @@ def handle_get_user_info(args: Dict, ig=None, is_logged_in=False, cache=None) ->
     # Fallback to public API
     return handle_get_profile(args, ig=ig, cache=cache)
 
+# ═══════════════════════════════════════════════════════════
+# TOOL 15: follow_user — Follow/Unfollow
+# ═══════════════════════════════════════════════════════════
+
+def handle_follow_user(args: Dict, ig=None, is_logged_in=False) -> str:
+    """Follow or unfollow a user."""
+    username = args.get("username", "").strip().lstrip("@").lower()
+    action = args.get("action", "follow").lower()
+
+    if not username:
+        return "Error: username is required."
+    if not is_logged_in:
+        return "Error: follow/unfollow requires login. You are in anonymous mode."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        # Get user PK first
+        user = ig.users.get_by_username(username)
+        if not user:
+            return f"User '@{username}' not found."
+
+        user_pk = user.get("pk") if isinstance(user, dict) else getattr(user, "pk", None)
+        if not user_pk:
+            return f"Could not get user ID for '@{username}'."
+
+        if action == "follow":
+            ig.friendships.follow(user_pk)
+            return f"✅ Successfully followed @{username}"
+        elif action == "unfollow":
+            ig.friendships.unfollow(user_pk)
+            return f"✅ Successfully unfollowed @{username}"
+        else:
+            return f"Error: unknown action '{action}'. Use 'follow' or 'unfollow'."
+
+    except Exception as e:
+        return f"Error {action}ing @{username}: {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 16: get_followers — Followers list
+# ═══════════════════════════════════════════════════════════
+
+def handle_get_followers(args: Dict, ig=None, is_logged_in=False) -> str:
+    """Get followers list for a user."""
+    username = args.get("username", "").strip().lstrip("@").lower()
+    max_count = min(args.get("max_count", 50), 1000)
+
+    if not username:
+        return "Error: username is required."
+    if not is_logged_in:
+        return "Error: followers list requires login. You are in anonymous mode."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        user = ig.users.get_by_username(username)
+        if not user:
+            return f"User '@{username}' not found."
+
+        user_pk = user.get("pk") if isinstance(user, dict) else getattr(user, "pk", None)
+        if not user_pk:
+            return f"Could not get user ID for '@{username}'."
+
+        followers = ig.friendships.get_all_followers(user_pk, max_count=max_count)
+        if not followers:
+            return f"No followers found for '@{username}' (may be private)."
+
+        lines = [f"Followers of @{username} ({len(followers)} shown):"]
+        lines.append("-" * 50)
+
+        for i, f in enumerate(followers[:max_count], 1):
+            if isinstance(f, dict):
+                fname = f.get("full_name", "")
+                uname = f.get("username", "?")
+                verified = " ✅" if f.get("is_verified") else ""
+                lines.append(f"  {i}. @{uname}{verified}" + (f" ({fname})" if fname else ""))
+            else:
+                uname = getattr(f, "username", str(f))
+                lines.append(f"  {i}. @{uname}")
+
+        return "\n".join(lines)
+
+    except Exception as e:
+        return f"Error getting followers for '@{username}': {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 17: get_following — Following list
+# ═══════════════════════════════════════════════════════════
+
+def handle_get_following(args: Dict, ig=None, is_logged_in=False) -> str:
+    """Get following list for a user."""
+    username = args.get("username", "").strip().lstrip("@").lower()
+    max_count = min(args.get("max_count", 50), 1000)
+
+    if not username:
+        return "Error: username is required."
+    if not is_logged_in:
+        return "Error: following list requires login. You are in anonymous mode."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        user = ig.users.get_by_username(username)
+        if not user:
+            return f"User '@{username}' not found."
+
+        user_pk = user.get("pk") if isinstance(user, dict) else getattr(user, "pk", None)
+        if not user_pk:
+            return f"Could not get user ID for '@{username}'."
+
+        following = ig.friendships.get_all_following(user_pk, max_count=max_count)
+        if not following:
+            return f"No following found for '@{username}' (may be private)."
+
+        lines = [f"Following of @{username} ({len(following)} shown):"]
+        lines.append("-" * 50)
+
+        for i, f in enumerate(following[:max_count], 1):
+            if isinstance(f, dict):
+                fname = f.get("full_name", "")
+                uname = f.get("username", "?")
+                verified = " ✅" if f.get("is_verified") else ""
+                lines.append(f"  {i}. @{uname}{verified}" + (f" ({fname})" if fname else ""))
+            else:
+                uname = getattr(f, "username", str(f))
+                lines.append(f"  {i}. @{uname}")
+
+        return "\n".join(lines)
+
+    except Exception as e:
+        return f"Error getting following for '@{username}': {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 18: get_friendship_status — Relationship check
+# ═══════════════════════════════════════════════════════════
+
+def handle_get_friendship_status(args: Dict, ig=None, is_logged_in=False) -> str:
+    """Check friendship status between me and another user."""
+    username = args.get("username", "").strip().lstrip("@").lower()
+
+    if not username:
+        return "Error: username is required."
+    if not is_logged_in:
+        return "Error: friendship status requires login."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        user = ig.users.get_by_username(username)
+        if not user:
+            return f"User '@{username}' not found."
+
+        user_pk = user.get("pk") if isinstance(user, dict) else getattr(user, "pk", None)
+        if not user_pk:
+            return f"Could not get user ID for '@{username}'."
+
+        status = ig.friendships.show(user_pk)
+        if not status:
+            return f"Could not get friendship status for '@{username}'."
+
+        if isinstance(status, dict):
+            lines = [
+                f"Friendship status with @{username}:",
+                f"  I follow them: {'Yes' if status.get('following') else 'No'}",
+                f"  They follow me: {'Yes' if status.get('followed_by') else 'No'}",
+                f"  Blocked: {'Yes' if status.get('blocking') else 'No'}",
+                f"  Muted: {'Yes' if status.get('muting') else 'No'}",
+                f"  Restricted: {'Yes' if status.get('is_restricted') else 'No'}",
+            ]
+            if status.get("outgoing_request"):
+                lines.append("  Pending follow request: Yes")
+            return "\n".join(lines)
+
+        return f"Friendship with @{username}: {status}"
+
+    except Exception as e:
+        return f"Error checking friendship with '@{username}': {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 19: like_media — Like/Unlike post
+# ═══════════════════════════════════════════════════════════
+
+def _resolve_media_id(media_id_or_url: str, ig) -> str:
+    """Resolve Instagram URL to media PK if needed."""
+    if media_id_or_url.startswith("http"):
+        shortcode_match = re.search(r"/(?:p|reel|tv)/([A-Za-z0-9_-]+)", media_id_or_url)
+        if shortcode_match and hasattr(ig, "media"):
+            shortcode = shortcode_match.group(1)
+            try:
+                info = ig.media.get_by_shortcode(shortcode) if hasattr(ig.media, "get_by_shortcode") else None
+                if info:
+                    return str(info.get("pk", info.get("id", shortcode)))
+            except Exception:
+                pass
+            # Fallback: use shortcode_to_media_id
+            if hasattr(ig.media, "_shortcode_to_media_id"):
+                return str(ig.media._shortcode_to_media_id(shortcode))
+        return media_id_or_url
+    return media_id_or_url
+
+
+def handle_like_media(args: Dict, ig=None, is_logged_in=False) -> str:
+    """Like or unlike a post."""
+    media_id = args.get("media_id", "").strip()
+    action = args.get("action", "like").lower()
+
+    if not media_id:
+        return "Error: media_id or URL is required."
+    if not is_logged_in:
+        return "Error: like/unlike requires login."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        resolved_id = _resolve_media_id(media_id, ig)
+
+        if action == "like":
+            ig.media.like(resolved_id)
+            return f"✅ Liked post (ID: {resolved_id})"
+        elif action == "unlike":
+            ig.media.unlike(resolved_id)
+            return f"✅ Unliked post (ID: {resolved_id})"
+        else:
+            return f"Error: unknown action '{action}'. Use 'like' or 'unlike'."
+
+    except Exception as e:
+        return f"Error {action}ing post: {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 20: comment_media — Add comment
+# ═══════════════════════════════════════════════════════════
+
+def handle_comment_media(args: Dict, ig=None, is_logged_in=False) -> str:
+    """Add comment to a post."""
+    media_id = args.get("media_id", "").strip()
+    text = args.get("text", "").strip()
+
+    if not media_id:
+        return "Error: media_id or URL is required."
+    if not text:
+        return "Error: comment text is required."
+    if not is_logged_in:
+        return "Error: commenting requires login."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        resolved_id = _resolve_media_id(media_id, ig)
+        result = ig.media.comment(resolved_id, text)
+        return f"✅ Comment posted: '{text}' (on post {resolved_id})"
+    except Exception as e:
+        return f"Error commenting: {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 21: get_media_info — Full post info
+# ═══════════════════════════════════════════════════════════
+
+def handle_get_media_info(args: Dict, ig=None) -> str:
+    """Get full information about a post."""
+    media_id = args.get("media_id", "").strip()
+
+    if not media_id:
+        return "Error: media_id or URL is required."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        # Try URL-based lookup first
+        if media_id.startswith("http"):
+            if hasattr(ig, "media") and hasattr(ig.media, "get_by_url_v2"):
+                info = ig.media.get_by_url_v2(media_id)
+            elif hasattr(ig, "public") and hasattr(ig.public, "get_post_by_url"):
+                info = ig.public.get_post_by_url(media_id)
+            else:
+                resolved_id = _resolve_media_id(media_id, ig)
+                info = ig.media.get_full_info(resolved_id) if hasattr(ig.media, "get_full_info") else ig.media.get_info(resolved_id)
+        else:
+            if hasattr(ig, "media") and hasattr(ig.media, "get_full_info"):
+                info = ig.media.get_full_info(media_id)
+            elif hasattr(ig, "media") and hasattr(ig.media, "get_info"):
+                info = ig.media.get_info(media_id)
+            else:
+                return "Error: media info endpoint not available."
+
+        if not info:
+            return f"Post not found: {media_id}"
+
+        if isinstance(info, dict):
+            lines = [
+                f"Post Info:",
+                f"  Type: {info.get('media_type', info.get('type', 'unknown'))}",
+                f"  Owner: @{info.get('owner', {}).get('username', info.get('username', 'N/A'))}",
+                f"  Likes: {info.get('likes', info.get('like_count', 0)):,}",
+                f"  Comments: {info.get('comments_count', info.get('comment_count', 0)):,}",
+            ]
+            caption = info.get("caption", "")
+            if isinstance(caption, dict):
+                caption = caption.get("text", "")
+            if caption:
+                lines.append(f"  Caption: {str(caption)[:200]}")
+
+            shortcode = info.get("code", info.get("shortcode", ""))
+            if shortcode:
+                lines.append(f"  URL: https://instagram.com/p/{shortcode}/")
+
+            views = info.get("views", info.get("play_count", 0))
+            if views:
+                lines.append(f"  Views: {views:,}")
+
+            return "\n".join(lines)
+
+        return f"Post info: {str(info)[:500]}"
+
+    except Exception as e:
+        return f"Error getting post info: {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 22: get_stories — User stories
+# ═══════════════════════════════════════════════════════════
+
+def handle_get_stories(args: Dict, ig=None, is_logged_in=False) -> str:
+    """Get user's stories."""
+    username = args.get("username", "").strip().lstrip("@").lower()
+
+    if not username:
+        return "Error: username is required."
+    if not is_logged_in:
+        return "Error: viewing stories requires login."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        user = ig.users.get_by_username(username)
+        if not user:
+            return f"User '@{username}' not found."
+
+        user_pk = user.get("pk") if isinstance(user, dict) else getattr(user, "pk", None)
+        if not user_pk:
+            return f"Could not get user ID for '@{username}'."
+
+        # Try parsed stories first
+        if hasattr(ig, "stories") and hasattr(ig.stories, "get_stories_parsed"):
+            stories = ig.stories.get_stories_parsed(user_pk)
+        elif hasattr(ig, "stories") and hasattr(ig.stories, "get_user_stories"):
+            stories = ig.stories.get_user_stories(user_pk)
+        else:
+            return "Error: stories API not available."
+
+        if not stories:
+            return f"No active stories for @{username}."
+
+        # Parse response
+        items = []
+        if isinstance(stories, dict):
+            items = stories.get("items", stories.get("reel", {}).get("items", []))
+        elif isinstance(stories, list):
+            items = stories
+
+        if not items:
+            return f"No active stories for @{username}."
+
+        lines = [f"Stories from @{username} ({len(items)} items):"]
+        lines.append("-" * 50)
+
+        for i, item in enumerate(items, 1):
+            if isinstance(item, dict):
+                mtype = "Photo" if item.get("media_type", 1) == 1 else "Video"
+                timestamp = item.get("taken_at", item.get("timestamp", ""))
+                lines.append(f"\n  {i}. [{mtype}] - {timestamp}")
+
+                # Media URL
+                if mtype == "Video":
+                    videos = item.get("video_versions", [])
+                    if videos:
+                        lines.append(f"     URL: {videos[0].get('url', 'N/A')[:100]}")
+                else:
+                    images = item.get("image_versions2", {}).get("candidates", [])
+                    if images:
+                        lines.append(f"     URL: {images[0].get('url', 'N/A')[:100]}")
+
+                viewers = item.get("viewer_count", item.get("total_viewer_count"))
+                if viewers:
+                    lines.append(f"     Viewers: {viewers:,}")
+            else:
+                lines.append(f"\n  {i}. {str(item)[:200]}")
+
+        return "\n".join(lines)
+
+    except Exception as e:
+        return f"Error getting stories for '@{username}': {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 23: send_dm — Direct message
+# ═══════════════════════════════════════════════════════════
+
+def handle_send_dm(args: Dict, ig=None, is_logged_in=False) -> str:
+    """Send a direct message."""
+    username = args.get("username", "").strip().lstrip("@").lower()
+    text = args.get("text", "").strip()
+    thread_id = args.get("thread_id", "").strip()
+
+    if not text:
+        return "Error: message text is required."
+    if not is_logged_in:
+        return "Error: sending DM requires login."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        # If thread_id is given, send directly
+        if thread_id:
+            ig.direct.send_text(thread_id, text)
+            return f"✅ Message sent to thread {thread_id}: '{text}'"
+
+        # Otherwise, need username to create/find thread
+        if not username:
+            return "Error: either username or thread_id is required."
+
+        user = ig.users.get_by_username(username)
+        if not user:
+            return f"User '@{username}' not found."
+
+        user_pk = user.get("pk") if isinstance(user, dict) else getattr(user, "pk", None)
+        if not user_pk:
+            return f"Could not get user ID for '@{username}'."
+
+        # Create new thread with message
+        result = ig.direct.create_thread([user_pk], text=text)
+        return f"✅ Message sent to @{username}: '{text}'"
+
+    except Exception as e:
+        return f"Error sending DM: {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 24: get_hashtag_info — Hashtag data
+# ═══════════════════════════════════════════════════════════
+
+def handle_get_hashtag_info(args: Dict, ig=None, is_logged_in=False) -> str:
+    """Get hashtag information."""
+    hashtag = args.get("hashtag", "").strip().lstrip("#").lower()
+
+    if not hashtag:
+        return "Error: hashtag name is required."
+    if not is_logged_in:
+        return "Error: hashtag info requires login."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        info = ig.hashtags.get_info(hashtag)
+        if not info:
+            return f"Hashtag '#{hashtag}' not found."
+
+        if isinstance(info, dict):
+            lines = [
+                f"Hashtag Info: #{hashtag}",
+                f"  Posts: {info.get('media_count', 0):,}",
+            ]
+            if info.get("name"):
+                lines.append(f"  Name: {info['name']}")
+            if info.get("id"):
+                lines.append(f"  ID: {info['id']}")
+            if info.get("following"):
+                lines.append(f"  You follow: Yes")
+
+            # Try getting related hashtags
+            try:
+                related = ig.hashtags.get_related(hashtag)
+                if related and isinstance(related, list):
+                    related_names = [r.get("name", str(r)) for r in related[:10] if isinstance(r, dict)]
+                    if related_names:
+                        lines.append(f"  Related: {', '.join('#' + n for n in related_names)}")
+            except Exception:
+                pass
+
+            return "\n".join(lines)
+
+        return f"Hashtag #{hashtag}: {str(info)[:500]}"
+
+    except Exception as e:
+        return f"Error getting hashtag info: {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 25: get_my_account — Current user info
+# ═══════════════════════════════════════════════════════════
+
+def handle_get_my_account(args: Dict, ig=None, is_logged_in=False) -> str:
+    """Get current logged-in user info."""
+    if not is_logged_in:
+        return "Error: account info requires login."
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        if hasattr(ig, "account") and hasattr(ig.account, "get_current_user"):
+            user = ig.account.get_current_user()
+        else:
+            return "Error: account API not available."
+
+        if not user or (isinstance(user, dict) and user.get("status") == "fail"):
+            msg = user.get("message", "unknown error") if isinstance(user, dict) else "no data"
+            return f"Error: could not get account info: {msg}"
+
+        if isinstance(user, dict):
+            lines = [
+                f"My Account:",
+                f"  Username: @{user.get('username', 'N/A')}",
+                f"  Full Name: {user.get('full_name', 'N/A')}",
+                f"  Followers: {user.get('followers', user.get('follower_count', 0)):,}",
+                f"  Following: {user.get('following', user.get('following_count', 0)):,}",
+                f"  Posts: {user.get('posts_count', user.get('media_count', 0)):,}",
+                f"  Bio: {user.get('biography', 'N/A')}",
+                f"  Verified: {'Yes' if user.get('is_verified') else 'No'}",
+                f"  Private: {'Yes' if user.get('is_private') else 'No'}",
+            ]
+            if user.get("external_url"):
+                lines.append(f"  Website: {user['external_url']}")
+            if user.get("email"):
+                lines.append(f"  Email: {user['email']}")
+            return "\n".join(lines)
+
+        return f"My account: {str(user)[:500]}"
+
+    except Exception as e:
+        return f"Error getting account info: {e}"
+
 
 # ═══════════════════════════════════════════════════════════
 # TOOL REGISTRY — Maps tool names to handlers
@@ -955,9 +1491,21 @@ TOOL_HANDLERS = {
     "http_request": handle_http_request,
     "create_chart": handle_create_chart,
     "search_web": handle_search_web,
-    # Specialized Instagram tools
+    # Specialized Instagram tools (Phase 1)
     "get_profile": handle_get_profile,
     "get_posts": handle_get_posts,
     "search_users": handle_search_users,
     "get_user_info": handle_get_user_info,
+    # Specialized Instagram tools (Phase 2)
+    "follow_user": handle_follow_user,
+    "get_followers": handle_get_followers,
+    "get_following": handle_get_following,
+    "get_friendship_status": handle_get_friendship_status,
+    "like_media": handle_like_media,
+    "comment_media": handle_comment_media,
+    "get_media_info": handle_get_media_info,
+    "get_stories": handle_get_stories,
+    "send_dm": handle_send_dm,
+    "get_hashtag_info": handle_get_hashtag_info,
+    "get_my_account": handle_get_my_account,
 }

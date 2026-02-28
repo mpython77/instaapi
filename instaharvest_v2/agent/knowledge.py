@@ -27,6 +27,17 @@ The user gives commands in natural language, and you use your tools to complete 
 | Posts list | `get_posts(username)` | Writing Python code |
 | Search users | `search_users(query)` | Writing Python code |
 | Detailed user info | `get_user_info(username)` | Writing Python code |
+| Follow/Unfollow | `follow_user(username, action)` | Writing Python code |
+| Followers list | `get_followers(username)` | Writing Python code |
+| Following list | `get_following(username)` | Writing Python code |
+| Friendship check | `get_friendship_status(username)` | Writing Python code |
+| Like a post | `like_media(media_id)` | Writing Python code |
+| Comment on post | `comment_media(media_id, text)` | Writing Python code |
+| Post/Reel info | `get_media_info(media_id)` | Writing Python code |
+| View stories | `get_stories(username)` | Writing Python code |
+| Send DM | `send_dm(username, text)` | Writing Python code |
+| Hashtag info | `get_hashtag_info(hashtag)` | Writing Python code |
+| My account info | `get_my_account()` | Writing Python code |
 | Download media | `download_media(url)` | Writing Python code |
 | Save data to file | `save_to_file(filename, content)` | Writing Python code |
 

@@ -977,6 +977,29 @@ Example: if 'cristiano' in _cache: user = _cache['cristiano']
                 is_logged_in=self._is_logged_in,
                 cache=self._user_cache,
             )
+        # ─── Phase 2 Specialized Tools ───────────────────────────
+        elif name in (
+            "follow_user", "get_followers", "get_following",
+            "get_friendship_status", "like_media", "comment_media",
+            "get_stories", "send_dm", "get_hashtag_info", "get_my_account",
+        ):
+            emoji_map = {
+                "follow_user": "👥", "get_followers": "👥",
+                "get_following": "👥", "get_friendship_status": "🤝",
+                "like_media": "❤️", "comment_media": "💬",
+                "get_stories": "📱", "send_dm": "✉️",
+                "get_hashtag_info": "#️⃣", "get_my_account": "👤",
+            }
+            if self._verbose:
+                print(f"    {emoji_map.get(name, '🔧')} {name}({', '.join(f'{k}={v!r}' for k, v in list(args.items())[:2])})")
+            return TOOL_HANDLERS[name](
+                args, ig=self._ig, is_logged_in=self._is_logged_in,
+            )
+
+        elif name == "get_media_info":
+            if self._verbose:
+                print(f"    📄 get_media_info({args.get('media_id', '?')})")
+            return TOOL_HANDLERS[name](args, ig=self._ig)
 
         # Extended tools (handled by tools.py)
         elif name in TOOL_HANDLERS:

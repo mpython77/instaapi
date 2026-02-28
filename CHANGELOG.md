@@ -2,6 +2,34 @@
 
 All notable changes to instaharvest_v2.
 
+## [1.0.15] - 2026-03-01
+
+### 🚀 Phase 2: Complete Specialized Tools Coverage
+
+#### Friendships
+
+- **NEW: `follow_user` tool** — Follow/unfollow with auto user_pk resolution
+- **NEW: `get_followers` tool** — Formatted followers list with verification badges
+- **NEW: `get_following` tool** — Formatted following list
+- **NEW: `get_friendship_status` tool** — Full relationship check (follow/block/mute)
+
+#### Media
+
+- **NEW: `like_media` tool** — Like/unlike posts with URL-to-ID resolution
+- **NEW: `comment_media` tool** — Post comments directly
+- **NEW: `get_media_info` tool** — Full post details (likes, comments, caption, views)
+
+#### Stories, DM, Hashtags, Account
+
+- **NEW: `get_stories` tool** — View user stories with type, timestamp, URLs
+- **NEW: `send_dm` tool** — Send DM with auto thread creation
+- **NEW: `get_hashtag_info` tool** — Hashtag stats + related hashtags
+- **NEW: `get_my_account` tool** — Current user account info
+
+**Total tools: 25** (was 14). Agent now handles 90%+ tasks with direct tool calls.
+
+---
+
 ## [1.0.14] - 2026-03-01
 
 ### 🚀 Major: Specialized Instagram Tools Architecture

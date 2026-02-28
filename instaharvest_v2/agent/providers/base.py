@@ -365,6 +365,241 @@ instaharvest_v2_TOOLS = [
             "required": ["username"],
         },
     },
+    # ═══════════════════════════════════════════════════════════
+    # FRIENDSHIPS TOOLS — Follow, unfollow, followers/following lists
+    # ═══════════════════════════════════════════════════════════
+    {
+        "name": "follow_user",
+        "description": (
+            "Follow or unfollow an Instagram user. REQUIRES LOGIN. "
+            "Returns success/failure message."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "description": "Instagram username to follow/unfollow",
+                },
+                "action": {
+                    "type": "string",
+                    "description": "Action: 'follow' or 'unfollow'",
+                },
+            },
+            "required": ["username", "action"],
+        },
+    },
+    {
+        "name": "get_followers",
+        "description": (
+            "Get list of followers for a user. REQUIRES LOGIN. "
+            "Returns list of usernames with follower counts. "
+            "USE THIS when user asks 'who follows X' or 'X ning followerlari'."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "description": "Instagram username",
+                },
+                "max_count": {
+                    "type": "integer",
+                    "description": "Maximum followers to fetch (default: 50, max: 1000)",
+                },
+            },
+            "required": ["username"],
+        },
+    },
+    {
+        "name": "get_following",
+        "description": (
+            "Get list of accounts a user follows. REQUIRES LOGIN. "
+            "Returns list of usernames. "
+            "USE THIS when user asks 'who does X follow' or 'X kim follow qiladi'."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "description": "Instagram username",
+                },
+                "max_count": {
+                    "type": "integer",
+                    "description": "Maximum following to fetch (default: 50, max: 1000)",
+                },
+            },
+            "required": ["username"],
+        },
+    },
+    {
+        "name": "get_friendship_status",
+        "description": (
+            "Check relationship between you and another user. REQUIRES LOGIN. "
+            "Returns: do I follow them? Do they follow me? Blocked? Muted? "
+            "USE THIS when user asks 'do I follow X' or 'does X follow me'."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "description": "Instagram username to check",
+                },
+            },
+            "required": ["username"],
+        },
+    },
+    # ═══════════════════════════════════════════════════════════
+    # MEDIA TOOLS — Like, comment, post info
+    # ═══════════════════════════════════════════════════════════
+    {
+        "name": "like_media",
+        "description": (
+            "Like or unlike an Instagram post/reel. REQUIRES LOGIN. "
+            "Accepts post URL or media ID."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "media_id": {
+                    "type": "string",
+                    "description": "Media PK/ID or Instagram URL (https://instagram.com/p/...)",
+                },
+                "action": {
+                    "type": "string",
+                    "description": "Action: 'like' or 'unlike' (default: 'like')",
+                },
+            },
+            "required": ["media_id"],
+        },
+    },
+    {
+        "name": "comment_media",
+        "description": (
+            "Add a comment to an Instagram post/reel. REQUIRES LOGIN. "
+            "Returns the posted comment data."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "media_id": {
+                    "type": "string",
+                    "description": "Media PK/ID or Instagram URL",
+                },
+                "text": {
+                    "type": "string",
+                    "description": "Comment text",
+                },
+            },
+            "required": ["media_id", "text"],
+        },
+    },
+    {
+        "name": "get_media_info",
+        "description": (
+            "Get full information about a specific post/reel. "
+            "Returns: likes, comments, caption, media type, owner, url. "
+            "Works with both media ID and Instagram URL. "
+            "USE THIS when user asks about a specific post."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "media_id": {
+                    "type": "string",
+                    "description": "Media PK/ID or Instagram URL (https://instagram.com/p/...)",
+                },
+            },
+            "required": ["media_id"],
+        },
+    },
+    # ═══════════════════════════════════════════════════════════
+    # STORIES TOOL
+    # ═══════════════════════════════════════════════════════════
+    {
+        "name": "get_stories",
+        "description": (
+            "Get Instagram stories for a user. REQUIRES LOGIN. "
+            "Returns list of story items with type, timestamp, media URLs. "
+            "USE THIS when user asks for someone's stories."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "description": "Instagram username",
+                },
+            },
+            "required": ["username"],
+        },
+    },
+    # ═══════════════════════════════════════════════════════════
+    # DIRECT MESSAGE TOOL
+    # ═══════════════════════════════════════════════════════════
+    {
+        "name": "send_dm",
+        "description": (
+            "Send a direct message to a user. REQUIRES LOGIN. "
+            "Can send text messages to existing threads or create new ones."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "description": "Recipient username (for new thread)",
+                },
+                "text": {
+                    "type": "string",
+                    "description": "Message text to send",
+                },
+                "thread_id": {
+                    "type": "string",
+                    "description": "Existing thread ID (if known, optional)",
+                },
+            },
+            "required": ["text"],
+        },
+    },
+    # ═══════════════════════════════════════════════════════════
+    # HASHTAG TOOL
+    # ═══════════════════════════════════════════════════════════
+    {
+        "name": "get_hashtag_info",
+        "description": (
+            "Get hashtag information: post count, related hashtags. "
+            "REQUIRES LOGIN. "
+            "USE THIS when user asks about a hashtag's popularity or info."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "hashtag": {
+                    "type": "string",
+                    "description": "Hashtag name (without #)",
+                },
+            },
+            "required": ["hashtag"],
+        },
+    },
+    # ═══════════════════════════════════════════════════════════
+    # ACCOUNT TOOL
+    # ═══════════════════════════════════════════════════════════
+    {
+        "name": "get_my_account",
+        "description": (
+            "Get current logged-in user account information. REQUIRES LOGIN. "
+            "Returns: username, followers, following, bio, verification status. "
+            "USE THIS when user asks 'my account info' or 'mening profilim'."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {},
+        },
+    },
 ]
 
 
