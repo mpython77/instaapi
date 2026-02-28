@@ -2,6 +2,19 @@
 
 All notable changes to instaharvest_v2.
 
+## [1.0.16] - 2026-03-01
+
+### 🔧 Fix: Profile Data Completeness
+
+- **Reordered `get_profile_chain`** — web_api first (24 fields, exact counts), html_parse last resort (9 fields, approximate)
+- **NEW: `_get_web_profile_parsed()`** — Parses raw web API response into 24 standardized fields with user_id, is_verified, bio_links, highlights, business info
+- **Enriched `handle_get_profile`** output — 20+ fields shown to user (was 8) including recent posts, bio links, business email/phone
+
+**Before:** html_parse returned first → 9 fields, approximate follower counts
+**After:** web_api returns first → 24 fields, exact follower counts (e.g. 672,011,111 vs 672M)
+
+---
+
 ## [1.0.15] - 2026-03-01
 
 ### 🚀 Phase 2: Complete Specialized Tools Coverage

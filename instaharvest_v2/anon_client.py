@@ -1275,19 +1275,22 @@ class AnonClient:
     def get_profile_chain(self, username: str) -> Optional[Dict]:
         """
         Get profile using fallback chain.
-        Tries all strategies in order until one succeeds.
+        Order: Web API (best data) → GraphQL → HTML parse (last resort).
+        Uses data merging: enrich result with any extra fields from other strategies.
         """
+        # Primary strategies — ordered by data completeness
         strategies = [
-            ("html_parse", lambda: self.get_profile_html(username)),
-            ("web_api", lambda: self.get_web_profile(username)),
+            ("web_api", lambda: self._get_web_profile_parsed(username)),
             ("graphql", lambda: self._graphql_profile_fallback(username)),
+            ("html_parse", lambda: self.get_profile_html(username)),
         ]
 
         for name, fn in strategies:
             try:
                 result = fn()
-                if result:
+                if result and (result.get("username") or result.get("followers")):
                     logger.info(f"[Anon] Profile '{username}' fetched via {name}")
+                    result["_strategy"] = name
                     return result
                 logger.debug(f"[Anon] Strategy {name} returned empty for '{username}'")
             except Exception as e:
@@ -1296,6 +1299,48 @@ class AnonClient:
 
         logger.warning(f"[Anon] All strategies failed for profile '{username}'")
         return None
+
+    def _get_web_profile_parsed(self, username: str) -> Optional[Dict]:
+        """
+        Get profile via web API and parse into standardized format.
+        Returns the richest data (50+ fields → parsed to 20+ standard fields).
+        """
+        raw = self.get_web_profile(username)
+        if not raw or not isinstance(raw, dict):
+            return None
+
+        # Parse raw web_profile_info response into clean format
+        edges_media = raw.get("edge_owner_to_timeline_media", {})
+        bio_links = raw.get("bio_links", [])
+
+        profile = {
+            "user_id": raw.get("id"),
+            "username": raw.get("username"),
+            "full_name": raw.get("full_name"),
+            "biography": raw.get("biography", ""),
+            "profile_pic_url": raw.get("profile_pic_url"),
+            "profile_pic_url_hd": raw.get("profile_pic_url_hd", raw.get("profile_pic_url")),
+            "is_private": raw.get("is_private", False),
+            "is_verified": raw.get("is_verified", False),
+            "is_business": raw.get("is_business_account", False),
+            "category": raw.get("category_name", raw.get("business_category_name", "")),
+            "external_url": raw.get("external_url"),
+            "followers": raw.get("edge_followed_by", {}).get("count", 0),
+            "following": raw.get("edge_follow", {}).get("count", 0),
+            "posts_count": edges_media.get("count", 0),
+            "bio_links": bio_links if isinstance(bio_links, list) else [],
+            "pronouns": raw.get("pronouns", []),
+            "highlight_count": raw.get("highlight_reel_count", 0),
+            "recent_posts": self._parse_timeline_edges(edges_media.get("edges", [])),
+            # Extra fields from web API
+            "has_clips": raw.get("has_clips", False),
+            "has_guides": raw.get("has_guides", False),
+            "mutual_followers": raw.get("edge_mutual_followed_by", {}).get("count", 0),
+            "business_email": raw.get("business_email"),
+            "business_phone": raw.get("business_phone_number"),
+            "business_address": raw.get("business_address_json"),
+        }
+        return profile
 
     def get_post_chain(self, shortcode: str) -> Optional[Dict]:
         """

@@ -708,60 +708,105 @@ def handle_get_profile(args: Dict, ig=None, cache=None) -> str:
     if cache and username in cache:
         cached = cache[username]
         if isinstance(cached, dict):
-            lines = [
-                f"(From cache) Profile: @{username}",
-                f"Username: {cached.get('username', username)}",
-                f"Full Name: {cached.get('full_name', 'N/A')}",
-                f"Followers: {cached.get('followers', 0):,}",
-                f"Following: {cached.get('following', 0):,}",
-                f"Posts: {cached.get('posts_count', 0):,}",
-                f"Bio: {cached.get('biography', 'N/A')}",
-                f"Verified: {'Yes' if cached.get('is_verified') else 'No'}",
-                f"Private: {'Yes' if cached.get('is_private') else 'No'}",
-            ]
-            pic = cached.get("profile_pic_url") or cached.get("profile_pic_url_hd")
-            if pic:
-                lines.append(f"Profile Pic: {pic}")
-            return "\n".join(lines)
+            return _format_profile(cached, username, from_cache=True)
 
     try:
         profile = ig.public.get_profile(username)
         if not profile:
             return f"Profile not found: '@{username}'. Check the username spelling."
 
-        # Build formatted output
-        lines = [
-            f"Profile: @{profile.get('username', username)}",
-            f"Full Name: {profile.get('full_name', 'N/A')}",
-            f"Followers: {profile.get('followers', 0):,}",
-            f"Following: {profile.get('following', 0):,}",
-            f"Posts: {profile.get('posts_count', 0):,}",
-            f"Bio: {profile.get('biography', 'N/A')}",
-            f"Verified: {'Yes' if profile.get('is_verified') else 'No'}",
-            f"Private: {'Yes' if profile.get('is_private') else 'No'}",
-        ]
-
-        # Add optional fields
-        pic = profile.get("profile_pic_url") or profile.get("profile_pic_url_hd")
-        if pic:
-            lines.append(f"Profile Pic: {pic}")
-
-        ext_url = profile.get("external_url")
-        if ext_url:
-            lines.append(f"Website: {ext_url}")
-
-        category = profile.get("category_name") or profile.get("category")
-        if category:
-            lines.append(f"Category: {category}")
-
         # Cache for future use
         if cache is not None:
             cache[username] = profile
 
-        return "\n".join(lines)
+        return _format_profile(profile, username)
 
     except Exception as e:
         return f"Error fetching profile '@{username}': {e}"
+
+
+def _format_profile(profile: Dict, username: str, from_cache: bool = False) -> str:
+    """Format profile data into comprehensive output string."""
+    prefix = "(From cache) " if from_cache else ""
+    lines = [
+        f"{prefix}Profile: @{profile.get('username', username)}",
+        f"Full Name: {profile.get('full_name', 'N/A')}",
+        f"Followers: {profile.get('followers', 0):,}",
+        f"Following: {profile.get('following', 0):,}",
+        f"Posts: {profile.get('posts_count', 0):,}",
+        f"Bio: {profile.get('biography', 'N/A')}",
+        f"Verified: {'Yes ✅' if profile.get('is_verified') else 'No'}",
+        f"Private: {'Yes 🔒' if profile.get('is_private') else 'No'}",
+    ]
+
+    # User ID
+    uid = profile.get("user_id") or profile.get("id")
+    if uid:
+        lines.append(f"User ID: {uid}")
+
+    # Business/Creator
+    if profile.get("is_business"):
+        lines.append("Account Type: Business/Creator")
+    category = profile.get("category") or profile.get("category_name")
+    if category:
+        lines.append(f"Category: {category}")
+
+    # Profile picture
+    pic = profile.get("profile_pic_url_hd") or profile.get("profile_pic_url")
+    if pic:
+        lines.append(f"Profile Pic HD: {pic}")
+
+    # Website
+    ext_url = profile.get("external_url")
+    if ext_url:
+        lines.append(f"Website: {ext_url}")
+
+    # Bio links
+    bio_links = profile.get("bio_links", [])
+    if bio_links and isinstance(bio_links, list):
+        for link in bio_links[:5]:
+            if isinstance(link, dict):
+                title = link.get("title", "")
+                url = link.get("url", link.get("lynx_url", ""))
+                if url:
+                    lines.append(f"Bio Link: {title + ' → ' if title else ''}{url}")
+
+    # Highlights
+    hl = profile.get("highlight_count", 0)
+    if hl:
+        lines.append(f"Highlights: {hl}")
+
+    # Pronouns
+    pronouns = profile.get("pronouns", [])
+    if pronouns:
+        lines.append(f"Pronouns: {'/'.join(pronouns)}")
+
+    # Mutual followers
+    mutual = profile.get("mutual_followers", 0)
+    if mutual:
+        lines.append(f"Mutual Followers: {mutual:,}")
+
+    # Business contact info
+    biz_email = profile.get("business_email")
+    if biz_email:
+        lines.append(f"Business Email: {biz_email}")
+    biz_phone = profile.get("business_phone")
+    if biz_phone:
+        lines.append(f"Business Phone: {biz_phone}")
+
+    # Recent posts summary
+    recent = profile.get("recent_posts", [])
+    if recent:
+        lines.append(f"\nRecent Posts ({len(recent)}):")
+        for i, post in enumerate(recent[:5], 1):
+            if isinstance(post, dict):
+                caption = str(post.get("caption", ""))[:60]
+                likes = post.get("likes", post.get("like_count", 0))
+                comments = post.get("comments", post.get("comment_count", 0))
+                lines.append(f"  {i}. {caption}{'...' if len(str(post.get('caption', ''))) > 60 else ''}")
+                lines.append(f"     ❤️ {likes:,}  💬 {comments:,}")
+
+    return "\n".join(lines)
 
 
 # ═══════════════════════════════════════════════════════════
