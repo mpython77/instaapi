@@ -2,6 +2,22 @@
 
 All notable changes to instaharvest_v2.
 
+## [1.0.18] - 2026-03-01
+
+### 🔓 Public Endpoints — No Login Required
+
+- **NEW: `get_ig_public()`** — Anonymous Instagram client using `Instagram.anonymous()`. No session, no cookies, no .env needed.
+- **15 endpoints switched** to anonymous mode:
+  - `/api/public/*` (8 endpoints): profile, posts, reels, highlights, similar, search, comments, media_urls
+  - `/api/analytics/profile` — engagement analysis
+  - `/api/compare` — side-by-side comparison
+  - `/api/batch/scrape` — bulk profile scraping
+  - `/api/download/*` (2 endpoints) — profile pic & post downloads
+  - `/api/tasks/*` (2 endpoints) — scheduled monitoring
+- **Login-only endpoints unchanged**: users, media, feed, stories, friendships, account, notifications, DMs
+
+---
+
 ## [1.0.17] - 2026-03-01
 
 ### 🔧 Web App Endpoint Enrichment

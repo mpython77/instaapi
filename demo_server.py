@@ -66,12 +66,29 @@ _history: List[Dict] = []
 
 
 def get_ig() -> Instagram:
+    """Get authenticated Instagram client (requires .env session)."""
     global _ig
     if _ig is None:
         env_path = os.environ.get("instaharvest_v2_ENV", ".env")
         _ig = Instagram.from_env(env_path)
         logger.info("Instagram client initialized from %s", env_path)
     return _ig
+
+
+_ig_public: Optional[Instagram] = None
+
+
+def get_ig_public() -> Instagram:
+    """Get anonymous Instagram client (NO login needed).
+    
+    Used for all public endpoints — profile, posts, reels,
+    highlights, analytics, compare, batch, downloads.
+    """
+    global _ig_public
+    if _ig_public is None:
+        _ig_public = Instagram.anonymous()
+        logger.info("Anonymous Instagram client initialized (no login)")
+    return _ig_public
 
 
 def get_agent():
@@ -912,7 +929,7 @@ async def get_account_info():
 @app.get("/api/public/profile/{username}")
 async def get_public_profile(username: str):
     try:
-        ig = get_ig()
+        ig = get_ig_public()
         profile = ig.public.get_profile(username)
         return _success(profile, f"Public: @{username}", f"public/profile/{username}")
     except Exception as e:
@@ -922,7 +939,7 @@ async def get_public_profile(username: str):
 @app.get("/api/public/posts/{username}")
 async def get_public_posts(username: str, count: int = 12):
     try:
-        ig = get_ig()
+        ig = get_ig_public()
         posts = ig.public.get_posts(username, max_count=count)
         return _success(posts, f"Posts: @{username} ({len(posts)})", f"public/posts/{username}")
     except Exception as e:
@@ -933,7 +950,7 @@ async def get_public_posts(username: str, count: int = 12):
 async def get_public_reels(username: str, count: int = 12):
     """Get user reels (anonymous)."""
     try:
-        ig = get_ig()
+        ig = get_ig_public()
         reels = ig.public.get_reels(username, max_count=count)
         return _success(reels, f"Reels: @{username} ({len(reels)})", f"public/reels/{username}")
     except Exception as e:
@@ -944,7 +961,7 @@ async def get_public_reels(username: str, count: int = 12):
 async def get_public_highlights(username: str):
     """Get user story highlights (anonymous)."""
     try:
-        ig = get_ig()
+        ig = get_ig_public()
         highlights = ig.public.get_highlights(username)
         return _success(highlights, f"Highlights: @{username}", f"public/highlights/{username}")
     except Exception as e:
@@ -955,7 +972,7 @@ async def get_public_highlights(username: str):
 async def get_public_similar(username: str):
     """Get similar accounts (anonymous)."""
     try:
-        ig = get_ig()
+        ig = get_ig_public()
         similar = ig.public.get_similar_accounts(username)
         return _success(similar, f"Similar accounts for @{username}", f"public/similar/{username}")
     except Exception as e:
@@ -966,7 +983,7 @@ async def get_public_similar(username: str):
 async def public_search(q: str = Query(...), context: str = "blended"):
     """Search Instagram anonymously."""
     try:
-        ig = get_ig()
+        ig = get_ig_public()
         results = ig.public.search(q, context=context)
         return _success(results, f"Search: '{q}' ({context})", "public/search")
     except Exception as e:
@@ -977,7 +994,7 @@ async def public_search(q: str = Query(...), context: str = "blended"):
 async def get_public_comments(shortcode: str, count: int = 24):
     """Get post comments (anonymous)."""
     try:
-        ig = get_ig()
+        ig = get_ig_public()
         comments = ig.public.get_comments(shortcode, max_count=count)
         return _success(comments, f"Comments for {shortcode}", f"public/comments/{shortcode}")
     except Exception as e:
@@ -988,7 +1005,7 @@ async def get_public_comments(shortcode: str, count: int = 24):
 async def get_public_media_urls(shortcode: str):
     """Get all media URLs from a post (anonymous)."""
     try:
-        ig = get_ig()
+        ig = get_ig_public()
         urls = ig.public.get_media_urls(shortcode)
         return _success(urls, f"Media URLs for {shortcode}", f"public/media_urls/{shortcode}")
     except Exception as e:
@@ -1212,7 +1229,7 @@ async def download_profile_pic(request: Request):
         username = body.get("username", "").strip()
         if not username:
             return _error("Username required", 400, "download/profile_pic")
-        ig = get_ig()
+        ig = get_ig_public()
         profile = ig.public.get_profile(username)
         pic_url = _pval(profile, "pic", "")
         if not pic_url:
@@ -1241,7 +1258,7 @@ async def download_posts(request: Request):
         count = min(int(body.get("count", 4)), 20)
         if not username:
             return _error("Username required", 400, "download/posts")
-        ig = get_ig()
+        ig = get_ig_public()
         posts = ig.public.get_posts(username, max_count=count)
         user_dir = DOWNLOADS_DIR / username
         user_dir.mkdir(parents=True, exist_ok=True)
@@ -1279,7 +1296,7 @@ async def download_posts(request: Request):
 async def analytics_profile(username: str):
     """Deep analytics for a user profile."""
     try:
-        ig = get_ig()
+        ig = get_ig_public()
         profile = ig.public.get_profile(username)
         posts = ig.public.get_posts(username, max_count=12)
         followers = _pval(profile, "followers")
@@ -1378,7 +1395,7 @@ async def create_task(request: Request):
         _task_results[task_id] = []
         # Run first check immediately
         try:
-            ig = get_ig()
+            ig = get_ig_public()
             profile = ig.public.get_profile(username)
             snapshot = {
                 "time": datetime.now().isoformat(),
@@ -1418,7 +1435,7 @@ async def run_task(task_id: str):
         return _error("Task not found", 404, "tasks/run")
     task = _scheduled_tasks[task_id]
     try:
-        ig = get_ig()
+        ig = get_ig_public()
         profile = ig.public.get_profile(task["username"])
         snapshot = {
             "time": datetime.now().isoformat(),
@@ -1461,7 +1478,7 @@ async def compare_profiles(users: str = Query(..., description="Comma-separated 
         usernames = [u.strip() for u in users.split(",") if u.strip()][:3]
         if len(usernames) < 2:
             return _error("At least 2 usernames required", 400, "compare")
-        ig = get_ig()
+        ig = get_ig_public()
         profiles = []
         for uname in usernames:
             try:
@@ -1519,7 +1536,7 @@ async def batch_scrape(request: Request):
         usernames = usernames[:20]  # Max 20
         if not usernames:
             return _error("Usernames list required", 400, "batch/scrape")
-        ig = get_ig()
+        ig = get_ig_public()
         results = []
         errors = []
         for uname in usernames:
