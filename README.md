@@ -11,10 +11,13 @@
     <img src="https://img.shields.io/badge/async-full_parity-brightgreen" alt="Async">
     <img src="https://img.shields.io/badge/tests-475_passed-success" alt="Tests">
     <img src="https://img.shields.io/badge/coverage-35%25-green" alt="Coverage">
+    <a href="https://mpython77.github.io/instaapi/"><img src="https://img.shields.io/badge/docs-online-blue?logo=readthedocs" alt="Docs"></a>
   </p>
 </p>
 
 > 32 sync + 32 async modules • 230+ functions • Pydantic models • AI Agent • CI/CD • 475 tests passed
+>
+> 📖 **Documentation:** [mpython77.github.io/instaapi](https://mpython77.github.io/instaapi/)
 
 ---
 
