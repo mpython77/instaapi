@@ -368,6 +368,20 @@ class AnonClient:
         if not result:
             result = self._parse_meta_tags(html)
 
+        # ── ENRICHMENT: always try to fill missing counts from meta tags ──
+        # Methods 1-3 may return a result without followers/following/posts
+        # Meta tags often have these in the description text
+        if result:
+            meta_data = self._parse_meta_tags(html)
+            # Fill in missing counts
+            for key in ("followers", "following", "posts_count"):
+                if not result.get(key) and meta_data.get(key):
+                    result[key] = meta_data[key]
+            # Fill in missing fields
+            for key in ("full_name", "biography", "profile_pic_url", "is_verified", "is_private"):
+                if not result.get(key) and meta_data.get(key):
+                    result[key] = meta_data[key]
+
         if result:
             result["_strategy"] = "html_parse"
             result["_username"] = username
@@ -441,7 +455,9 @@ class AnonClient:
             bio_match = re.search(r'Posts\s*[-–—:]\s*(.*)', desc_text, re.DOTALL)
             if bio_match:
                 bio = bio_match.group(1).strip()
-                if bio:
+                # Filter out auto-generated Instagram summary text
+                # e.g. "see Instagram photos and videos from Name (@user)"
+                if bio and not re.match(r'^see Instagram photos', bio, re.IGNORECASE):
                     data["biography"] = bio
 
         # --- Fallback bio from og:description ---
@@ -451,7 +467,8 @@ class AnonClient:
                 og_desc = re.search(r'<meta[^>]+content="([^"]*)"[^>]+property="og:description"', html)
             if og_desc:
                 desc = html_module.unescape(og_desc.group(1))
-                if desc:
+                # Filter out auto-generated summary text
+                if desc and not re.match(r'^\d+[\d,.]*[KMBkmb]?\s*Followers', desc, re.IGNORECASE):
                     data["biography"] = desc
 
         # --- Fallback bio: use full title text if no bio found yet ---

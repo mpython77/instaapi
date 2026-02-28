@@ -2,7 +2,15 @@
 
 All notable changes to instaharvest_v2.
 
-## [1.0.11] - 2026-02-28
+## [1.0.12] - 2026-03-01
+
+### 🐛 Fix: Intermittent Zero Followers & Wrong Bio
+
+- **Meta tag enrichment**: After ANY parsing method, always fill missing `followers`/`following`/`posts_count` from meta tags
+- **Bio filter**: Auto-generated Instagram summary text ("see Instagram photos and videos from...") no longer shown as biography
+- **og:description filter**: Meta descriptions starting with "672M Followers..." no longer used as bio
+
+---
 
 ### 🧠 Smarter Agent: Mode Awareness & Anti-Hallucination
 
