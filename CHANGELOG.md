@@ -2,7 +2,21 @@
 
 All notable changes to instaharvest_v2.
 
-## [1.0.9] - 2026-02-28
+## [1.0.10] - 2026-02-28
+
+### 🐛 Critical Fix: Agent Infinite Loop
+
+- **Agent was running 15 steps** for a 1-step profile query — now stops after 1-3 steps
+- Removed "try at least 3 alternatives" rule that caused infinite retries
+- Added explicit **STOP CONDITIONS**: max 3 code executions per request, stop on success
+- Fixed all wrong field names in agent prompts:
+  - `edge_followed_by` → `followers` (correct key returned by `get_profile`)
+  - `edge_follow` → `following`
+  - `edge_owner_to_timeline_media` → `posts_count`
+- Updated compact prompt and anonymous mode examples with correct flat dict keys
+- Added "IMPORTANT: get_profile() returns a FLAT dict" warning to prompts
+
+---
 
 ### 🐛 Bug Fixes
 

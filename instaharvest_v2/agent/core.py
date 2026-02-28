@@ -244,16 +244,21 @@ class InstaAgent:
                 "- ig.public.get_comments(shortcode) → list",
                 "- ig.public.get_hashtag_posts(tag) → list",
                 "",
-                "Profile fields: username, biography, is_verified, is_private,",
-                "  edge_followed_by.count (followers), edge_follow.count (following),",
-                "  edge_owner_to_timeline_media.count (posts), profile_pic_url_hd",
+                "Profile fields: username, full_name, biography, is_verified, is_private,",
+                "  followers (count), following (count), posts_count (count),",
+                "  profile_pic_url, profile_pic_url_hd",
+                "",
+                "IMPORTANT: get_profile() returns a flat dict with these TOP-LEVEL keys:",
+                "  followers, following, posts_count — use them DIRECTLY!",
+                "  Do NOT use edge_followed_by or follower_count — they don't exist!",
                 "",
                 "Example:",
                 "```python",
                 "profile = ig.public.get_profile('username')",
                 "if profile:",
-                "    followers = profile.get('edge_followed_by', {}).get('count', 0)",
-                "    print(f'Followers: {followers:,}')",
+                "    print(f'Followers: {profile.get(\"followers\", 0):,}')",
+                "    print(f'Following: {profile.get(\"following\", 0):,}')",
+                "    print(f'Posts: {profile.get(\"posts_count\", 0):,}')",
                 "```",
             ])
         else:
@@ -298,11 +303,12 @@ try:
     profile = ig.public.get_profile('username')
     if profile:
         print(f"Username: {profile.get('username', 'N/A')}")
-        print(f"Followers: {profile.get('edge_followed_by', {}).get('count', 0):,}")
-        print(f"Following: {profile.get('edge_follow', {}).get('count', 0):,}")
-        print(f"Posts: {profile.get('edge_owner_to_timeline_media', {}).get('count', 0):,}")
+        print(f"Followers: {profile.get('followers', 0):,}")
+        print(f"Following: {profile.get('following', 0):,}")
+        print(f"Posts: {profile.get('posts_count', 0):,}")
         print(f"Bio: {profile.get('biography', '')}")
-        print(f"Verified: {profile.get('is_verified', False)}")
+        verified = 'Yes' if profile.get('is_verified') else 'No'
+        print(f"Verified: {verified}")
         # Cache the data
         _cache[profile.get('username', '')] = profile
     else:
@@ -310,6 +316,12 @@ try:
 except Exception as e:
     print(f"Error: {e}")
 ```
+
+### IMPORTANT: get_profile() returns a FLAT dict!
+- Use `profile.get('followers', 0)` — NOT `profile.get('follower_count')` or `profile.get('edge_followed_by')`
+- Use `profile.get('following', 0)` — NOT `profile.get('edge_follow')`
+- Use `profile.get('posts_count', 0)` — NOT `profile.get('edge_owner_to_timeline_media')`
+- These are the ONLY correct field names. All other field names are WRONG.
 
 ### NOT AVAILABLE IN ANONYMOUS MODE:
 - ❌ ig.users.get_by_username() — requires session
