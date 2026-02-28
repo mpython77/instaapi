@@ -2,6 +2,62 @@
 
 All notable changes to instaharvest_v2.
 
+## [1.0.9] - 2026-02-28
+
+### 🐛 Bug Fixes
+
+- **Agent f-string crash**: Banned backslash `\` inside f-string braces — fixes `SyntaxError` on Python 3.10
+- **Agent output language**: Enforced English-only in all `print()` statements (agent now outputs English labels: `Followers`, `Verified`, etc.)
+- **Meta tag parsing**: Enhanced `_parse_meta_tags` with 3 new fallbacks:
+  - Title-based follower/following/posts extraction
+  - `og:description` fallback for biography
+  - Full title text as biography when no other source found
+
+---
+
+## [1.0.8] - 2026-02-28
+
+### 🌐 i18n: Full English Translation
+
+- Translated **27 Uzbek text instances** to English across 5 files:
+  - `stories.py` / `async_stories.py` — docstrings (`get_viewers`, `vote_poll`, `vote_slider`, `answer_quiz`)
+  - `search.py` — class docstring, comments, section headers, error messages
+  - `gemini_provider.py` — error messages and ImportError text
+  - `openai_compatible.py` — error messages in `from_profile()`
+
+---
+
+## [1.0.7] - 2026-02-28
+
+### ✨ Clean Agent TUI (Claude Code Style)
+
+- **Eliminated duplicate code display**: `code` event now skipped entirely in CLI callback
+- **Compact tool_call display**: Shows one-line description + dim API call subtext (e.g., `↳ ig.public.get_profile()`)
+- **Result truncation**: `tool_result` capped at 15 lines max (10 in compact mode)
+- **FallbackConsole**: Updated signature to match new `description` parameter
+
+---
+
+## [1.0.6] - 2026-02-28
+
+### 🐛 Bug Fixes
+
+- **`get_profile` returning zero counts**: Fixed field name mapping in agent knowledge base (`follower_count` → `followers`, `edge_followed_by.count` → `followers`)
+- Updated API reference and code recipes in `knowledge.py` to use correct primary keys
+
+---
+
+## [1.0.5] - 2026-02-28
+
+### 🐛 Bug Fixes
+
+- **Stuck "Thinking..." spinner**: Fixed `Live` object leak in `tui.py` — `stop_thinking()` now called before creating new spinner
+- **Agent hallucination**: Added strict anti-hallucination rules to system prompt — agent must only present actual code execution output
+- **Default permission**: Changed from `ask_once` to `full_access` for smoother CLI experience
+- **Max steps**: Increased agent `max_steps` from 15 to 25
+
+---
+
 ## [1.0.0] - 2026-02-28
 
 ### 🎉 Initial Release — Full-Featured Instagram API Library
