@@ -284,32 +284,34 @@ class InstaAgent:
 
         if self._mode == "anonymous" or not self._is_logged_in:
             parts.append("""
-## MODE: ANONYMOUS (No Login)
+## MODE: ANONYMOUS (No Login) — `_is_logged_in = False`
 - `ig` is available, but no cookie/session
 - Only `ig.public.*` methods work
 - `ig.users.*`, `ig.feed.*`, `ig.friendships.*` — WILL NOT WORK!
 
 ### Rules:
-1. ALWAYS use `ig.public.get_profile(username)` — it returns a dict
-2. When a dict is returned, use `.get()`: `profile.get('follower_count', 0)`
-3. NEVER use `ig.users.get_by_username()` — it requires a session!
+1. ALWAYS use `ig.public.get_profile(username)` — it returns a FLAT dict
+2. Use `.get()` with correct keys: `profile.get('followers', 0)` — NOT 'follower_count'!
+3. NEVER try `ig.users.get_by_username()` — it WILL FAIL, do NOT waste a step!
 4. Follow/unfollow/DM/upload — NOT POSSIBLE, tell the user "login required"
-5. If the user requests a task that requires login:
-   "This task requires login. Add SESSION_ID, CSRF_TOKEN, DS_USER_ID to the .env file."
+5. For a simple profile query: ONE code execution should be enough!
+6. Do NOT write "trying login API first..." — go DIRECTLY to ig.public.*
 
-### Example pattern (ANONYMOUS):
+### Example pattern (ANONYMOUS — ONE STEP!):
 ```python
 try:
     profile = ig.public.get_profile('username')
     if profile:
         print(f"Username: {profile.get('username', 'N/A')}")
+        print(f"Full Name: {profile.get('full_name', 'N/A')}")
         print(f"Followers: {profile.get('followers', 0):,}")
         print(f"Following: {profile.get('following', 0):,}")
         print(f"Posts: {profile.get('posts_count', 0):,}")
         print(f"Bio: {profile.get('biography', '')}")
         verified = 'Yes' if profile.get('is_verified') else 'No'
+        private = 'Yes' if profile.get('is_private') else 'No'
         print(f"Verified: {verified}")
-        # Cache the data
+        print(f"Private: {private}")
         _cache[profile.get('username', '')] = profile
     else:
         print("User not found")

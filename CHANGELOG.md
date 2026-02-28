@@ -2,7 +2,17 @@
 
 All notable changes to instaharvest_v2.
 
-## [1.0.10] - 2026-02-28
+## [1.0.11] - 2026-02-28
+
+### 🧠 Smarter Agent: Mode Awareness & Anti-Hallucination
+
+- **Mode detection**: Agent now checks `_is_logged_in` and skips login API entirely in anonymous mode — no wasted steps
+- **One-step profile**: Anonymous profile queries now complete in **1 step** instead of 3-15
+- **FINAL ANSWER RULE**: Agent must copy EXACT values from code stdout — prevents "Verified: Yes" when code says "Verified: No"
+- **Removed ALL wrong field names**: `follower_count`, `edge_followed_by`, `edge_follow` completely purged from all prompts
+- **English-only code**: All `print()` labels must be in English (agent explains in user's language outside code)
+
+---
 
 ### 🐛 Critical Fix: Agent Infinite Loop
 
