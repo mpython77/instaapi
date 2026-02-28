@@ -24,7 +24,7 @@
 | Proxy management | ✅ Built-in | ⚠️ Basic | ❌ |
 | AI Agent | ✅ 13 providers | ❌ | ❌ |
 | Advanced tools | ✅ 12 tools | ❌ | ❌ |
-| CI/CD + Tests | ✅ 390 tests | ⚠️ Basic | ⚠️ Basic |
+| CI/CD + Tests | ✅ 475 tests | ⚠️ Basic | ⚠️ Basic |
 
 ## Key Features
 
@@ -88,7 +88,7 @@
 
     ---
 
-    390 tests, pytest-cov, GitHub Actions pipeline — lint, test, security, build, benchmark.
+    475 tests, pytest-cov, GitHub Actions pipeline — lint, test, security, build, benchmark.
 
 </div>
 

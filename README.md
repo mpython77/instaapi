@@ -6,15 +6,15 @@
   <p align="center">
     <img src="https://img.shields.io/pypi/v/instaapi?color=blue" alt="PyPI">
     <img src="https://img.shields.io/pypi/pyversions/instaapi" alt="Python">
-    <img src="https://img.shields.io/github/license/instaapi/instaapi" alt="License">
+    <img src="https://img.shields.io/github/license/mpython77/instaapi" alt="License">
     <img src="https://img.shields.io/badge/modules-32+32-green" alt="Modules">
     <img src="https://img.shields.io/badge/async-full_parity-brightgreen" alt="Async">
-    <img src="https://img.shields.io/badge/tests-390_passed-success" alt="Tests">
-    <img src="https://img.shields.io/badge/coverage-33%25-yellow" alt="Coverage">
+    <img src="https://img.shields.io/badge/tests-475_passed-success" alt="Tests">
+    <img src="https://img.shields.io/badge/coverage-35%25-green" alt="Coverage">
   </p>
 </p>
 
-> 32 sync + 32 async modules • 230+ functions • Pydantic models • AI Agent • CI/CD • Performance benchmarks
+> 32 sync + 32 async modules • 230+ functions • Pydantic models • AI Agent • CI/CD • 475 tests passed
 
 ---
 
@@ -435,7 +435,7 @@ print(user.some_new_field)    # works!
 | 🤖 **AI Agent** | 13 providers, natural language control, memory, webhooks |
 | 📊 **12 Advanced tools** | Analytics, Export, Growth, Automation, Monitor, Pipeline, etc. |
 | ✅ **CI/CD** | GitHub Actions — lint, test (3 Python versions), security, build |
-| 🏎️ **Benchmarks** | Import: <200ms, Pydantic: 190K ops/sec, RateLimiter: 540K ops/sec |
+| 🧪 **475 tests** | 35% coverage, pytest-cov, comprehensive unit & integration tests |
 
 ## Speed Modes (Async)
 
@@ -467,9 +467,8 @@ python benchmarks/benchmark.py
 
 **Current status:**
 
-- ✅ 390 tests passed
-- 📊 33.4% code coverage
-- 🏎️ 8/8 benchmarks passed
+- ✅ 475 tests passed
+- 📊 35.3% code coverage
 
 ---
 
@@ -483,19 +482,21 @@ instaapi/
 ├── async_client.py        # Async HTTP client
 ├── challenge.py           # Challenge auto-resolver
 ├── anti_detect.py         # Anti-detection system
-├── session_manager.py     # Multi-account sessions
+├── session_manager.py     # Session auto-refresh
 ├── proxy_manager.py       # Proxy rotation
 ├── rate_limiter.py        # Rate limiting
 ├── multi_account.py       # Multi-account manager
 ├── exceptions.py          # Error classes
 ├── models/                # Pydantic models
 │   ├── user.py            # User, UserShort, BioParsed
-│   ├── media.py           # Media, ImageVersion
+│   ├── media.py           # Media, Caption
 │   ├── comment.py         # Comment
 │   ├── story.py           # Story, Highlight
 │   ├── direct.py          # DirectThread, DirectMessage
-│   └── location.py        # Location
-├── api/                   # API modules (32 sync + 32 async)
+│   ├── location.py        # Location
+│   ├── notification.py    # Notification models
+│   └── public_data.py     # PublicProfile, PublicPost
+├── api/                   # API modules (33 sync + 33 async)
 │   ├── users.py           # User profiles
 │   ├── media.py           # Post interactions
 │   ├── feed.py            # User feeds
@@ -519,18 +520,23 @@ instaapi/
 │   ├── audience.py        # Lookalike audience
 │   ├── comment_manager.py # Comment management
 │   ├── ab_test.py         # A/B testing
-│   └── async_*.py         # All 32 async mirrors
+│   ├── public_data.py     # Public data analytics
+│   ├── discover.py        # Similar user discovery
+│   └── async_*.py         # All 33 async mirrors
 ├── agent/                 # AI Agent system
-│   ├── core.py            # InstaAgent main
-│   ├── providers/         # 13 AI providers
-│   ├── tools/             # 10 built-in tools
+│   ├── core.py            # InstaAgent main class
+│   ├── providers/         # AI providers (Gemini, OpenAI, Claude, etc.)
+│   ├── tools.py           # 10 built-in tools
 │   ├── memory.py          # Conversation memory
-│   ├── templates.py       # Task templates
-│   └── web.py             # Web UI
-├── tests/                 # 390+ tests
-├── benchmarks/            # Performance benchmarks
-├── docs/                  # MkDocs documentation
-└── .github/workflows/     # CI/CD pipeline
+│   ├── templates.py       # 10 task templates
+│   ├── tui.py             # Terminal UI (Rich)
+│   ├── web.py             # Web UI (FastAPI)
+│   ├── webhook.py         # Notifications (Telegram, Discord)
+│   ├── cost_tracker.py    # Token usage & pricing
+│   └── vision.py          # Multimodal image analysis
+tests/                     # 475 tests
+docs/                      # MkDocs documentation
+.github/workflows/         # CI/CD pipeline
 ```
 
 ## CI/CD

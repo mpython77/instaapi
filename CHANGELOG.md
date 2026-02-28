@@ -94,7 +94,7 @@ All notable changes to InstaAPI.
 
 #### Testing & CI/CD
 
-- 390 tests — all passing
+- 475 tests — all passing
 - pytest-cov with coverage thresholds
 - GitHub Actions: lint, test (Python 3.10-3.12), security scan, package build
 

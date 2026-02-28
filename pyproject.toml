@@ -70,9 +70,9 @@ all = [
 instaapi-agent = "instaapi.agent.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/instaapi/instaapi"
-Documentation = "https://github.com/instaapi/instaapi#readme"
-Issues = "https://github.com/instaapi/instaapi/issues"
+Homepage = "https://github.com/mpython77/instaapi"
+Documentation = "https://mpython77.github.io/instaapi/"
+Issues = "https://github.com/mpython77/instaapi/issues"
 
 [tool.setuptools.packages.find]
 include = ["instaapi*"]
