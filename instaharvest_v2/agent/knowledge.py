@@ -143,20 +143,21 @@ profile = ig.public.get_profile("username")
 # Returns dict with keys:
 #   username, full_name, biography, is_private, is_verified,
 #   profile_pic_url, profile_pic_url_hd, external_url,
-#   category_name, is_business_account, pronouns
+#   category, is_business, pronouns
 # 
-# IMPORTANT FIELD NAMES FOR COUNTS (varies by response source):
-#   profile.get("edge_followed_by", {}).get("count", 0)  → followers
-#   profile.get("edge_follow", {}).get("count", 0)        → following
-#   profile.get("edge_owner_to_timeline_media", {}).get("count", 0) → posts
+# IMPORTANT — ACTUAL FIELD NAMES FOR COUNTS:
+#   profile.get("followers", 0)     → follower count (PRIMARY!)
+#   profile.get("following", 0)     → following count (PRIMARY!)
+#   profile.get("posts_count", 0)   → post count (PRIMARY!)
 #
-#   OR (from mobile API / different responses):
+#   FALLBACK field names (from different API responses):
 #   profile.get("follower_count", 0)
-#   profile.get("following_count", 0)
-#   profile.get("media_count", 0)
+#   profile.get("edge_followed_by", {}).get("count", 0)
 #
-# SAFE PATTERN — always try both:
-# followers = profile.get("follower_count") or profile.get("edge_followed_by", {}).get("count", 0)
+# SAFE PATTERN — always try PRIMARY first, then fallbacks:
+# followers = profile.get("followers") or profile.get("follower_count") or profile.get("edge_followed_by", {}).get("count", 0)
+# following = profile.get("following") or profile.get("following_count") or profile.get("edge_follow", {}).get("count", 0)
+# posts = profile.get("posts_count") or profile.get("media_count") or profile.get("edge_owner_to_timeline_media", {}).get("count", 0)
 
 # Get user ID from username
 user_id = ig.public.get_user_id("username")

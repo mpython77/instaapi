@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "instaharvest_v2"
-version = "1.0.5"
+version = "1.0.6"
 description = "Powerful Instagram Private API — anti-detection, async, Pydantic models"
 readme = "README.md"
 license = {text = "MIT"}
