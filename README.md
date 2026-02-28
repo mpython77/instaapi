@@ -4,9 +4,9 @@
     <strong>Powerful Instagram Private API</strong> — async, anti-detection, Pydantic models, AI Agent
   </p>
   <p align="center">
-    <img src="https://img.shields.io/pypi/v/instaharvest_v2?color=blue" alt="PyPI">
-    <img src="https://img.shields.io/pypi/pyversions/instaharvest_v2" alt="Python">
-    <img src="https://img.shields.io/github/license/mpython77/instaharvest_v2" alt="License">
+    <a href="https://pypi.org/project/instaharvest-v2/"><img src="https://img.shields.io/pypi/v/instaharvest-v2?color=blue" alt="PyPI"></a>
+    <a href="https://pypi.org/project/instaharvest-v2/"><img src="https://img.shields.io/pypi/pyversions/instaharvest-v2" alt="Python"></a>
+    <a href="https://github.com/mpython77/instaharvest_v2/blob/main/LICENSE"><img src="https://img.shields.io/github/license/mpython77/instaharvest_v2" alt="License"></a>
     <img src="https://img.shields.io/badge/modules-32+32-green" alt="Modules">
     <img src="https://img.shields.io/badge/async-full_parity-brightgreen" alt="Async">
     <img src="https://img.shields.io/badge/tests-475_passed-success" alt="Tests">
