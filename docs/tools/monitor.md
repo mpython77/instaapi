@@ -79,7 +79,7 @@ stats = ig.monitor.get_stats()
 ## Async Version
 
 ```python
-from instaapi import AsyncInstagram
+from instaharvest_v2 import AsyncInstagram
 
 async with AsyncInstagram.from_env() as ig:
     watcher = ig.monitor.watch("cristiano")

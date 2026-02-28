@@ -7,7 +7,7 @@ Send agent results to external services — Telegram, Discord, Email, or custom 
 ### Setup
 
 ```python
-from instaapi.agent.webhook import WebhookNotifier
+from instaharvest_v2.agent.webhook import WebhookNotifier
 
 notifier = WebhookNotifier()
 
@@ -81,8 +81,8 @@ Schedule agent tasks to run at intervals — cron-like automation.
 ### Basic Usage
 
 ```python
-from instaapi.agent import InstaAgent
-from instaapi.agent.scheduler import AgentScheduler
+from instaharvest_v2.agent import InstaAgent
+from instaharvest_v2.agent.scheduler import AgentScheduler
 
 agent = InstaAgent(ig=ig, provider="gemini", api_key="...")
 scheduler = AgentScheduler(agent)

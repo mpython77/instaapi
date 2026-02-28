@@ -18,14 +18,14 @@ import unittest
 from datetime import datetime, timedelta
 from unittest.mock import MagicMock, patch
 
-from instaapi.models.public_data import (
+from instaharvest_v2.models.public_data import (
     PublicProfile,
     PublicPost,
     HashtagPost,
     ProfileSnapshot,
     PublicDataReport,
 )
-from instaapi.api.public_data import PublicDataAPI, HashtagQuotaTracker
+from instaharvest_v2.api.public_data import PublicDataAPI, HashtagQuotaTracker
 
 
 # ═══════════════════════════════════════════════════════════

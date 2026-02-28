@@ -9,8 +9,8 @@ InstaAPI provides built-in tools to resolve these automatically (`resolve()`) an
 The simplest method is providing a callback function during setup:
 
 ```python
-from instaapi import Instagram
-from instaapi.exceptions import ChallengeRequired
+from instaharvest_v2 import Instagram
+from instaharvest_v2.exceptions import ChallengeRequired
 
 def prompt_for_code(challenge_type, contact_point):
     print(f"Instagram sent a code to your {challenge_type}: {contact_point}")
@@ -40,8 +40,8 @@ If the account uses Gmail, you can use the `EmailVerifier` module to automatical
 ### 2. Configure the Auto-Resolver
 
 ```python
-from instaapi import Instagram
-from instaapi.email_verifier import EmailVerifier
+from instaharvest_v2 import Instagram
+from instaharvest_v2.email_verifier import EmailVerifier
 
 # 1. Init verifier
 verifier = EmailVerifier("credentials.json", "token.json")

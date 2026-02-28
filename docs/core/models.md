@@ -22,7 +22,7 @@ InstaAPI uses Pydantic models for structured, validated data.
 ## User Model
 
 ```python
-from instaapi.models import User
+from instaharvest_v2.models import User
 
 user = ig.users.get_by_username("cristiano")
 ```
@@ -49,7 +49,7 @@ user = ig.users.get_by_username("cristiano")
 ## Media Model
 
 ```python
-from instaapi.models import Media
+from instaharvest_v2.models import Media
 
 media = ig.media.get_by_shortcode("ABC123")
 ```
@@ -93,7 +93,7 @@ data = user.to_dict()
 ## Import
 
 ```python
-from instaapi.models import (
+from instaharvest_v2.models import (
     User, UserShort, Contact, BioParsed,
     Media, Caption,
     Comment,

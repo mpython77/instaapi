@@ -23,7 +23,7 @@ class TestExportFilter(unittest.TestCase):
     """Test ExportFilter data class."""
 
     def test_default_filter(self):
-        from instaapi.api.export import ExportFilter
+        from instaharvest_v2.api.export import ExportFilter
         f = ExportFilter()
         self.assertEqual(f.min_followers, 0)
         self.assertEqual(f.max_followers, 0)
@@ -32,14 +32,14 @@ class TestExportFilter(unittest.TestCase):
         self.assertIsNone(f.is_private)
 
     def test_custom_filter(self):
-        from instaapi.api.export import ExportFilter
+        from instaharvest_v2.api.export import ExportFilter
         f = ExportFilter(min_followers=100, max_followers=5000, has_bio=True)
         self.assertEqual(f.min_followers, 100)
         self.assertEqual(f.max_followers, 5000)
         self.assertTrue(f.has_bio)
 
     def test_filter_match(self):
-        from instaapi.api.export import ExportFilter
+        from instaharvest_v2.api.export import ExportFilter
         f = ExportFilter(min_followers=10, max_followers=1000)
         # Mock user object
         user = {"follower_count": 500, "following_count": 200, "biography": "hey"}
@@ -53,7 +53,7 @@ class TestExportAPI(unittest.TestCase):
     """Test ExportAPI initialization."""
 
     def test_init(self):
-        from instaapi.api.export import ExportAPI
+        from instaharvest_v2.api.export import ExportAPI
         client = MagicMock()
         users = MagicMock()
         friendships = MagicMock()
@@ -73,7 +73,7 @@ class TestAnalyticsAPI(unittest.TestCase):
     """Test AnalyticsAPI methods."""
 
     def setUp(self):
-        from instaapi.api.analytics import AnalyticsAPI
+        from instaharvest_v2.api.analytics import AnalyticsAPI
         self.client = MagicMock()
         self.users = MagicMock()
         self.media = MagicMock()
@@ -136,7 +136,7 @@ class TestAnalyticsAPI(unittest.TestCase):
 
     def test_helper_methods(self):
         """Test static helper methods."""
-        from instaapi.api.analytics import AnalyticsAPI
+        from instaharvest_v2.api.analytics import AnalyticsAPI
         self.assertEqual(AnalyticsAPI._get_likes({"like_count": 50}), 50)
         self.assertEqual(AnalyticsAPI._get_comments({"comment_count": 10}), 10)
         self.assertEqual(AnalyticsAPI._get_timestamp({"taken_at": 100}), 100)
@@ -154,7 +154,7 @@ class TestSchedulerAPI(unittest.TestCase):
     """Test SchedulerAPI."""
 
     def setUp(self):
-        from instaapi.api.scheduler import SchedulerAPI
+        from instaharvest_v2.api.scheduler import SchedulerAPI
         self.upload = MagicMock()
         self.stories = MagicMock()
         self.api = SchedulerAPI(self.upload, self.stories)
@@ -225,12 +225,12 @@ class TestMultiAccountManager(unittest.TestCase):
     """Test MultiAccountManager."""
 
     def test_init_empty(self):
-        from instaapi.multi_account import MultiAccountManager
+        from instaharvest_v2.multi_account import MultiAccountManager
         mgr = MultiAccountManager()
         self.assertEqual(mgr.count, 0)
 
     def test_add_instance(self):
-        from instaapi.multi_account import MultiAccountManager
+        from instaharvest_v2.multi_account import MultiAccountManager
         mgr = MultiAccountManager()
         mock_ig = MagicMock()
         # Remove _session_mgr so AccountInfo falls back to source
@@ -239,7 +239,7 @@ class TestMultiAccountManager(unittest.TestCase):
         self.assertEqual(mgr.count, 1)
 
     def test_get_account(self):
-        from instaapi.multi_account import MultiAccountManager, AccountInfo
+        from instaharvest_v2.multi_account import MultiAccountManager, AccountInfo
         mgr = MultiAccountManager()
         mock_ig = MagicMock()
         # Ensure _session_mgr is None so AccountInfo falls back to source as username
@@ -249,7 +249,7 @@ class TestMultiAccountManager(unittest.TestCase):
         self.assertEqual(result, mock_ig)
 
     def test_get_nonexistent(self):
-        from instaapi.multi_account import MultiAccountManager
+        from instaharvest_v2.multi_account import MultiAccountManager
         mgr = MultiAccountManager()
         result = mgr.get("nonexistent")
         self.assertIsNone(result)
@@ -263,7 +263,7 @@ class TestGrowthAPI(unittest.TestCase):
     """Test GrowthAPI."""
 
     def setUp(self):
-        from instaapi.api.growth import GrowthAPI, GrowthFilters, GrowthLimits
+        from instaharvest_v2.api.growth import GrowthAPI, GrowthFilters, GrowthLimits
         self.client = MagicMock()
         self.users = MagicMock()
         self.friendships = MagicMock()
@@ -273,13 +273,13 @@ class TestGrowthAPI(unittest.TestCase):
         self.assertIsNotNone(self.api)
 
     def test_growth_limits_defaults(self):
-        from instaapi.api.growth import GrowthLimits
+        from instaharvest_v2.api.growth import GrowthLimits
         limits = GrowthLimits()
         self.assertGreater(limits.max_per_hour, 0)
         self.assertGreater(limits.min_delay, 0)
 
     def test_growth_filters_defaults(self):
-        from instaapi.api.growth import GrowthFilters
+        from instaharvest_v2.api.growth import GrowthFilters
         filters = GrowthFilters()
         self.assertEqual(filters.min_followers, 0)
 
@@ -298,23 +298,23 @@ class TestTemplateEngine(unittest.TestCase):
     """Test TemplateEngine."""
 
     def test_basic_template(self):
-        from instaapi.api.automation import TemplateEngine
+        from instaharvest_v2.api.automation import TemplateEngine
         result = TemplateEngine.render("Hello {username}!", {"username": "cristiano"})
         self.assertEqual(result, "Hello cristiano!")
 
     def test_template_with_name(self):
-        from instaapi.api.automation import TemplateEngine
+        from instaharvest_v2.api.automation import TemplateEngine
         result = TemplateEngine.render("Hi {name}", {"name": "Cristiano"})
         self.assertEqual(result, "Hi Cristiano")
 
     def test_random_placeholder(self):
-        from instaapi.api.automation import TemplateEngine
+        from instaharvest_v2.api.automation import TemplateEngine
         result = TemplateEngine.render("Hey {random}")
         self.assertNotEqual(result, "Hey {random}")
         self.assertGreater(len(result), 4)
 
     def test_empty_context(self):
-        from instaapi.api.automation import TemplateEngine
+        from instaharvest_v2.api.automation import TemplateEngine
         result = TemplateEngine.render("Hey {username}")
         self.assertIn("Hey", result)
 
@@ -323,7 +323,7 @@ class TestAutomationAPI(unittest.TestCase):
     """Test AutomationAPI."""
 
     def test_init(self):
-        from instaapi.api.automation import AutomationAPI
+        from instaharvest_v2.api.automation import AutomationAPI
         client = MagicMock()
         direct = MagicMock()
         media = MagicMock()
@@ -341,14 +341,14 @@ class TestAccountWatcher(unittest.TestCase):
     """Test AccountWatcher."""
 
     def test_create_watcher(self):
-        from instaapi.api.monitor import AccountWatcher
+        from instaharvest_v2.api.monitor import AccountWatcher
         w = AccountWatcher("cristiano")
         self.assertEqual(w.username, "cristiano")
         self.assertIsNone(w.user_id)
         self.assertFalse(w.is_initialized)
 
     def test_register_callbacks(self):
-        from instaapi.api.monitor import AccountWatcher
+        from instaharvest_v2.api.monitor import AccountWatcher
         w = AccountWatcher("test")
         cb = lambda: None
         w.on_new_post(cb)
@@ -359,14 +359,14 @@ class TestAccountWatcher(unittest.TestCase):
         self.assertEqual(len(w._on_bio_change), 1)
 
     def test_chaining(self):
-        from instaapi.api.monitor import AccountWatcher
+        from instaharvest_v2.api.monitor import AccountWatcher
         w = AccountWatcher("test")
         result = w.on_new_post(lambda: None).on_follower_change(lambda a,b: None)
         self.assertIsInstance(result, AccountWatcher)
 
     def test_fire_safe(self):
         """Callbacks should not crash on exception."""
-        from instaapi.api.monitor import AccountWatcher
+        from instaharvest_v2.api.monitor import AccountWatcher
         w = AccountWatcher("test")
         def bad_cb(): raise ValueError("boom")
         w.on_new_post(bad_cb)
@@ -378,7 +378,7 @@ class TestMonitorAPI(unittest.TestCase):
     """Test MonitorAPI."""
 
     def setUp(self):
-        from instaapi.api.monitor import MonitorAPI
+        from instaharvest_v2.api.monitor import MonitorAPI
         self.client = MagicMock()
         self.users = MagicMock()
         self.api = MonitorAPI(self.client, self.users)
@@ -425,7 +425,7 @@ class TestMonitorAPI(unittest.TestCase):
         self.assertFalse(self.api.is_running)
 
     def test_extract_state_dict(self):
-        from instaapi.api.monitor import MonitorAPI
+        from instaharvest_v2.api.monitor import MonitorAPI
         state = MonitorAPI._extract_state({"pk": 1, "username": "test", "follower_count": 500})
         self.assertEqual(state["followers"], 500)
         self.assertEqual(state["username"], "test")
@@ -446,12 +446,12 @@ class TestBulkDownloadAPI(unittest.TestCase):
     """Test BulkDownloadAPI."""
 
     def test_init(self):
-        from instaapi.api.bulk_download import BulkDownloadAPI
+        from instaharvest_v2.api.bulk_download import BulkDownloadAPI
         api = BulkDownloadAPI(MagicMock(), MagicMock(), MagicMock())
         self.assertIsNotNone(api)
 
     def test_extract_photo(self):
-        from instaapi.api.bulk_download import BulkDownloadAPI
+        from instaharvest_v2.api.bulk_download import BulkDownloadAPI
         item = {"media_type": 1, "image_versions2": {"candidates": [
             {"url": "http://example.com/img.jpg", "width": 1080, "height": 1080}
         ]}}
@@ -460,7 +460,7 @@ class TestBulkDownloadAPI(unittest.TestCase):
         self.assertIn(".jpg", urls[0][1])
 
     def test_extract_video(self):
-        from instaapi.api.bulk_download import BulkDownloadAPI
+        from instaharvest_v2.api.bulk_download import BulkDownloadAPI
         item = {"media_type": 2, "video_versions": [
             {"url": "http://example.com/vid.mp4", "width": 1080, "height": 1920}
         ]}
@@ -469,7 +469,7 @@ class TestBulkDownloadAPI(unittest.TestCase):
         self.assertIn(".mp4", urls[0][1])
 
     def test_extract_carousel(self):
-        from instaapi.api.bulk_download import BulkDownloadAPI
+        from instaharvest_v2.api.bulk_download import BulkDownloadAPI
         item = {"media_type": 8, "carousel_media": [
             {"media_type": 1, "image_versions2": {"candidates": [{"url": "http://a.com/1.jpg", "width": 1}]}},
             {"media_type": 1, "image_versions2": {"candidates": [{"url": "http://a.com/2.jpg", "width": 1}]}},
@@ -478,7 +478,7 @@ class TestBulkDownloadAPI(unittest.TestCase):
         self.assertEqual(len(urls), 2)
 
     def test_extract_empty(self):
-        from instaapi.api.bulk_download import BulkDownloadAPI
+        from instaharvest_v2.api.bulk_download import BulkDownloadAPI
         urls = BulkDownloadAPI._extract_media_urls({})
         self.assertEqual(len(urls), 0)
 
@@ -491,7 +491,7 @@ class TestHashtagResearchAPI(unittest.TestCase):
     """Test HashtagResearchAPI."""
 
     def setUp(self):
-        from instaapi.api.hashtag_research import HashtagResearchAPI
+        from instaharvest_v2.api.hashtag_research import HashtagResearchAPI
         self.client = MagicMock()
         self.hashtags = MagicMock()
         self.api = HashtagResearchAPI(self.client, self.hashtags)
@@ -544,7 +544,7 @@ class TestPipelineAPI(unittest.TestCase):
     """Test PipelineAPI."""
 
     def setUp(self):
-        from instaapi.api.pipeline import PipelineAPI
+        from instaharvest_v2.api.pipeline import PipelineAPI
         self.client = MagicMock()
         self.users = MagicMock()
         self.friendships = MagicMock()
@@ -553,7 +553,7 @@ class TestPipelineAPI(unittest.TestCase):
 
     def test_create_tables(self):
         """Test SQLite table creation."""
-        from instaapi.api.pipeline import PipelineAPI
+        from instaharvest_v2.api.pipeline import PipelineAPI
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
             db_path = f.name
         try:
@@ -573,7 +573,7 @@ class TestPipelineAPI(unittest.TestCase):
             os.unlink(db_path)
 
     def test_user_to_dict_obj(self):
-        from instaapi.api.pipeline import PipelineAPI
+        from instaharvest_v2.api.pipeline import PipelineAPI
         user = MagicMock()
         user.pk = 123
         user.username = "test"
@@ -592,7 +592,7 @@ class TestPipelineAPI(unittest.TestCase):
         self.assertEqual(result["followers"], 100)
 
     def test_user_to_dict_dict(self):
-        from instaapi.api.pipeline import PipelineAPI
+        from instaharvest_v2.api.pipeline import PipelineAPI
         user = {"pk": 123, "username": "test", "follower_count": 500}
         result = PipelineAPI._user_to_dict(user)
         self.assertEqual(result["followers"], 500)
@@ -637,11 +637,11 @@ class TestAISuggestAPI(unittest.TestCase):
     """Test AISuggestAPI."""
 
     def setUp(self):
-        from instaapi.api.ai_suggest import AISuggestAPI
+        from instaharvest_v2.api.ai_suggest import AISuggestAPI
         self.api = AISuggestAPI(MagicMock(), MagicMock())
 
     def test_extract_keywords(self):
-        from instaapi.api.ai_suggest import AISuggestAPI
+        from instaharvest_v2.api.ai_suggest import AISuggestAPI
         kw = AISuggestAPI._extract_keywords("Beautiful sunset at the beach #nofilter @user")
         self.assertIn("beautiful", kw)
         self.assertIn("sunset", kw)
@@ -650,13 +650,13 @@ class TestAISuggestAPI(unittest.TestCase):
         self.assertNotIn("nofilter", kw)  # hashtag removed
 
     def test_detect_niche_fitness(self):
-        from instaapi.api.ai_suggest import AISuggestAPI
+        from instaharvest_v2.api.ai_suggest import AISuggestAPI
         niche, conf = AISuggestAPI._detect_niche(["gym", "workout", "fitness", "muscle"])
         self.assertEqual(niche, "fitness")
         self.assertGreater(conf, 0)
 
     def test_detect_niche_empty(self):
-        from instaapi.api.ai_suggest import AISuggestAPI
+        from instaharvest_v2.api.ai_suggest import AISuggestAPI
         niche, conf = AISuggestAPI._detect_niche([])
         self.assertEqual(niche, "general")
         self.assertEqual(conf, 0.0)
@@ -686,13 +686,13 @@ class TestAISuggestAPI(unittest.TestCase):
         self.assertGreater(len(result["hashtags"]), 0)
 
     def test_universal_tags(self):
-        from instaapi.api.ai_suggest import AISuggestAPI
+        from instaharvest_v2.api.ai_suggest import AISuggestAPI
         tags = AISuggestAPI._get_universal_tags(5)
         self.assertEqual(len(tags), 5)
         self.assertIn("instagood", tags)
 
     def test_longtail_tags(self):
-        from instaapi.api.ai_suggest import AISuggestAPI
+        from instaharvest_v2.api.ai_suggest import AISuggestAPI
         tags = AISuggestAPI._get_longtail_tags(["travel"], "travel", 10)
         self.assertGreater(len(tags), 0)
 
@@ -705,17 +705,17 @@ class TestAudienceAPI(unittest.TestCase):
     """Test AudienceAPI."""
 
     def test_init(self):
-        from instaapi.api.audience import AudienceAPI
+        from instaharvest_v2.api.audience import AudienceAPI
         api = AudienceAPI(MagicMock(), MagicMock(), MagicMock())
         self.assertIsNotNone(api)
 
     def test_quality_score(self):
-        from instaapi.api.audience import AudienceAPI
+        from instaharvest_v2.api.audience import AudienceAPI
         self.assertEqual(AudienceAPI._audience_quality_score(0.1, 0.2, 1000, 50), "excellent")
         self.assertEqual(AudienceAPI._audience_quality_score(0, 0.8, 10, 1), "low")
 
     def test_score_candidates(self):
-        from instaapi.api.audience import AudienceAPI
+        from instaharvest_v2.api.audience import AudienceAPI
         candidates = {
             "user1": {"username": "user1", "weight": 5, "followers": 5000, "is_verified": True},
             "user2": {"username": "user2", "weight": 1, "followers": 100, "is_verified": False},
@@ -733,7 +733,7 @@ class TestCommentManagerAPI(unittest.TestCase):
     """Test CommentManagerAPI."""
 
     def setUp(self):
-        from instaapi.api.comment_manager import CommentManagerAPI
+        from instaharvest_v2.api.comment_manager import CommentManagerAPI
         self.api = CommentManagerAPI(MagicMock(), MagicMock())
 
     def test_spam_detection(self):
@@ -748,17 +748,17 @@ class TestCommentManagerAPI(unittest.TestCase):
         self.assertTrue(self.api._is_spam("🔥🔥🔥🔥🔥🔥"))
 
     def test_sentiment_positive(self):
-        from instaapi.api.comment_manager import CommentManagerAPI
+        from instaharvest_v2.api.comment_manager import CommentManagerAPI
         self.assertEqual(CommentManagerAPI._quick_sentiment("This is amazing and beautiful!"), "positive")
         self.assertEqual(CommentManagerAPI._quick_sentiment("love this ❤️ 🔥"), "positive")
 
     def test_sentiment_negative(self):
-        from instaapi.api.comment_manager import CommentManagerAPI
+        from instaharvest_v2.api.comment_manager import CommentManagerAPI
         self.assertEqual(CommentManagerAPI._quick_sentiment("This is ugly and terrible"), "negative")
         self.assertEqual(CommentManagerAPI._quick_sentiment("hate this garbage awful"), "negative")
 
     def test_sentiment_neutral(self):
-        from instaapi.api.comment_manager import CommentManagerAPI
+        from instaharvest_v2.api.comment_manager import CommentManagerAPI
         self.assertEqual(CommentManagerAPI._quick_sentiment("ok"), "neutral")
         self.assertEqual(CommentManagerAPI._quick_sentiment(""), "neutral")
 
@@ -771,7 +771,7 @@ class TestABTestAPI(unittest.TestCase):
     """Test ABTestAPI."""
 
     def setUp(self):
-        from instaapi.api.ab_test import ABTestAPI
+        from instaharvest_v2.api.ab_test import ABTestAPI
         self.api = ABTestAPI(MagicMock())
         self.api._storage_file = tempfile.mktemp(suffix=".json")
         self.api._tests = {}
@@ -844,19 +844,19 @@ class TestCLI(unittest.TestCase):
     """Test CLI argument parsing."""
 
     def test_parser_creation(self):
-        from instaapi.cli import create_parser
+        from instaharvest_v2.cli import create_parser
         parser = create_parser()
         self.assertIsNotNone(parser)
 
     def test_profile_command(self):
-        from instaapi.cli import create_parser
+        from instaharvest_v2.cli import create_parser
         parser = create_parser()
         args = parser.parse_args(["profile", "cristiano"])
         self.assertEqual(args.command, "profile")
         self.assertEqual(args.username, "cristiano")
 
     def test_export_followers(self):
-        from instaapi.cli import create_parser
+        from instaharvest_v2.cli import create_parser
         parser = create_parser()
         args = parser.parse_args(["export", "followers", "user1", "-o", "out.csv"])
         self.assertEqual(args.command, "export")
@@ -864,34 +864,34 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(args.output, "out.csv")
 
     def test_analytics_engagement(self):
-        from instaapi.cli import create_parser
+        from instaharvest_v2.cli import create_parser
         parser = create_parser()
         args = parser.parse_args(["analytics", "engagement", "user1"])
         self.assertEqual(args.analytics_type, "engagement")
 
     def test_analytics_compare(self):
-        from instaapi.cli import create_parser
+        from instaharvest_v2.cli import create_parser
         parser = create_parser()
         args = parser.parse_args(["analytics", "compare", "a", "b", "c"])
         self.assertEqual(args.analytics_type, "compare")
         self.assertEqual(args.usernames, ["a", "b", "c"])
 
     def test_hashtag_analyze(self):
-        from instaapi.cli import create_parser
+        from instaharvest_v2.cli import create_parser
         parser = create_parser()
         args = parser.parse_args(["hashtag", "analyze", "python"])
         self.assertEqual(args.hashtag_type, "analyze")
         self.assertEqual(args.tag, "python")
 
     def test_download_all(self):
-        from instaapi.cli import create_parser
+        from instaharvest_v2.cli import create_parser
         parser = create_parser()
         args = parser.parse_args(["download", "all", "user", "-o", "dl/"])
         self.assertEqual(args.download_type, "all")
         self.assertEqual(args.output, "dl/")
 
     def test_pipeline_sqlite(self):
-        from instaapi.cli import create_parser
+        from instaharvest_v2.cli import create_parser
         parser = create_parser()
         args = parser.parse_args(["pipeline", "sqlite", "user", "-o", "data.db"])
         self.assertEqual(args.pipeline_type, "sqlite")

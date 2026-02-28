@@ -6,7 +6,7 @@
   <p align="center">
     <img src="https://img.shields.io/pypi/v/instaapi?color=blue" alt="PyPI">
     <img src="https://img.shields.io/pypi/pyversions/instaapi" alt="Python">
-    <img src="https://img.shields.io/github/license/mpython77/instaapi" alt="License">
+    <img src="https://img.shields.io/github/license/mpython77/instaharvest_v2" alt="License">
     <img src="https://img.shields.io/badge/modules-32+32-green" alt="Modules">
     <img src="https://img.shields.io/badge/async-full_parity-brightgreen" alt="Async">
     <img src="https://img.shields.io/badge/tests-475_passed-success" alt="Tests">
@@ -43,7 +43,7 @@ pip install instaapi[all]      # everything
 ### With cookies (.env file)
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram.from_env(".env")
 user = ig.users.get_by_username("cristiano")
@@ -71,7 +71,7 @@ ig.auth.load_session("session.json")   # no re-login needed
 
 ```python
 import asyncio
-from instaapi import AsyncInstagram
+from instaharvest_v2 import AsyncInstagram
 
 async def main():
     async with AsyncInstagram.from_env(mode="fast") as ig:
@@ -120,8 +120,8 @@ post = ig.public.get_post_by_url("https://instagram.com/reel/ABC123/")
 ### 🤖 AI Agent
 
 ```python
-from instaapi import Instagram
-from instaapi.agent import InstaAgent, Permission
+from instaharvest_v2 import Instagram
+from instaharvest_v2.agent import InstaAgent, Permission
 
 ig = Instagram.from_env(".env")
 agent = InstaAgent(

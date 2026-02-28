@@ -5,8 +5,8 @@ When doing heavy authenticated scraping, using a single account/IP will get you 
 ## Quick Example
 
 ```python
-from instaapi import Instagram
-from instaapi.smart_rotation import SmartRotation
+from instaharvest_v2 import Instagram
+from instaharvest_v2.smart_rotation import SmartRotation
 
 # Initialize router
 router = SmartRotation()

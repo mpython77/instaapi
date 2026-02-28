@@ -6,7 +6,7 @@ import logging
 import os
 import tempfile
 import pytest
-from instaapi.log_config import LogConfig
+from instaharvest_v2.log_config import LogConfig
 
 
 class TestLogConfig:
@@ -14,7 +14,7 @@ class TestLogConfig:
 
     def test_configure_default(self):
         logger = LogConfig.configure(level="DEBUG")
-        assert logger.name == "instaapi"
+        assert logger.name == "instaharvest_v2"
         assert logger.level == logging.DEBUG
         assert LogConfig.is_configured() is True
 
@@ -48,26 +48,26 @@ class TestLogConfig:
 
     def test_get_logger(self):
         child = LogConfig.get_logger("client")
-        assert child.name == "instaapi.client"
+        assert child.name == "instaharvest_v2.client"
 
     def test_get_logger_already_namespaced(self):
-        child = LogConfig.get_logger("instaapi.batch")
-        assert child.name == "instaapi.batch"
+        child = LogConfig.get_logger("instaharvest_v2.batch")
+        assert child.name == "instaharvest_v2.batch"
 
     def test_set_level(self):
         LogConfig.configure(level="INFO")
         LogConfig.set_level("DEBUG")
-        root = logging.getLogger("instaapi")
+        root = logging.getLogger("instaharvest_v2")
         assert root.level == logging.DEBUG
 
     def test_silence(self):
         LogConfig.configure(level="DEBUG")
         LogConfig.silence()
-        root = logging.getLogger("instaapi")
+        root = logging.getLogger("instaharvest_v2")
         assert root.level > logging.CRITICAL
 
     def test_child_logger_inherits(self):
         LogConfig.configure(level="DEBUG", console=False)
-        parent = logging.getLogger("instaapi")
-        child = logging.getLogger("instaapi.client")
+        parent = logging.getLogger("instaharvest_v2")
+        child = logging.getLogger("instaharvest_v2.client")
         assert child.getEffectiveLevel() == logging.DEBUG

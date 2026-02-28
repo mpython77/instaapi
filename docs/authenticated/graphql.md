@@ -10,7 +10,7 @@ GraphQL supports two transport modes:
 ## Quick Example
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram.from_env()
 

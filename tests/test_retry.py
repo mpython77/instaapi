@@ -3,8 +3,8 @@ Tests for RetryConfig: delay calculation, jitter, ceiling, should_retry.
 """
 
 import pytest
-from instaapi.retry import RetryConfig
-from instaapi.exceptions import RateLimitError, NetworkError, LoginRequired
+from instaharvest_v2.retry import RetryConfig
+from instaharvest_v2.exceptions import RateLimitError, NetworkError, LoginRequired
 
 
 class TestRetryConfigDefaults:

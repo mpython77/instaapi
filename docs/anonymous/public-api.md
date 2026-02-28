@@ -3,7 +3,7 @@
 High-level synchronous interface for anonymous Instagram data access.
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram.anonymous()
 # or with unlimited speed:

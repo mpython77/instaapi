@@ -73,7 +73,7 @@ ig.stop_proxy_health()
 ## Speed Modes (Async only)
 
 ```python
-from instaapi import AsyncInstagram
+from instaharvest_v2 import AsyncInstagram
 
 # Safe — default, ban-proof
 ig = AsyncInstagram.from_env(mode="safe")
@@ -114,8 +114,8 @@ ig = Instagram.from_env(debug=True, debug_log_file="debug.log")
 ## Retry Configuration
 
 ```python
-from instaapi import Instagram
-from instaapi.retry import RetryConfig
+from instaharvest_v2 import Instagram
+from instaharvest_v2.retry import RetryConfig
 
 ig = Instagram.from_env(
     retry=RetryConfig(

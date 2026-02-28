@@ -5,7 +5,7 @@ For automation tools, running campaigns from a single account is risky. `MultiAc
 ## Quick Example
 
 ```python
-from instaapi.multi_account import MultiAccountManager
+from instaharvest_v2.multi_account import MultiAccountManager
 
 # Setup 3 worker accounts
 manager = MultiAccountManager()

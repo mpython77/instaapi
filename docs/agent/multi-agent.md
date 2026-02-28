@@ -5,8 +5,8 @@
 ## Quick Example
 
 ```python
-from instaapi import Instagram
-from instaapi.agent import InstaAgent, AgentCoordinator, Permission
+from instaharvest_v2 import Instagram
+from instaharvest_v2.agent import InstaAgent, AgentCoordinator, Permission
 
 ig = Instagram.from_env(".env")
 
@@ -90,7 +90,7 @@ AgentCoordinator(
 ## CLI Parallel Mode
 
 ```bash
-python -m instaapi.agent.cli --parallel \
+python -m instaharvest_v2.agent.cli --parallel \
     "Get Cristiano followers" \
     "Get Messi followers" \
     "Get Neymar followers"

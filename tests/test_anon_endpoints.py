@@ -5,7 +5,7 @@ No real HTTP calls — uses unittest.mock to patch _request.
 
 import pytest
 from unittest.mock import MagicMock, patch, AsyncMock
-from instaapi.anon_client import AnonClient, StrategyFailed
+from instaharvest_v2.anon_client import AnonClient, StrategyFailed
 
 
 @pytest.fixture

@@ -4,8 +4,8 @@ Tests for AsyncChallengeHandler — async challenge resolution.
 
 import asyncio
 import pytest
-from instaapi.async_challenge import AsyncChallengeHandler
-from instaapi.challenge import ChallengeType, ChallengeContext, ChallengeResult
+from instaharvest_v2.async_challenge import AsyncChallengeHandler
+from instaharvest_v2.challenge import ChallengeType, ChallengeContext, ChallengeResult
 
 
 class TestAsyncChallengeHandlerInit:

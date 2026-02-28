@@ -6,12 +6,12 @@ Verifies that all throttling is bypassed when unlimited=True.
 import time
 import pytest
 
-from instaapi.config import (
+from instaharvest_v2.config import (
     ANON_RATE_LIMITS_UNLIMITED,
     ANON_REQUEST_DELAYS_UNLIMITED,
 )
-from instaapi.anon_client import AnonRateLimiter, AnonClient
-from instaapi.speed_modes import get_mode, UNLIMITED
+from instaharvest_v2.anon_client import AnonRateLimiter, AnonClient
+from instaharvest_v2.speed_modes import get_mode, UNLIMITED
 
 
 # ─── AnonRateLimiter ─────────────────────────────────────────
@@ -129,27 +129,27 @@ class TestFactoryMethods:
     """Instagram.anonymous(unlimited=True) creates unlimited client."""
 
     def test_sync_anonymous_unlimited(self):
-        from instaapi.instagram import Instagram
+        from instaharvest_v2.instagram import Instagram
         ig = Instagram.anonymous(unlimited=True)
         assert ig._anon_client._unlimited is True
         assert ig._anon_client._rate_limiter._enabled is False
         ig.close()
 
     def test_sync_anonymous_normal(self):
-        from instaapi.instagram import Instagram
+        from instaharvest_v2.instagram import Instagram
         ig = Instagram.anonymous()
         assert ig._anon_client._unlimited is False
         assert ig._anon_client._rate_limiter._enabled is True
         ig.close()
 
     def test_async_anonymous_unlimited(self):
-        from instaapi.async_instagram import AsyncInstagram
+        from instaharvest_v2.async_instagram import AsyncInstagram
         ig = AsyncInstagram.anonymous(unlimited=True)
         assert ig._anon_client._unlimited is True
         assert ig._anon_client._rate_limiter._enabled is False
 
     def test_async_anonymous_normal(self):
-        from instaapi.async_instagram import AsyncInstagram
+        from instaharvest_v2.async_instagram import AsyncInstagram
         ig = AsyncInstagram.anonymous()
         assert ig._anon_client._unlimited is False
         assert ig._anon_client._rate_limiter._enabled is True

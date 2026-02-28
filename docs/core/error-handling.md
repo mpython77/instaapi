@@ -41,8 +41,8 @@ graph TD
 ### Basic Try/Catch
 
 ```python
-from instaapi import Instagram
-from instaapi.exceptions import (
+from instaharvest_v2 import Instagram
+from instaharvest_v2.exceptions import (
     NotFoundError,
     PrivateAccountError,
     RateLimitError,
@@ -66,7 +66,7 @@ except LoginRequired:
 ### ChallengeRequired Details
 
 ```python
-from instaapi.exceptions import ChallengeRequired
+from instaharvest_v2.exceptions import ChallengeRequired
 
 try:
     ig.login("user", "pass")
@@ -92,8 +92,8 @@ All exceptions have:
 InstaAPI automatically retries on transient errors:
 
 ```python
-from instaapi import Instagram
-from instaapi.retry import RetryConfig
+from instaharvest_v2 import Instagram
+from instaharvest_v2.retry import RetryConfig
 
 ig = Instagram(
     retry=RetryConfig(

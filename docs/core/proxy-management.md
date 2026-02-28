@@ -5,7 +5,7 @@ Built-in proxy rotation, health checking, and BrightData integration.
 ## Quick Setup
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram.from_env()
 
@@ -40,7 +40,7 @@ ig.add_proxies([
 ## Rotation Strategies
 
 ```python
-from instaapi.proxy_manager import ProxyManager, RotationStrategy
+from instaharvest_v2.proxy_manager import ProxyManager, RotationStrategy
 
 pm = ProxyManager(strategy=RotationStrategy.ROUND_ROBIN)
 # or
@@ -82,7 +82,7 @@ ig.stop_proxy_health()
 ## Anonymous Scraping with Proxies
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram.anonymous(unlimited=True)
 ig.add_proxies([
@@ -97,7 +97,7 @@ profile = ig.public.get_profile("cristiano")
 ## Async with Proxies
 
 ```python
-from instaapi import AsyncInstagram
+from instaharvest_v2 import AsyncInstagram
 
 async with AsyncInstagram.from_env(mode="turbo") as ig:
     ig.add_proxies(proxy_list)

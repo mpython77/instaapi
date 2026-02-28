@@ -3,7 +3,7 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "instaapi"
+name = "instaharvest_v2"
 version = "1.0.0"
 description = "Powerful Instagram Private API — anti-detection, async, Pydantic models"
 readme = "README.md"
@@ -67,12 +67,12 @@ all = [
 ]
 
 [project.scripts]
-instaapi-agent = "instaapi.agent.cli:main"
+instaapi-agent = "instaharvest_v2.agent.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/mpython77/instaapi"
+Homepage = "https://github.com/mpython77/instaharvest_v2"
 Documentation = "https://mpython77.github.io/instaapi/"
-Issues = "https://github.com/mpython77/instaapi/issues"
+Issues = "https://github.com/mpython77/instaharvest_v2/issues"
 
 [tool.setuptools.packages.find]
 include = ["instaapi*"]
@@ -84,7 +84,7 @@ asyncio_mode = "auto"
 addopts = "-v --tb=short --cov=instaapi --cov-report=term-missing"
 
 [tool.coverage.run]
-source = ["instaapi"]
+source = ["instaharvest_v2"]
 omit = [
     "instaapi/agent/*",
     "instaapi/web/*",

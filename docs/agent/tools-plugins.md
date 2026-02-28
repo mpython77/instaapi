@@ -43,7 +43,7 @@ List files in a directory with size and modification time.
 
 ### 6. `download_media`
 
-Download Instagram photos/videos via InstaAPI.
+Download Instagram photos/videos via instaharvest_v2.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -100,7 +100,7 @@ Search the internet via DuckDuckGo Lite.
 Register your own functions as agent tools using `PluginManager`:
 
 ```python
-from instaapi.agent import InstaAgent
+from instaharvest_v2.agent import InstaAgent
 
 agent = InstaAgent(ig=ig, provider="gemini", api_key="...")
 

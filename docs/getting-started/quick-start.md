@@ -9,7 +9,7 @@ Get up and running in 5 minutes.
 Scrape public Instagram data **without login**:
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 # Create anonymous client
 ig = Instagram.anonymous()
@@ -68,7 +68,7 @@ DS_USER_ID=your_user_id
 ```
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram.from_env(".env")
 
@@ -88,7 +88,7 @@ ig.friendships.follow(user.pk)
 ### Option B: Login with credentials
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram()
 ig.login("your_username", "your_password")
@@ -107,7 +107,7 @@ ig = Instagram.from_session_file("session.json")
 
 ```python
 import asyncio
-from instaapi import AsyncInstagram
+from instaharvest_v2 import AsyncInstagram
 
 async def main():
     async with AsyncInstagram.anonymous(unlimited=True) as ig:

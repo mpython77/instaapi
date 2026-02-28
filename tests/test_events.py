@@ -3,7 +3,7 @@ Tests for EventEmitter: on/off/emit, sync/async callbacks, EventData.
 """
 
 import pytest
-from instaapi.events import EventEmitter, EventType, EventData
+from instaharvest_v2.events import EventEmitter, EventType, EventData
 
 
 class TestEventType:

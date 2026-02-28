@@ -4,9 +4,9 @@ Tests for ResponseHandler: exception mapping and error detection.
 
 import pytest
 from unittest.mock import MagicMock
-from instaapi.response_handler import ResponseHandler
-from instaapi.session_manager import SessionManager, SessionInfo
-from instaapi.exceptions import (
+from instaharvest_v2.response_handler import ResponseHandler
+from instaharvest_v2.session_manager import SessionManager, SessionInfo
+from instaharvest_v2.exceptions import (
     LoginRequired,
     RateLimitError,
     NotFoundError,

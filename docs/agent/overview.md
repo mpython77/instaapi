@@ -14,8 +14,8 @@ InstaAPI's built-in AI Agent lets you control Instagram using **natural language
 ## Quick Start
 
 ```python
-from instaapi import Instagram
-from instaapi.agent import InstaAgent, Permission
+from instaharvest_v2 import Instagram
+from instaharvest_v2.agent import InstaAgent, Permission
 
 ig = Instagram.from_env(".env")
 agent = InstaAgent(
@@ -84,7 +84,7 @@ print(result.answer)
 ## Permission Levels
 
 ```python
-from instaapi.agent import Permission
+from instaharvest_v2.agent import Permission
 
 # Ask before every action (safest)
 agent = InstaAgent(ig=ig, permission=Permission.ASK_EVERY, ...)

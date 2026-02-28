@@ -14,7 +14,7 @@ pip install instaapi
 ## Install from source
 
 ```bash
-git clone https://github.com/mpython77/instaapi.git
+git clone https://github.com/mpython77/instaharvest_v2.git
 cd instaapi
 pip install -e .
 ```
@@ -34,8 +34,8 @@ InstaAPI automatically installs these:
 ## Verify Installation
 
 ```python
-import instaapi
-print(instaapi.__version__)
+import instaharvest_v2
+print(instaharvest_v2.__version__)
 ```
 
 ## Optional Dependencies

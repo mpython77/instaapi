@@ -5,8 +5,8 @@
 ## Quick Example
 
 ```python
-from instaapi import Instagram
-from instaapi.api.growth import GrowthFilters, GrowthLimits
+from instaharvest_v2 import Instagram
+from instaharvest_v2.api.growth import GrowthFilters, GrowthLimits
 
 ig = Instagram.from_env()
 
@@ -114,7 +114,7 @@ ig.growth.add_blacklist(["spam_account"])
 ## GrowthFilters
 
 ```python
-from instaapi.api.growth import GrowthFilters
+from instaharvest_v2.api.growth import GrowthFilters
 
 filters = GrowthFilters(
     min_followers=50,
@@ -141,7 +141,7 @@ filters = GrowthFilters(
 ## GrowthLimits
 
 ```python
-from instaapi.api.growth import GrowthLimits
+from instaharvest_v2.api.growth import GrowthLimits
 
 limits = GrowthLimits(
     max_per_hour=20,

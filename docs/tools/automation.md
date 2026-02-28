@@ -99,7 +99,7 @@ Watch all stories of a user.
 ## AutomationLimits
 
 ```python
-from instaapi.api.automation import AutomationLimits
+from instaharvest_v2.api.automation import AutomationLimits
 
 limits = AutomationLimits(
     max_per_hour=30,
@@ -125,7 +125,7 @@ limits = AutomationLimits(
 Templates support variables and randomization:
 
 ```python
-from instaapi.api.automation import TemplateEngine
+from instaharvest_v2.api.automation import TemplateEngine
 
 # Render a template
 msg = TemplateEngine.render(

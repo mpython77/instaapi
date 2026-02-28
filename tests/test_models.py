@@ -3,9 +3,9 @@ Tests for Pydantic models: User, UserShort, Media, Comment.
 """
 
 import pytest
-from instaapi.models.user import User, UserShort
-from instaapi.models.media import Media
-from instaapi.models.comment import Comment
+from instaharvest_v2.models.user import User, UserShort
+from instaharvest_v2.models.media import Media
+from instaharvest_v2.models.comment import Comment
 
 
 class TestUserModel:

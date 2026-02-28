@@ -112,7 +112,7 @@ pip install instaapi[all]      # everything
 === "Anonymous (no login)"
 
     ```python
-    from instaapi import Instagram
+    from instaharvest_v2 import Instagram
 
     ig = Instagram.anonymous()
     profile = ig.public.get_profile("cristiano")
@@ -122,7 +122,7 @@ pip install instaapi[all]      # everything
 === "Reel / Post Scraping :material-new-box:"
 
     ```python
-    from instaapi import Instagram
+    from instaharvest_v2 import Instagram
 
     ig = Instagram()  # no login needed!
 
@@ -136,7 +136,7 @@ pip install instaapi[all]      # everything
 === "Authenticated"
 
     ```python
-    from instaapi import Instagram
+    from instaharvest_v2 import Instagram
 
     ig = Instagram.from_env(".env")
     user = ig.users.get_by_username("cristiano")
@@ -147,7 +147,7 @@ pip install instaapi[all]      # everything
 
     ```python
     import asyncio
-    from instaapi import AsyncInstagram
+    from instaharvest_v2 import AsyncInstagram
 
     async def main():
         async with AsyncInstagram.anonymous(unlimited=True) as ig:
@@ -160,8 +160,8 @@ pip install instaapi[all]      # everything
 === "AI Agent :material-new-box:"
 
     ```python
-    from instaapi import Instagram
-    from instaapi.agent import InstaAgent, Permission
+    from instaharvest_v2 import Instagram
+    from instaharvest_v2.agent import InstaAgent, Permission
 
     ig = Instagram.from_env(".env")
     agent = InstaAgent(
@@ -179,7 +179,7 @@ pip install instaapi[all]      # everything
 === "Advanced Tools :material-new-box:"
 
     ```python
-    from instaapi import Instagram
+    from instaharvest_v2 import Instagram
 
     ig = Instagram.from_env()
 

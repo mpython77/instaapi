@@ -23,7 +23,7 @@ result = agent.ask("Get Cristiano's followers")
 ### Memory API
 
 ```python
-from instaapi.agent.memory import AgentMemory
+from instaharvest_v2.agent.memory import AgentMemory
 
 mem = AgentMemory(memory_dir=".instaapi_memory")
 
@@ -108,7 +108,7 @@ CLI output:
 ### Custom Callback
 
 ```python
-from instaapi.agent.streaming import StreamHandler
+from instaharvest_v2.agent.streaming import StreamHandler
 
 def my_handler(event_type, data):
     if event_type == "text":
@@ -124,7 +124,7 @@ handler = StreamHandler(callback=my_handler)
 ### Web Streaming (SSE)
 
 ```python
-from instaapi.agent.streaming import WebStreamHandler
+from instaharvest_v2.agent.streaming import WebStreamHandler
 
 handler = WebStreamHandler()
 

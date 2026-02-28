@@ -7,13 +7,13 @@ Interactive and one-shot command-line interface.
 ### One-Shot Question
 
 ```bash
-python -m instaapi.agent.cli "Get Cristiano's follower count"
+python -m instaharvest_v2.agent.cli "Get Cristiano's follower count"
 ```
 
 ### Interactive Chat
 
 ```bash
-python -m instaapi.agent.cli --interactive
+python -m instaharvest_v2.agent.cli --interactive
 ```
 
 ```text
@@ -32,7 +32,7 @@ You: exit
 ### CLI Options
 
 ```bash
-python -m instaapi.agent.cli [OPTIONS] [QUESTION]
+python -m instaharvest_v2.agent.cli [OPTIONS] [QUESTION]
 ```
 
 | Option | Default | Description |
@@ -54,16 +54,16 @@ python -m instaapi.agent.cli [OPTIONS] [QUESTION]
 
 ```bash
 # Use OpenAI
-python -m instaapi.agent.cli --provider openai "Analyze nike engagement"
+python -m instaharvest_v2.agent.cli --provider openai "Analyze nike engagement"
 
 # Use local Ollama
-python -m instaapi.agent.cli --provider ollama --model llama3.2 "Get my followers"
+python -m instaharvest_v2.agent.cli --provider ollama --model llama3.2 "Get my followers"
 
 # Full access (no prompts)
-python -m instaapi.agent.cli --full-access "Like all posts in my feed"
+python -m instaharvest_v2.agent.cli --full-access "Like all posts in my feed"
 
 # Parallel tasks
-python -m instaapi.agent.cli --parallel \
+python -m instaharvest_v2.agent.cli --parallel \
     "Get Cristiano followers" \
     "Get Messi followers" \
     "Get Neymar followers"
@@ -78,14 +78,14 @@ Browser-based chat interface powered by FastAPI.
 ### Start
 
 ```bash
-python -m instaapi.agent.web
+python -m instaharvest_v2.agent.web
 # Opens http://localhost:8899
 ```
 
 ### Web Options
 
 ```bash
-python -m instaapi.agent.web [OPTIONS]
+python -m instaharvest_v2.agent.web [OPTIONS]
 ```
 
 | Option | Default | Description |
@@ -137,7 +137,7 @@ curl -X POST http://localhost:8899/api/parallel \
 ### Programmatic Usage
 
 ```python
-from instaapi.agent.web import create_app
+from instaharvest_v2.agent.web import create_app
 
 app = create_app(
     env_path=".env",

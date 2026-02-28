@@ -7,8 +7,8 @@ You can create your own plugins to inject custom middleware, handle state, or au
 ## Quick Example
 
 ```python
-from instaapi import Instagram
-from instaapi.plugin import Plugin
+from instaharvest_v2 import Instagram
+from instaharvest_v2.plugin import Plugin
 
 class AutoLikerPlugin(Plugin):
     """Automatically likes any post fetched by get_post_by_shortcode"""
@@ -32,7 +32,7 @@ ig.use(AutoLikerPlugin()) # Install the plugin
 
 ## Building a Basic Plugin
 
-Plugins must subclass `instaapi.plugin.Plugin` and specify a string `name`. They are automatically injected with the main client instance as `self.ig`.
+Plugins must subclass `instaharvest_v2.plugin.Plugin` and specify a string `name`. They are automatically injected with the main client instance as `self.ig`.
 
 ```python
 class MyCustomTool(Plugin):

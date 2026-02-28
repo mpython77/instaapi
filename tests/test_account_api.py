@@ -12,7 +12,7 @@ class TestAccountAPI(unittest.TestCase):
     """Test AccountAPI initialization and methods."""
 
     def setUp(self):
-        from instaapi.api.account import AccountAPI
+        from instaharvest_v2.api.account import AccountAPI
         self.client = MagicMock()
         self.api = AccountAPI(self.client)
 
@@ -81,7 +81,7 @@ class TestAccountAPIPrivacy(unittest.TestCase):
     """Test AccountAPI privacy settings."""
 
     def setUp(self):
-        from instaapi.api.account import AccountAPI
+        from instaharvest_v2.api.account import AccountAPI
         self.client = MagicMock()
         self.api = AccountAPI(self.client)
 
@@ -122,7 +122,7 @@ class TestAccountAPISecurity(unittest.TestCase):
     """Test AccountAPI security features."""
 
     def setUp(self):
-        from instaapi.api.account import AccountAPI
+        from instaharvest_v2.api.account import AccountAPI
         self.client = MagicMock()
         self.api = AccountAPI(self.client)
 
@@ -150,7 +150,7 @@ class TestAsyncAccountAPI(unittest.TestCase):
 
     def test_async_init(self):
         """Test AsyncAccountAPI initializes correctly."""
-        from instaapi.api.async_account import AsyncAccountAPI
+        from instaharvest_v2.api.async_account import AsyncAccountAPI
         client = MagicMock()
         api = AsyncAccountAPI(client)
         self.assertIsNotNone(api)

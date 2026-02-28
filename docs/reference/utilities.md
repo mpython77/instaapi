@@ -1,6 +1,6 @@
 # Utilities Reference
 
-Helper functions in `instaapi.utils` for URL/shortcode conversion and data extraction.
+Helper functions in `instaharvest_v2.utils` for URL/shortcode conversion and data extraction.
 
 ## Shortcode / PK Conversion
 
@@ -9,7 +9,7 @@ Helper functions in `instaapi.utils` for URL/shortcode conversion and data extra
 Convert Instagram shortcode to media PK.
 
 ```python
-from instaapi.utils import shortcode_to_pk
+from instaharvest_v2.utils import shortcode_to_pk
 
 pk = shortcode_to_pk("DVDk2dSjcq_")
 # 3124567890123
@@ -20,7 +20,7 @@ pk = shortcode_to_pk("DVDk2dSjcq_")
 Convert media PK to shortcode.
 
 ```python
-from instaapi.utils import pk_to_shortcode
+from instaharvest_v2.utils import pk_to_shortcode
 
 code = pk_to_shortcode(3124567890123)
 # "DVDk2dSjcq_"
@@ -35,7 +35,7 @@ code = pk_to_shortcode(3124567890123)
 Extract shortcode from Instagram URL. Supports `instagram.com/p/`, `instagram.com/reel/`, `instagram.com/tv/`, and `instagr.am/p/`.
 
 ```python
-from instaapi.utils import extract_shortcode
+from instaharvest_v2.utils import extract_shortcode
 
 code = extract_shortcode("https://www.instagram.com/reel/ABC123/")
 # "ABC123"
@@ -46,7 +46,7 @@ code = extract_shortcode("https://www.instagram.com/reel/ABC123/")
 Convert Instagram URL directly to media PK.
 
 ```python
-from instaapi.utils import url_to_media_pk
+from instaharvest_v2.utils import url_to_media_pk
 
 pk = url_to_media_pk("https://www.instagram.com/p/ABC123/")
 ```
@@ -56,7 +56,7 @@ pk = url_to_media_pk("https://www.instagram.com/p/ABC123/")
 Convert media PK to Instagram URL.
 
 ```python
-from instaapi.utils import media_pk_to_url
+from instaharvest_v2.utils import media_pk_to_url
 
 url = media_pk_to_url(3124567890123)
 # "https://www.instagram.com/p/DVDk2dSjcq_/"
@@ -67,7 +67,7 @@ url = media_pk_to_url(3124567890123)
 Extract username from Instagram profile URL.
 
 ```python
-from instaapi.utils import extract_username
+from instaharvest_v2.utils import extract_username
 
 username = extract_username("https://www.instagram.com/cristiano/")
 # "cristiano"
@@ -78,7 +78,7 @@ username = extract_username("https://www.instagram.com/cristiano/")
 Extract story PK from story URL.
 
 ```python
-from instaapi.utils import extract_story_pk
+from instaharvest_v2.utils import extract_story_pk
 
 pk = extract_story_pk("https://www.instagram.com/stories/nike/12345/")
 # "12345"
@@ -93,7 +93,7 @@ pk = extract_story_pk("https://www.instagram.com/stories/nike/12345/")
 Convert media ID (`pk_user_pk` format) to PK.
 
 ```python
-from instaapi.utils import media_id_to_pk
+from instaharvest_v2.utils import media_id_to_pk
 
 pk = media_id_to_pk("1234567890_1234567")
 # 1234567890
@@ -104,7 +104,7 @@ pk = media_id_to_pk("1234567890_1234567")
 Format number in compact form.
 
 ```python
-from instaapi.utils import format_count
+from instaharvest_v2.utils import format_count
 
 format_count(1500)       # "1.5K"
 format_count(2500000)    # "2.5M"

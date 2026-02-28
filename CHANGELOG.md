@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to InstaAPI.
+All notable changes to instaharvest_v2.
 
 ## [1.0.0] - 2026-02-28
 

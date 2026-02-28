@@ -7,14 +7,14 @@ import json
 import pytest
 from unittest.mock import MagicMock, patch, PropertyMock
 
-from instaapi.events import EventEmitter, EventType, EventData
-from instaapi.retry import RetryConfig
-from instaapi.log_config import LogConfig
-from instaapi.dashboard import Dashboard
-from instaapi.plugin import Plugin, PluginManager
-from instaapi.story_composer import StoryComposer, StoryDraft, StoryElement
-from instaapi.proxy_manager import ProxyManager, ProxyInfo
-from instaapi.proxy_health import ProxyHealthChecker
+from instaharvest_v2.events import EventEmitter, EventType, EventData
+from instaharvest_v2.retry import RetryConfig
+from instaharvest_v2.log_config import LogConfig
+from instaharvest_v2.dashboard import Dashboard
+from instaharvest_v2.plugin import Plugin, PluginManager
+from instaharvest_v2.story_composer import StoryComposer, StoryDraft, StoryElement
+from instaharvest_v2.proxy_manager import ProxyManager, ProxyInfo
+from instaharvest_v2.proxy_health import ProxyHealthChecker
 
 
 # ─── DASHBOARD TESTS ──────────────────────────────────────

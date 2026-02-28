@@ -1,6 +1,6 @@
 # Models Dictionary
 
-Complete dictionary mapping to the native `instaapi.models` schema. Extracted payloads provide full code hinting in IDEs like VSCode and PyCharm.
+Complete dictionary mapping to the native `instaharvest_v2.models` schema. Extracted payloads provide full code hinting in IDEs like VSCode and PyCharm.
 
 ## User Models
 

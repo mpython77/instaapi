@@ -5,8 +5,8 @@ InstaAPI includes a robust synchronous `EventEmitter` natively built into the `H
 ## Quick Example
 
 ```python
-from instaapi import Instagram
-from instaapi.events import EventType
+from instaharvest_v2 import Instagram
+from instaharvest_v2.events import EventType
 
 def on_request(data):
     print(f"📡 Making Request: {data.get('url')}")
@@ -23,7 +23,7 @@ ig.on(EventType.CHALLENGE_REQUIRED, on_challenge)
 
 ## Available Event Types
 
-The `instaapi.events.EventType` ENUM defines all supported hooks:
+The `instaharvest_v2.events.EventType` ENUM defines all supported hooks:
 
 | Event Type String | Fired When | Data Payload |
 |---|---|---|

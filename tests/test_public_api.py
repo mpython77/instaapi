@@ -7,10 +7,10 @@ import asyncio
 import pytest
 from unittest.mock import MagicMock, AsyncMock, patch, PropertyMock
 
-from instaapi.anon_client import AnonClient
-from instaapi.async_anon_client import AsyncAnonClient
-from instaapi.api.public import PublicAPI
-from instaapi.api.async_public import AsyncPublicAPI
+from instaharvest_v2.anon_client import AnonClient
+from instaharvest_v2.async_anon_client import AsyncAnonClient
+from instaharvest_v2.api.public import PublicAPI
+from instaharvest_v2.api.async_public import AsyncPublicAPI
 
 
 # ═══════════════════════════════════════════════════════════

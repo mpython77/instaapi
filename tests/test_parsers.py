@@ -5,7 +5,7 @@ that normalize Instagram API responses into clean dicts.
 """
 
 import pytest
-from instaapi.anon_client import AnonClient
+from instaharvest_v2.anon_client import AnonClient
 
 
 @pytest.fixture

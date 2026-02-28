@@ -16,8 +16,8 @@
 ### Analyze Local Image
 
 ```python
-from instaapi.agent.vision import VisionAnalyzer
-from instaapi.agent.providers import get_provider
+from instaharvest_v2.agent.vision import VisionAnalyzer
+from instaharvest_v2.agent.providers import get_provider
 
 provider = get_provider("gemini", api_key="AIza...")
 vision = VisionAnalyzer(provider)

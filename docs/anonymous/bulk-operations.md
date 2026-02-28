@@ -23,7 +23,7 @@ for username, profile in profiles.items():
 
 ```python
 import asyncio
-from instaapi import AsyncInstagram
+from instaharvest_v2 import AsyncInstagram
 
 async def scrape_profiles(usernames):
     async with AsyncInstagram.anonymous(unlimited=True) as ig:

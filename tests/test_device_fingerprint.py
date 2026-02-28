@@ -7,7 +7,7 @@ import os
 import tempfile
 import pytest
 
-from instaapi.device_fingerprint import (
+from instaharvest_v2.device_fingerprint import (
     DeviceFingerprint,
     DEVICE_DATABASE,
     IG_APP_VERSIONS,

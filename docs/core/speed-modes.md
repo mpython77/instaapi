@@ -18,7 +18,7 @@ InstaAPI provides 4 speed modes that control concurrency, delays, and rate limit
 
 ```python
 import asyncio
-from instaapi import AsyncInstagram
+from instaharvest_v2 import AsyncInstagram
 
 async def main():
     # Safe — default, ban-proof
@@ -44,7 +44,7 @@ asyncio.run(main())
 ## SpeedMode Parameters
 
 ```python
-from instaapi.speed_modes import SpeedMode
+from instaharvest_v2.speed_modes import SpeedMode
 
 # Each mode is a frozen dataclass:
 SpeedMode(
@@ -90,7 +90,7 @@ Each escalation level increases delays by 30%.
 ## Custom Mode
 
 ```python
-from instaapi.speed_modes import SpeedMode
+from instaharvest_v2.speed_modes import SpeedMode
 
 custom = SpeedMode(
     name="custom",

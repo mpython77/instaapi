@@ -1,6 +1,6 @@
 # Exception Reference
 
-The `instaapi.exceptions` module structures all possible faults into a clean hierarchy. Catching specific exceptions provides insight into why your automation/scraper failed.
+The `instaharvest_v2.exceptions` module structures all possible faults into a clean hierarchy. Catching specific exceptions provides insight into why your automation/scraper failed.
 
 ## Base Class
 

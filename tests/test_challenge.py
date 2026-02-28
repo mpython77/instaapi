@@ -3,8 +3,8 @@ Tests for Challenge Handler: type detection, context building, result handling.
 """
 
 import pytest
-from instaapi.challenge import ChallengeHandler, ChallengeType, ChallengeContext, ChallengeResult
-from instaapi.exceptions import ChallengeRequired
+from instaharvest_v2.challenge import ChallengeHandler, ChallengeType, ChallengeContext, ChallengeResult
+from instaharvest_v2.exceptions import ChallengeRequired
 
 
 class TestChallengeType:

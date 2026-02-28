@@ -7,8 +7,8 @@ import asyncio
 import time
 import pytest
 
-from instaapi.async_anon_client import AsyncAnonClient, AsyncAnonRateLimiter, AsyncStrategyFailed
-from instaapi.speed_modes import get_mode
+from instaharvest_v2.async_anon_client import AsyncAnonClient, AsyncAnonRateLimiter, AsyncStrategyFailed
+from instaharvest_v2.speed_modes import get_mode
 
 
 # ─── AsyncAnonRateLimiter ────────────────────────────────────
@@ -110,33 +110,33 @@ class TestAsyncInstagramIntegration:
     """AsyncInstagram.anonymous() creates async anonymous client."""
 
     def test_anonymous_creates_async_client(self):
-        from instaapi.async_instagram import AsyncInstagram
+        from instaharvest_v2.async_instagram import AsyncInstagram
         ig = AsyncInstagram.anonymous()
         assert isinstance(ig._anon_client, AsyncAnonClient)
         assert ig._anon_client._unlimited is False
 
     def test_anonymous_unlimited_creates_async_client(self):
-        from instaapi.async_instagram import AsyncInstagram
+        from instaharvest_v2.async_instagram import AsyncInstagram
         ig = AsyncInstagram.anonymous(unlimited=True)
         assert isinstance(ig._anon_client, AsyncAnonClient)
         assert ig._anon_client._unlimited is True
         assert ig._anon_client._max_concurrency == 1000
 
     def test_anonymous_has_async_public_api(self):
-        from instaapi.async_instagram import AsyncInstagram
-        from instaapi.api.async_public import AsyncPublicAPI
+        from instaharvest_v2.async_instagram import AsyncInstagram
+        from instaharvest_v2.api.async_public import AsyncPublicAPI
         ig = AsyncInstagram.anonymous()
         assert isinstance(ig.public, AsyncPublicAPI)
 
     def test_default_init_uses_async_anon(self):
         """Even default init should have async anon client."""
-        from instaapi.async_instagram import AsyncInstagram
+        from instaharvest_v2.async_instagram import AsyncInstagram
         ig = AsyncInstagram()
         assert isinstance(ig._anon_client, AsyncAnonClient)
 
     @pytest.mark.asyncio
     async def test_close_cleans_async_session(self):
-        from instaapi.async_instagram import AsyncInstagram
+        from instaharvest_v2.async_instagram import AsyncInstagram
         ig = AsyncInstagram.anonymous(unlimited=True)
         # Get session (creates it)
         _ = await ig._anon_client._get_session()

@@ -33,7 +33,7 @@ except ImportError:
 
 # ── InstaAPI ────────────────────────────────────────────
 sys.path.insert(0, str(Path(__file__).parent))
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 logger = logging.getLogger("demo_server")
 
@@ -81,8 +81,8 @@ def get_agent():
         return _agent
 
     try:
-        from instaapi.agent.core import InstaAgent
-        from instaapi.agent.permissions import Permission
+        from instaharvest_v2.agent.core import InstaAgent
+        from instaharvest_v2.agent.permissions import Permission
 
         api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("OPENAI_API_KEY")
         provider = "gemini" if os.environ.get("GEMINI_API_KEY") else "openai"

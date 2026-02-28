@@ -56,7 +56,7 @@ If one strategy fails (rate limited, blocked, etc.), it automatically tries the 
 ## Quick Example
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram.anonymous()
 

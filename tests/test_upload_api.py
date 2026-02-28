@@ -15,7 +15,7 @@ class TestUploadAPI(unittest.TestCase):
     """Test UploadAPI initialization and methods."""
 
     def setUp(self):
-        from instaapi.api.upload import UploadAPI
+        from instaharvest_v2.api.upload import UploadAPI
         self.client = MagicMock()
         self.api = UploadAPI(self.client)
         self._tmpfiles = []

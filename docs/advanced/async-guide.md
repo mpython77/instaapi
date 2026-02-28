@@ -6,7 +6,7 @@ InstaAPI is built ground-up to support **True Python Async I/O** via the `curl_c
 
 ```python
 # Sync: Takes ~300 seconds (5 mins)
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram.anonymous(unlimited=True)
 for i in range(100):
@@ -19,7 +19,7 @@ for i in range(100):
 ```python
 # Async: Takes ~10 seconds!
 import asyncio
-from instaapi import AsyncInstagram
+from instaharvest_v2 import AsyncInstagram
 
 async def main():
     async with AsyncInstagram.anonymous(unlimited=True) as ig:
@@ -40,7 +40,7 @@ asyncio.run(main())
 You must initiate the Async client inside an async context manager (`async with`) to properly handle connections, TLS contexts, and session loops.
 
 ```python
-from instaapi import AsyncInstagram
+from instaharvest_v2 import AsyncInstagram
 
 async def runner():
     # Regular safe speed mode

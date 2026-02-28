@@ -12,7 +12,7 @@ class TestDirectAPI(unittest.TestCase):
     """Test DirectAPI initialization and methods."""
 
     def setUp(self):
-        from instaapi.api.direct import DirectAPI
+        from instaharvest_v2.api.direct import DirectAPI
         self.client = MagicMock()
         self.api = DirectAPI(self.client)
 
@@ -94,7 +94,7 @@ class TestDirectAPIThreads(unittest.TestCase):
     """Test DirectAPI thread management."""
 
     def setUp(self):
-        from instaapi.api.direct import DirectAPI
+        from instaharvest_v2.api.direct import DirectAPI
         self.client = MagicMock()
         self.api = DirectAPI(self.client)
 
@@ -130,7 +130,7 @@ class TestDirectAPIMassMessage(unittest.TestCase):
     """Test DirectAPI mass messaging features."""
 
     def setUp(self):
-        from instaapi.api.direct import DirectAPI
+        from instaharvest_v2.api.direct import DirectAPI
         self.client = MagicMock()
         self.api = DirectAPI(self.client)
 

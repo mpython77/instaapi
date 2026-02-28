@@ -11,7 +11,7 @@ ig = Instagram.from_env()
 ig.export.followers_to_csv("nike", "nike_followers.csv", max_count=500)
 
 # Export with filters
-from instaapi.api.export import ExportFilter
+from instaharvest_v2.api.export import ExportFilter
 
 filters = ExportFilter(min_followers=100, is_business=True)
 ig.export.followers_to_csv("nike", "filtered.csv", filters=filters)
@@ -110,7 +110,7 @@ Export full profile data to JSON.
 Filter users during export.
 
 ```python
-from instaapi.api.export import ExportFilter
+from instaharvest_v2.api.export import ExportFilter
 
 filters = ExportFilter(
     min_followers=100,

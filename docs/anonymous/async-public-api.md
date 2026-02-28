@@ -4,7 +4,7 @@ Async version of PublicAPI — same methods, true async I/O with `asyncio.gather
 
 ```python
 import asyncio
-from instaapi import AsyncInstagram
+from instaharvest_v2 import AsyncInstagram
 
 async def main():
     async with AsyncInstagram.anonymous(unlimited=True) as ig:

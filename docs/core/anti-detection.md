@@ -71,7 +71,7 @@ Each request gets unique, browser-accurate headers:
 For mobile API requests, InstaAPI generates realistic device fingerprints:
 
 ```python
-from instaapi.device_fingerprint import DeviceFingerprint
+from instaharvest_v2.device_fingerprint import DeviceFingerprint
 
 df = DeviceFingerprint()
 device = df.generate()

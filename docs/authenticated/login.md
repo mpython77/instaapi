@@ -23,7 +23,7 @@ USER_AGENT=your_user_agent_string
 ```
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 # Auto-loads from .env
 ig = Instagram.from_env()
@@ -32,8 +32,8 @@ ig = Instagram.from_env()
 ## Login with Credentials
 
 ```python
-from instaapi import Instagram
-from instaapi.exceptions import ChallengeRequired, LoginRequired
+from instaharvest_v2 import Instagram
+from instaharvest_v2.exceptions import ChallengeRequired, LoginRequired
 
 ig = Instagram()
 
@@ -75,8 +75,8 @@ If you started with `from_session_file`, InstaAPI will attempt to transparently 
 When logging in from a new IP, Instagram often asks for email or SMS verification. InstaAPI includes the `ChallengeHandler` class to resolve these:
 
 ```python
-from instaapi import Instagram, ChallengeHandler
-from instaapi.exceptions import ChallengeRequired
+from instaharvest_v2 import Instagram, ChallengeHandler
+from instaharvest_v2.exceptions import ChallengeRequired
 
 ig = Instagram()
 

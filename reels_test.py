@@ -2,7 +2,7 @@
 Har xil turdagi postlarni test qilish:
 reel, oddiy video, rasm, carousel
 """
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram()
 

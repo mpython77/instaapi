@@ -7,7 +7,7 @@ The `PublicDataAPI` provides a comprehensive suite of methods to fetch, analyze,
 Unlike standard anonymous endpoints, `PublicDataAPI` aggregates multiple endpoints, tracks rating limits (e.g., hashtag quotas limits), computes engagement metrics, and allows you to build standard analytics reports out of the box.
 
 ```python
-from instaapi import Instagram
+from instaharvest_v2 import Instagram
 
 ig = Instagram.anonymous()
 
