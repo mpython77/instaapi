@@ -185,9 +185,8 @@ class RichStepCallback:
 
     def finish(self):
         """Ensure thinking spinner is stopped."""
-        if self._thinking:
-            self.console.stop_thinking()
-            self._thinking = False
+        self.console.stop_thinking()
+        self._thinking = False
 
 
 # ═══════════════════════════════════════════════════════════
@@ -387,7 +386,9 @@ def interactive_chat(agent, console, templates_runner=None, auth_manager=None):
             console.error(f"Agent error: {e}")
             continue
 
+        # Always stop spinner after agent finishes
         callback.finish()
+        console.stop_thinking()
 
         # Display response
         if result.success:
@@ -425,6 +426,7 @@ def one_shot(agent, console, question: str):
         sys.exit(1)
 
     callback.finish()
+    console.stop_thinking()
 
     if result.success:
         console.response(result.answer)
