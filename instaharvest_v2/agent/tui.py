@@ -174,7 +174,10 @@ class AgentConsole:
     # ─── Thinking Spinner ───────────────────────────────
 
     def start_thinking(self):
-        """Start the thinking spinner."""
+        """Start the thinking spinner. Stops any existing spinner first."""
+        # CRITICAL: Stop existing spinner before creating new one
+        # Without this, old Live objects leak and keep rendering!
+        self.stop_thinking()
         self._spinner_start = time.time()
         spinner = Spinner("dots", text=Text.from_markup(
             "[agent.thinking]Thinking...[/]"
