@@ -37,10 +37,11 @@ Only populates if `is_business` is True.
 
 | Property | Type |
 |---|---|
-| `public_email` | `str` |
-| `contact_phone_number` | `str` |
-| `city_name` | `str` |
-| `public_phone_country_code` | `str` |
+| `email` | `str` |
+| `phone` | `str` |
+| `phone_country_code` | `str` |
+| `city` | `str` |
+| `address` | `str` |
 
 ## Media Models
 

@@ -101,10 +101,10 @@ Parse mentions (`@user`), hashtags (`#tag`), and entities from a bio string.
 ```python
 user = ig.users.get_by_username("nike")
 bio = ig.users.parse_bio(user)
-print("Mentions:", bio.mentions)
-print("Hashtags:", bio.hashtags)
-print("Emails:", bio.emails)
-print("Phones:", bio.phones)
+print("Mentions:", bio.bio_mentions)
+print("Hashtags:", bio.bio_hashtags)
+print("Emails:", bio.bio_emails)
+print("Phones:", bio.bio_phones)
 ```
 
 ---
@@ -122,10 +122,10 @@ Gather ALL profile data in one call. Combines `web_profile_info` + `user_info` +
 ```python
 user = ig.users.get_full_profile("nasa")
 print(user.biography)
-if user.contact.public_email:
-    print("Email:", user.contact.public_email)
-if user.contact.contact_phone_number:
-    print("Phone:", user.contact.contact_phone_number)
+if user.contact.email:
+    print("Email:", user.contact.email)
+if user.contact.phone:
+    print("Phone:", user.contact.phone)
 ```
 
 ---
@@ -157,8 +157,10 @@ if user.contact.contact_phone_number:
 
 | Field | Type | Description |
 |---|---|---|
-| `mentions` | `list[str]` | @username mentions |
-| `hashtags` | `list[str]` | #tag references |
-| `emails` | `list[str]` | Extracted emails |
-| `phones` | `list[str]` | Extracted phone numbers |
-| `urls` | `list[str]` | Extracted URLs |
+| `bio_mentions` | `list[str]` | @username mentions |
+| `bio_hashtags` | `list[str]` | #tag references |
+| `bio_emails` | `list[str]` | Extracted emails |
+| `bio_phones` | `list[str]` | Extracted phone numbers |
+| `bio_urls` | `list[str]` | Extracted URLs |
+| `bio_links` | `list` | Structured link objects |
+| `bio_entities` | `list[dict]` | Raw bio entities |

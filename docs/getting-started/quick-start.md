@@ -76,8 +76,10 @@ ig = Instagram.from_env(".env")
 user = ig.users.get_by_username("cristiano")
 print(f"{user.full_name} — {user.followers:,} followers")
 
-# Like a post
-ig.media.like(user.media[0].pk)
+# Get user's posts and like the first one
+posts = ig.feed.get_all_posts(user.pk, max_posts=1)
+if posts:
+    ig.media.like(posts[0].pk)
 
 # Follow a user
 ig.friendships.follow(user.pk)

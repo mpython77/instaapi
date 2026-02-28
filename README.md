@@ -45,7 +45,7 @@ from instaapi import Instagram
 ig = Instagram.from_env(".env")
 user = ig.users.get_by_username("cristiano")
 print(user.username)        # cristiano
-print(user.follower_count)  # 650000000
+print(user.followers)       # 650000000
 print(user["bio"])           # dict-like access works too
 ```
 

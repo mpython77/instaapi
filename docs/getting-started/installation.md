@@ -8,14 +8,14 @@
 ## Install from PyPI
 
 ```bash
-pip install insaapi
+pip install instaapi
 ```
 
 ## Install from source
 
 ```bash
-git clone https://github.com/insaapi/insaapi.git
-cd insaapi
+git clone https://github.com/mpython77/instaapi.git
+cd instaapi
 pip install -e .
 ```
 
@@ -28,6 +28,8 @@ InstaAPI automatically installs these:
 | `curl_cffi` | HTTP client with TLS fingerprint impersonation |
 | `pydantic` | Data models and validation |
 | `python-dotenv` | `.env` file loading |
+| `pynacl` | NaCl encrypted password login |
+| `cryptography` | Cryptographic operations |
 
 ## Verify Installation
 
@@ -39,12 +41,15 @@ print(instaapi.__version__)
 ## Optional Dependencies
 
 ```bash
-# For Gmail challenge auto-resolver
-pip install google-auth google-auth-oauthlib google-api-python-client
+# AI Agent providers
+pip install instaapi[agent]    # openai, google-genai, anthropic, rich
 
-# For export to Excel
-pip install openpyxl
+# Web playground (FastAPI)
+pip install instaapi[web]      # fastapi, uvicorn + agent deps
 
-# For AI suggestions
-pip install google-generativeai
+# Development tools
+pip install instaapi[dev]      # pytest, pytest-asyncio, pytest-cov
+
+# Everything
+pip install instaapi[all]
 ```
