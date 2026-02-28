@@ -2,7 +2,18 @@
 
 All notable changes to instaharvest_v2.
 
-## [1.0.12] - 2026-03-01
+## [1.0.13] - 2026-03-01
+
+### 🔥 Major: Complete Knowledge Base Rewrite
+
+- **TASK TEMPLATES**: Agent now copies exact tested code templates instead of writing custom code
+- **One-step profile**: Profile info query completes in 1 code execution (was 3-15)
+- **Purged ALL wrong field names**: `follower_count`, `edge_followed_by`, `following_count`, `media_count` completely removed from all agent prompts and recipes
+- **Correct field names only**: `followers`, `following`, `posts_count` — verified against actual API output
+- **Anonymous mode**: Agent goes DIRECTLY to `ig.public.*` — no wasted login attempts
+- **Condensed rules**: Reduced agent system prompt size for faster response
+
+---
 
 ### 🐛 Fix: Intermittent Zero Followers & Wrong Bio
 
