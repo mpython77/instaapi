@@ -225,37 +225,69 @@ class AgentConsole:
 
     # ─── Tool Call Display ──────────────────────────────
 
-    def tool_call(self, name: str, args: Optional[Dict] = None, code: str = ""):
-        """Display a tool call with optional code."""
+    def tool_call(self, name: str, args: Optional[Dict] = None, code: str = "", description: str = ""):
+        """Display a compact tool call (Claude Code style)."""
         self.stop_thinking()
 
-        # Tool header
-        self.console.print(
-            f"\n  [agent.tool]{self.SYM_TOOL} {name}[/]"
-        )
+        # Extract key API call from code for the subtext line
+        api_call = self._extract_api_call(code) if code else ""
 
-        # Show code if it's a code execution tool
-        if code:
-            self.show_code(code)
-        elif name == "run_instaharvest_v2_code" and args:
-            code_content = args.get("code", "")
-            if code_content:
-                desc = args.get("description", "")
-                if desc:
-                    self.console.print(
-                        f"    [dim]{desc}[/]"
-                    )
-                self.show_code(code_content)
+        # Build display text
+        if name == "run_instaharvest_v2_code":
+            # Show description or fallback to extracted API call
+            display_text = description or api_call or "Running code..."
+            self.console.print(
+                f"\n  [agent.tool]{self.SYM_TOOL}[/] [bold]{display_text}[/]"
+            )
+            # Show extracted API as dim subtext (if different from description)
+            if api_call and api_call != display_text:
+                self.console.print(
+                    f"    [dim]↳ {api_call}[/]"
+                )
+        else:
+            # Non-code tools — just show the tool name
+            self.console.print(
+                f"\n  [agent.tool]{self.SYM_TOOL} {name}[/]"
+            )
+
+    def _extract_api_call(self, code: str) -> str:
+        """Extract the key API call from code for compact display."""
+        import re
+        if not code:
+            return ""
+
+        # Look for ig.xxx.method() patterns
+        patterns = [
+            r'(ig\.public\.\w+)\s*\(',
+            r'(ig\.users\.\w+)\s*\(',
+            r'(ig\.feed\.\w+)\s*\(',
+            r'(ig\.friendships\.\w+)\s*\(',
+            r'(ig\.media\.\w+)\s*\(',
+            r'(ig\.direct\.\w+)\s*\(',
+            r'(ig\.stories\.\w+)\s*\(',
+            r'(ig\.upload\.\w+)\s*\(',
+            r'(ig\.automation\.\w+)\s*\(',
+            r'(ig\.account\.\w+)\s*\(',
+        ]
+        for pattern in patterns:
+            match = re.search(pattern, code)
+            if match:
+                return f"{match.group(1)}()"
+
+        return ""
 
     def tool_result(self, result: str, success: bool = True, name: str = ""):
-        """Display tool result."""
+        """Display tool result (compact)."""
         if success:
             # Truncate long results
             display = result
-            if len(display) > 500 and self.compact:
-                display = display[:500] + "\n... (truncated)"
-            elif len(display) > 2000:
-                display = display[:2000] + "\n... (truncated)"
+            lines = display.splitlines()
+            if self.compact and len(lines) > 8:
+                display = "\n".join(lines[:8]) + "\n... (truncated)"
+            elif len(lines) > 15:
+                display = "\n".join(lines[:15]) + "\n... (truncated)"
+            elif len(display) > 1000:
+                display = display[:1000] + "\n... (truncated)"
 
             if display.strip():
                 result_panel = Panel(
@@ -265,7 +297,7 @@ class AgentConsole:
                     border_style="green",
                     box=ROUNDED,
                     padding=(0, 1),
-                    width=min(100, self.console.width - 4),
+                    width=min(90, self.console.width - 4),
                 )
                 self.console.print(Padding(result_panel, (0, 2)))
         else:
@@ -276,7 +308,7 @@ class AgentConsole:
                 border_style="red",
                 box=ROUNDED,
                 padding=(0, 1),
-                width=min(100, self.console.width - 4),
+                width=min(90, self.console.width - 4),
             )
             self.console.print(Padding(error_panel, (0, 2)))
 
@@ -686,10 +718,9 @@ class FallbackConsole:
     def step(self, number: int, total: int = 0):
         pass
 
-    def tool_call(self, name: str, args=None, code: str = ""):
-        print(f"  >> {name}")
-        if code:
-            print(f"  {code[:200]}")
+    def tool_call(self, name: str, args=None, code: str = "", description: str = ""):
+        display = description or name
+        print(f"  >> {display}")
 
     def tool_result(self, result: str, success: bool = True, name: str = ""):
         status = "OK" if success else "ERR"

@@ -153,14 +153,8 @@ class RichStepCallback:
             self.console.update_thinking(f"Step {step}: {msg}")
 
         elif event_type == "code":
-            self.console.stop_thinking()
-            self._thinking = False
-            code = event.get("content", "")
-            desc = event.get("description", "")
-            if code:
-                if desc:
-                    self.console.info(f"  {desc}")
-                self.console.show_code(code)
+            # SKIP — don't show code separately, tool_call handles display
+            pass
 
         elif event_type == "tool_call":
             self.console.stop_thinking()
@@ -168,9 +162,12 @@ class RichStepCallback:
             name = event.get("name", "?")
             args = event.get("arguments", {})
             code = ""
+            desc = ""
             if name == "run_instaharvest_v2_code":
                 code = args.get("code", "")
-            self.console.tool_call(name, args=args, code=code)
+                desc = args.get("description", "")
+            # Pass code for API extraction, but display is compact
+            self.console.tool_call(name, args=args, code=code, description=desc)
 
         elif event_type == "tool_result":
             output = event.get("output", "")
