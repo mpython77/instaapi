@@ -284,6 +284,87 @@ instaharvest_v2_TOOLS = [
             "required": ["query"],
         },
     },
+    # ═══════════════════════════════════════════════════════════
+    # SPECIALIZED INSTAGRAM TOOLS — Direct API calls, no code needed!
+    # ═══════════════════════════════════════════════════════════
+    {
+        "name": "get_profile",
+        "description": (
+            "Get Instagram profile information by username. "
+            "Returns: username, full_name, followers, following, posts_count, "
+            "biography, profile_pic_url. Works in both anonymous and login mode. "
+            "USE THIS instead of run_instaharvest_v2_code for profile queries!"
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "description": "Instagram username (without @)",
+                },
+            },
+            "required": ["username"],
+        },
+    },
+    {
+        "name": "get_posts",
+        "description": (
+            "Get a user's recent Instagram posts with likes, comments, captions. "
+            "Returns formatted list of posts. Works in anonymous mode. "
+            "USE THIS instead of run_instaharvest_v2_code for post queries!"
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "description": "Instagram username",
+                },
+                "max_count": {
+                    "type": "integer",
+                    "description": "Maximum posts to fetch (default: 12, max: 50)",
+                },
+            },
+            "required": ["username"],
+        },
+    },
+    {
+        "name": "search_users",
+        "description": (
+            "Search Instagram for users by query string. "
+            "Returns list of matching users with username, full_name, followers. "
+            "USE THIS instead of run_instaharvest_v2_code for user searches!"
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "Search query (name, username, keyword)",
+                },
+            },
+            "required": ["query"],
+        },
+    },
+    {
+        "name": "get_user_info",
+        "description": (
+            "Get detailed user information including verification status, "
+            "business category, contact info. In login mode returns full data. "
+            "In anonymous mode, falls back to get_profile with limited data. "
+            "USE THIS when user asks about verification, business info, or detailed profile."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "description": "Instagram username",
+                },
+            },
+            "required": ["username"],
+        },
+    },
 ]
 
 

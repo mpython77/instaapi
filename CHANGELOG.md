@@ -2,6 +2,23 @@
 
 All notable changes to instaharvest_v2.
 
+## [1.0.14] - 2026-03-01
+
+### 🚀 Major: Specialized Instagram Tools Architecture
+
+- **NEW: `get_profile` tool** — LLM calls tool directly, no code writing needed. Returns profile info in 1 step
+- **NEW: `get_posts` tool** — Fetch recent posts with likes, comments, captions directly
+- **NEW: `search_users` tool** — Search Instagram users by query
+- **NEW: `get_user_info` tool** — Get detailed user info (login API with public fallback)
+- **Tool-first architecture**: Agent now uses specialized tools for common tasks instead of writing Python code
+- **Reduced hallucination**: Structured data returned from tools — no more wrong field names or parsing errors
+- **Faster responses**: Profile queries complete in 1 tool call (was 1-3 code executions)
+- **Better error messages**: Tools return helpful messages like "Profile not found. Check spelling."
+- **Cache integration**: All profile tools use shared `_user_cache` for instant repeat queries
+- **Fixed `edge_followed_by`**: Last remaining wrong field name removed from login mode prompt
+
+---
+
 ## [1.0.13] - 2026-03-01
 
 ### 🔥 Major: Complete Knowledge Base Rewrite

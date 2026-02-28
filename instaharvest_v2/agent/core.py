@@ -359,17 +359,16 @@ try:
         print(f"(From cache) Followers: {user.followers:,}")
     else:
         user = ig.users.get_by_username('username')
-        print(f"Username: {user.username}")
-        print(f"Followers: {user.followers:,}")
-        print(f"Following: {user.following:,}")
-        print(f"Posts: {user.posts_count}")
-        _cache[user.username] = user  # Save to cache
+    print(f"Username: {user.username}")
+    print(f"Followers: {user.followers:,}")
+    print(f"Following: {user.following:,}")
+    print(f"Posts: {user.posts_count}")
+    _cache[user.username] = user  # Save to cache
 except Exception as e:
     # Fallback to public API
     try:
         profile = ig.public.get_profile('username')
-        count = profile.get('edge_followed_by', {}).get('count', 0)
-        print(f"Followers: {count:,}")
+        print(f"Followers: {profile.get('followers', 0):,}")
         _cache['username'] = profile
     except Exception as e2:
         print(f"Error: {e2}")
@@ -953,6 +952,31 @@ Example: if 'cristiano' in _cache: user = _cache['cristiano']
             return self._handle_save_file(args)
         elif name == "ask_user":
             return self._handle_ask_user(args)
+
+        # Specialized Instagram tools — direct API calls, no sandbox
+        elif name == "get_profile":
+            if self._verbose:
+                print(f"    🔍 get_profile(@{args.get('username', '?')})")
+            return TOOL_HANDLERS[name](args, ig=self._ig, cache=self._user_cache)
+
+        elif name == "get_posts":
+            if self._verbose:
+                print(f"    📸 get_posts(@{args.get('username', '?')})")
+            return TOOL_HANDLERS[name](args, ig=self._ig, cache=self._user_cache)
+
+        elif name == "search_users":
+            if self._verbose:
+                print(f"    🔎 search_users('{args.get('query', '?')}')")
+            return TOOL_HANDLERS[name](args, ig=self._ig)
+
+        elif name == "get_user_info":
+            if self._verbose:
+                print(f"    👤 get_user_info(@{args.get('username', '?')})")
+            return TOOL_HANDLERS[name](
+                args, ig=self._ig,
+                is_logged_in=self._is_logged_in,
+                cache=self._user_cache,
+            )
 
         # Extended tools (handled by tools.py)
         elif name in TOOL_HANDLERS:

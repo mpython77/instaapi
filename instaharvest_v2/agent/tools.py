@@ -690,6 +690,258 @@ def _extract_search_results(html: str) -> list:
 
     return results
 
+# ═══════════════════════════════════════════════════════════
+# TOOL 11: get_profile — Specialized Instagram Profile Tool
+# ═══════════════════════════════════════════════════════════
+
+def handle_get_profile(args: Dict, ig=None, cache=None) -> str:
+    """Get Instagram profile info — direct API call, no code needed."""
+    username = args.get("username", "").strip().lstrip("@").lower()
+
+    if not username:
+        return "Error: username is required. Example: get_profile(username='cristiano')"
+
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    # Check cache first
+    if cache and username in cache:
+        cached = cache[username]
+        if isinstance(cached, dict):
+            lines = [
+                f"(From cache) Profile: @{username}",
+                f"Username: {cached.get('username', username)}",
+                f"Full Name: {cached.get('full_name', 'N/A')}",
+                f"Followers: {cached.get('followers', 0):,}",
+                f"Following: {cached.get('following', 0):,}",
+                f"Posts: {cached.get('posts_count', 0):,}",
+                f"Bio: {cached.get('biography', 'N/A')}",
+                f"Verified: {'Yes' if cached.get('is_verified') else 'No'}",
+                f"Private: {'Yes' if cached.get('is_private') else 'No'}",
+            ]
+            pic = cached.get("profile_pic_url") or cached.get("profile_pic_url_hd")
+            if pic:
+                lines.append(f"Profile Pic: {pic}")
+            return "\n".join(lines)
+
+    try:
+        profile = ig.public.get_profile(username)
+        if not profile:
+            return f"Profile not found: '@{username}'. Check the username spelling."
+
+        # Build formatted output
+        lines = [
+            f"Profile: @{profile.get('username', username)}",
+            f"Full Name: {profile.get('full_name', 'N/A')}",
+            f"Followers: {profile.get('followers', 0):,}",
+            f"Following: {profile.get('following', 0):,}",
+            f"Posts: {profile.get('posts_count', 0):,}",
+            f"Bio: {profile.get('biography', 'N/A')}",
+            f"Verified: {'Yes' if profile.get('is_verified') else 'No'}",
+            f"Private: {'Yes' if profile.get('is_private') else 'No'}",
+        ]
+
+        # Add optional fields
+        pic = profile.get("profile_pic_url") or profile.get("profile_pic_url_hd")
+        if pic:
+            lines.append(f"Profile Pic: {pic}")
+
+        ext_url = profile.get("external_url")
+        if ext_url:
+            lines.append(f"Website: {ext_url}")
+
+        category = profile.get("category_name") or profile.get("category")
+        if category:
+            lines.append(f"Category: {category}")
+
+        # Cache for future use
+        if cache is not None:
+            cache[username] = profile
+
+        return "\n".join(lines)
+
+    except Exception as e:
+        return f"Error fetching profile '@{username}': {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 12: get_posts — Specialized Instagram Posts Tool
+# ═══════════════════════════════════════════════════════════
+
+def handle_get_posts(args: Dict, ig=None, cache=None) -> str:
+    """Get user's recent Instagram posts — direct API call."""
+    username = args.get("username", "").strip().lstrip("@").lower()
+    max_count = min(args.get("max_count", 12), 50)
+
+    if not username:
+        return "Error: username is required."
+
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        posts = ig.public.get_posts(username)
+        if not posts:
+            return f"No posts found for '@{username}' or profile is private."
+
+        # Limit to max_count
+        posts = posts[:max_count] if isinstance(posts, list) else [posts]
+
+        lines = [f"Recent posts from @{username} ({len(posts)} posts):"]
+        lines.append("-" * 50)
+
+        for i, post in enumerate(posts, 1):
+            if isinstance(post, dict):
+                shortcode = post.get("shortcode", "?")
+                likes = post.get("like_count", post.get("likes", 0))
+                comments = post.get("comment_count", post.get("comments", 0))
+                caption = post.get("caption", "") or ""
+                timestamp = post.get("taken_at", post.get("timestamp", ""))
+                media_type = post.get("media_type", post.get("type", "photo"))
+
+                # Truncate caption
+                if len(caption) > 100:
+                    caption = caption[:100] + "..."
+
+                lines.append(f"\n  {i}. [{media_type}] https://instagram.com/p/{shortcode}/")
+                if likes:
+                    lines.append(f"     Likes: {likes:,}")
+                if comments:
+                    lines.append(f"     Comments: {comments:,}")
+                if caption:
+                    lines.append(f"     Caption: {caption}")
+                if timestamp:
+                    lines.append(f"     Date: {timestamp}")
+            else:
+                lines.append(f"\n  {i}. {str(post)[:200]}")
+
+        return "\n".join(lines)
+
+    except Exception as e:
+        return f"Error fetching posts for '@{username}': {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 13: search_users — Specialized Instagram Search Tool
+# ═══════════════════════════════════════════════════════════
+
+def handle_search_users(args: Dict, ig=None) -> str:
+    """Search Instagram for users — direct API call."""
+    query = args.get("query", "").strip()
+
+    if not query:
+        return "Error: search query is required."
+
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    try:
+        # Try public search first
+        if hasattr(ig, "public") and hasattr(ig.public, "search"):
+            results = ig.public.search(query)
+        elif hasattr(ig, "users") and hasattr(ig.users, "search"):
+            results = ig.users.search(query)
+        else:
+            return "Error: search is not available in current mode."
+
+        if not results:
+            return f"No users found for query: '{query}'"
+
+        items = results if isinstance(results, list) else [results]
+        lines = [f"Search results for '{query}' ({len(items)} found):"]
+        lines.append("-" * 50)
+
+        for i, user in enumerate(items[:10], 1):
+            if isinstance(user, dict):
+                uname = user.get("username", "?")
+                fname = user.get("full_name", "")
+                followers = user.get("followers", user.get("follower_count", "?"))
+                verified = " ✅" if user.get("is_verified") else ""
+                private = " 🔒" if user.get("is_private") else ""
+
+                lines.append(f"\n  {i}. @{uname}{verified}{private}")
+                if fname:
+                    lines.append(f"     Name: {fname}")
+                if isinstance(followers, int):
+                    lines.append(f"     Followers: {followers:,}")
+            else:
+                lines.append(f"\n  {i}. {str(user)[:200]}")
+
+        return "\n".join(lines)
+
+    except Exception as e:
+        return f"Error searching for '{query}': {e}"
+
+
+# ═══════════════════════════════════════════════════════════
+# TOOL 14: get_user_info — Detailed User Info Tool
+# ═══════════════════════════════════════════════════════════
+
+def handle_get_user_info(args: Dict, ig=None, is_logged_in=False, cache=None) -> str:
+    """Get detailed user info — uses login API if available, fallback to public."""
+    username = args.get("username", "").strip().lstrip("@").lower()
+
+    if not username:
+        return "Error: username is required."
+
+    if ig is None:
+        return "Error: Instagram client not available."
+
+    # Try login API first (more detailed data)
+    if is_logged_in and hasattr(ig, "users") and hasattr(ig.users, "get_by_username"):
+        try:
+            user = ig.users.get_by_username(username)
+            if user:
+                # Handle both dict and object responses
+                if isinstance(user, dict):
+                    data = user
+                else:
+                    data = {
+                        "username": getattr(user, "username", username),
+                        "full_name": getattr(user, "full_name", "N/A"),
+                        "followers": getattr(user, "followers", 0),
+                        "following": getattr(user, "following", 0),
+                        "posts_count": getattr(user, "posts_count", 0),
+                        "biography": getattr(user, "biography", ""),
+                        "is_verified": getattr(user, "is_verified", False),
+                        "is_private": getattr(user, "is_private", False),
+                        "is_business": getattr(user, "is_business_account", False),
+                        "category": getattr(user, "category_name", ""),
+                        "external_url": getattr(user, "external_url", ""),
+                        "profile_pic_url": getattr(user, "profile_pic_url", ""),
+                    }
+
+                lines = [
+                    f"Detailed Profile: @{data.get('username', username)}",
+                    f"Full Name: {data.get('full_name', 'N/A')}",
+                    f"Followers: {data.get('followers', 0):,}",
+                    f"Following: {data.get('following', 0):,}",
+                    f"Posts: {data.get('posts_count', 0):,}",
+                    f"Bio: {data.get('biography', 'N/A')}",
+                    f"Verified: {'Yes' if data.get('is_verified') else 'No'}",
+                    f"Private: {'Yes' if data.get('is_private') else 'No'}",
+                    f"Business: {'Yes' if data.get('is_business') else 'No'}",
+                ]
+
+                if data.get("category"):
+                    lines.append(f"Category: {data['category']}")
+                if data.get("external_url"):
+                    lines.append(f"Website: {data['external_url']}")
+                if data.get("profile_pic_url"):
+                    lines.append(f"Profile Pic: {data['profile_pic_url']}")
+
+                # Cache
+                if cache is not None:
+                    cache[username] = data
+
+                return "\n".join(lines)
+
+        except Exception as e:
+            logger.warning(f"Login API failed for '{username}': {e}, falling back to public")
+
+    # Fallback to public API
+    return handle_get_profile(args, ig=ig, cache=cache)
+
 
 # ═══════════════════════════════════════════════════════════
 # TOOL REGISTRY — Maps tool names to handlers
@@ -703,4 +955,9 @@ TOOL_HANDLERS = {
     "http_request": handle_http_request,
     "create_chart": handle_create_chart,
     "search_web": handle_search_web,
+    # Specialized Instagram tools
+    "get_profile": handle_get_profile,
+    "get_posts": handle_get_posts,
+    "search_users": handle_search_users,
+    "get_user_info": handle_get_user_info,
 }
