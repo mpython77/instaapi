@@ -1,8 +1,8 @@
-site_name: instaharvest_v2 Documentation
+site_name: InstaHarvest v2 Documentation
 site_description: Powerful Instagram Private API Library — 32 sync + 32 async modules, AI Agent, anti-detection, curl_cffi engine
-site_url: https://insaapi.github.io
-repo_url: https://github.com/insaapi/insaapi
-repo_name: insaapi/insaapi
+site_url: https://mpython77.github.io/instaharvest_v2/
+repo_url: https://github.com/mpython77/instaharvest_v2
+repo_name: mpython77/instaharvest_v2
 
 theme:
   name: material
@@ -73,9 +73,9 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/insaapi/insaapi
+      link: https://github.com/mpython77/instaharvest_v2
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/insaapi/
+      link: https://pypi.org/project/instaharvest-v2/
 
 nav:
   - Home: index.md
