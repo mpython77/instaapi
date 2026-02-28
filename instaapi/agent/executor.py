@@ -115,7 +115,18 @@ class SafeExecutor:
         """
         for pattern in BLOCKED_PATTERNS:
             if pattern in code:
-                return f"Blocked pattern found: '{pattern}'"
+                # Give actionable hint to the LLM
+                hints = {
+                    "globals()": "Use the `ig` variable directly — it's already in your namespace.",
+                    "locals()": "Use the `ig` variable directly — it's already in your namespace.",
+                    "subprocess": "Shell commands are not allowed. Use ig.* methods instead.",
+                    "os.system": "Shell commands are not allowed. Use ig.* methods instead.",
+                    "__import__(": "Use standard `import` statements. Only json, csv, re, math, datetime, time, os, pathlib are allowed.",
+                    "compile(": "Dynamic code compilation is not allowed. Write code directly.",
+                    "eval(": "Dynamic code evaluation is not allowed. Write code directly.",
+                }
+                hint = hints.get(pattern, "This pattern is blocked for security.")
+                return f"Blocked pattern: '{pattern}'. {hint}"
 
         # Check imports
         lines = code.split("\n")
