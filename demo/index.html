@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaAPI Playground v2</title>
+    <meta name="description" content="Full-featured web playground for InstaAPI — AI Chat, API Testing, Data Export">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --bg: #08080d;
+            --surface: #0e0e16;
+            --surface2: #151520;
+            --surface3: #1c1c2e;
+            --border: #252540;
+            --border-hover: #3a3a5c;
+            --text: #eaeaf0;
+            --text2: #7c7c9a;
+            --text3: #55556e;
+            --accent: #6366f1;
+            --accent2: #818cf8;
+            --accent-dim: rgba(99, 102, 241, .12);
+            --accent-glow: rgba(99, 102, 241, .25);
+            --purple: #a855f7;
+            --purple-dim: rgba(168, 85, 247, .12);
+            --success: #22c55e;
+            --success-dim: rgba(34, 197, 94, .12);
+            --error: #ef4444;
+            --error-dim: rgba(239, 68, 68, .12);
+            --warning: #f59e0b;
+            --pink: #ec4899;
+            --cyan: #06b6d4;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --sidebar-w: 250px;
+            --transition: .2s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            overflow: hidden
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow-y: auto
+        }
+
+        .sidebar-header {
+            padding: 16px 16px 12px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 16px var(--accent-glow)
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent2), #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .logo-version {
+            font-size: 10px;
+            color: var(--text3);
+            font-weight: 500
+        }
+
+        .sidebar-nav {
+            padding: 8px 8px;
+            flex: 1
+        }
+
+        .nav-label {
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text3);
+            padding: 10px 10px 4px
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--text2);
+            border: 1px solid transparent
+        }
+
+        .nav-item:hover {
+            background: var(--surface2);
+            color: var(--text)
+        }
+
+        .nav-item.active {
+            background: var(--accent-dim);
+            color: var(--accent2);
+            border-color: rgba(99, 102, 241, .2)
+        }
+
+        .nav-icon {
+            font-size: 14px;
+            width: 20px;
+            text-align: center
+        }
+
+        .sidebar-footer {
+            padding: 10px 14px;
+            border-top: 1px solid var(--border);
+            font-size: 10px;
+            color: var(--text3)
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--success);
+            margin-right: 5px;
+            box-shadow: 0 0 6px var(--success);
+            animation: pulse 2s infinite
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .5
+            }
+        }
+
+        /* MAIN */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden
+        }
+
+        .main-header {
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface)
+        }
+
+        .main-title {
+            font-size: 16px;
+            font-weight: 700
+        }
+
+        .main-subtitle {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 1px
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 6px;
+            align-items: center
+        }
+
+        .badge {
+            font-size: 10px;
+            padding: 3px 10px;
+            border-radius: 16px;
+            font-weight: 500
+        }
+
+        .badge-accent {
+            background: var(--accent-dim);
+            color: var(--accent2);
+            border: 1px solid rgba(99, 102, 241, .25)
+        }
+
+        .badge-success {
+            background: var(--success-dim);
+            color: var(--success);
+            border: 1px solid rgba(34, 197, 94, .25)
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, .12);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, .25)
+        }
+
+        /* CONTENT */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+            display: flex;
+            gap: 20px
+        }
+
+        .panel-form {
+            width: 360px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: border-color var(--transition)
+        }
+
+        .card:hover {
+            border-color: var(--border-hover)
+        }
+
+        .card-header {
+            padding: 11px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .card-body {
+            padding: 14px 16px
+        }
+
+        .form-group {
+            margin-bottom: 10px
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0
+        }
+
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text2);
+            margin-bottom: 4px
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            color: var(--text);
+            font-size: 12.5px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all var(--transition)
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim)
+        }
+
+        .form-input::placeholder {
+            color: var(--text3)
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: none;
+            width: 100%
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: #fff;
+            box-shadow: 0 3px 12px var(--accent-glow)
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 20px var(--accent-glow)
+        }
+
+        .btn-primary:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+            transform: none
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text2);
+            width: auto
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent2);
+            background: var(--accent-dim)
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 11px
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px
+        }
+
+        .quick-btn {
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: 'Inter', sans-serif
+        }
+
+        .quick-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent2);
+            background: var(--accent-dim)
+        }
+
+        /* RESULT PANEL */
+        .panel-result {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column
+        }
+
+        .result-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden
+        }
+
+        .result-header {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .result-title {
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center
+        }
+
+        .result-meta {
+            font-size: 10px;
+            color: var(--text3);
+            margin-right: 8px
+        }
+
+        .result-body {
+            flex: 1;
+            overflow-y: auto;
+            position: relative
+        }
+
+        .result-empty {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3)
+        }
+
+        .result-empty-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+            opacity: .3
+        }
+
+        .result-empty-text {
+            font-size: 13px;
+            font-weight: 500
+        }
+
+        .result-empty-sub {
+            font-size: 11px;
+            margin-top: 3px
+        }
+
+        .json-output {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            line-height: 1.65;
+            padding: 14px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: #c4c4e0;
+            min-height: 100%
+        }
+
+        .json-output .key {
+            color: #818cf8
+        }
+
+        .json-output .string {
+            color: #86efac
+        }
+
+        .json-output .number {
+            color: #f9a8d4
+        }
+
+        .json-output .boolean {
+            color: #fbbf24
+        }
+
+        .json-output .null {
+            color: #6b7280
+        }
+
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(8, 8, 13, .85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin .8s linear infinite
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .loading-text {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 10px
+        }
+
+        .error-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: var(--error-dim);
+            border: 1px solid rgba(239, 68, 68, .25);
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--error)
+        }
+
+        .success-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            background: var(--success-dim);
+            border: 1px solid rgba(34, 197, 94, .25);
+            border-radius: 16px;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--success)
+        }
+
+        /* PANELS */
+        .panel-content {
+            display: none
+        }
+
+        .panel-content.active {
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        /* AI CHAT — FULL WIDTH */
+        .panel-content.active.ai-full {
+            flex: 1
+        }
+
+        .ai-full .card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0
+        }
+
+        .chat-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px
+        }
+
+        .chat-msg {
+            max-width: 90%;
+            margin-bottom: 14px;
+            animation: fadeIn .3s ease
+        }
+
+        .chat-msg.user {
+            margin-left: auto
+        }
+
+        .chat-msg.agent {
+            margin-right: auto;
+            max-width: 98%
+        }
+
+        .chat-bubble {
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            word-break: break-word
+        }
+
+        .chat-bubble code {
+            background: var(--surface3);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px
+        }
+
+        .chat-bubble pre {
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 8px 0;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            line-height: 1.5;
+            white-space: pre-wrap
+        }
+
+        .chat-bubble pre code {
+            background: none;
+            padding: 0;
+            border: none
+        }
+
+        .chat-bubble strong {
+            color: var(--accent2);
+            font-weight: 600
+        }
+
+        .chat-bubble em {
+            color: var(--pink);
+            font-style: italic
+        }
+
+        /* Tables in chat */
+        .chat-bubble .table-wrap {
+            overflow-x: auto;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border)
+        }
+
+        .chat-bubble table {
+            width: 100%;
+            min-width: 400px;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 12px;
+            table-layout: auto
+        }
+
+        .chat-bubble thead {
+            background: linear-gradient(135deg, rgba(99, 102, 241, .15), rgba(168, 85, 247, .1))
+        }
+
+        .chat-bubble th {
+            padding: 8px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--accent2);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap
+        }
+
+        .chat-bubble td {
+            padding: 7px 12px;
+            border-bottom: 1px solid rgba(42, 42, 61, .4);
+            color: var(--text);
+            white-space: nowrap
+        }
+
+        .chat-bubble tbody tr:last-child td {
+            border-bottom: none
+        }
+
+        .chat-bubble tbody tr:hover {
+            background: rgba(99, 102, 241, .04)
+        }
+
+        .chat-bubble tbody tr:nth-child(even) {
+            background: rgba(255, 255, 255, .015)
+        }
+
+        /* Headers in chat */
+        .chat-bubble h1 {
+            font-size: 17px;
+            font-weight: 700;
+            margin: 14px 0 6px;
+            color: var(--text)
+        }
+
+        .chat-bubble h2 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 12px 0 6px;
+            color: var(--text)
+        }
+
+        .chat-bubble h3 {
+            font-size: 13px;
+            font-weight: 600;
+            margin: 10px 0 4px;
+            color: var(--accent2)
+        }
+
+        /* Lists in chat */
+        .chat-bubble ul,
+        .chat-bubble ol {
+            margin: 6px 0;
+            padding-left: 18px
+        }
+
+        .chat-bubble li {
+            margin-bottom: 3px
+        }
+
+        /* Paragraphs in chat */
+        .chat-bubble p {
+            margin: 6px 0
+        }
+
+        .chat-bubble p:first-child {
+            margin-top: 0
+        }
+
+        .chat-bubble p:last-child {
+            margin-bottom: 0
+        }
+
+        /* Blockquote */
+        .chat-bubble blockquote {
+            border-left: 3px solid var(--accent);
+            padding: 6px 12px;
+            margin: 8px 0;
+            background: rgba(99, 102, 241, .06);
+            border-radius: 0 6px 6px 0;
+            color: var(--text2)
+        }
+
+        /* HR */
+        .chat-bubble hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 12px 0
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px
+        }
+
+        .chat-action-btn {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: 'Inter', sans-serif
+        }
+
+        .chat-action-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent2);
+            background: var(--accent-dim)
+        }
+
+        .chat-msg.user .chat-bubble {
+            background: var(--accent-dim);
+            border: 1px solid rgba(99, 102, 241, .25);
+            border-bottom-right-radius: 4px
+        }
+
+        .chat-msg.agent .chat-bubble {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px
+        }
+
+        .chat-meta {
+            font-size: 10px;
+            color: var(--text3);
+            margin-top: 4px;
+            display: flex;
+            gap: 8px
+        }
+
+        /* ═══ Agent Steps ═══ */
+        .agent-steps {
+            margin: 8px 0 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .agent-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(99, 102, 241, .04);
+            border: 1px solid rgba(99, 102, 241, .1);
+            font-size: 12px;
+            animation: stepFadeIn .3s ease;
+            transition: all .3s ease;
+        }
+
+        @keyframes stepFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .agent-step .step-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        .agent-step .step-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .agent-step .step-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .agent-step .step-detail {
+            color: var(--text3);
+            font-size: 11px;
+            word-break: break-word;
+        }
+
+        .agent-step.step-thinking .step-icon {
+            color: #f59e0b;
+        }
+
+        .agent-step.step-code .step-icon {
+            color: #8b5cf6;
+        }
+
+        .agent-step.step-tool-call .step-icon {
+            color: #3b82f6;
+        }
+
+        .agent-step.step-tool-result .step-icon {
+            color: #10b981;
+        }
+
+        .agent-step.step-error .step-icon {
+            color: #ef4444;
+        }
+
+        .agent-step .step-code-block {
+            margin-top: 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            max-height: 200px;
+            overflow-y: auto;
+            color: var(--text2);
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .agent-step .step-output {
+            margin-top: 4px;
+            padding: 6px 10px;
+            background: rgba(16, 185, 129, .06);
+            border: 1px solid rgba(16, 185, 129, .15);
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            max-height: 150px;
+            overflow-y: auto;
+            color: var(--text2);
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .step-toggle {
+            font-size: 10px;
+            color: var(--accent2);
+            cursor: pointer;
+            margin-top: 4px;
+            user-select: none;
+        }
+
+        .step-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .step-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(99, 102, 241, .2);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: stepSpin .6s linear infinite;
+        }
+
+        @keyframes stepSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .chat-input-area {
+            padding: 14px 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+            background: var(--surface)
+        }
+
+        .chat-toolbar {
+            display: flex;
+            gap: 4px;
+            padding: 0 16px 6px;
+            background: var(--surface)
+        }
+
+        .chat-input {
+            flex: 1;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: var(--text);
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            resize: none;
+            min-height: 40px;
+            max-height: 100px
+        }
+
+        .chat-input:focus {
+            border-color: var(--accent)
+        }
+
+        .chat-send {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all var(--transition)
+        }
+
+        .chat-send:hover {
+            transform: scale(1.05)
+        }
+
+        .chat-send:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+            transform: none
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+            padding: 8px 12px
+        }
+
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: typing 1.4s infinite
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: .2s
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: .4s
+        }
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                opacity: .3;
+                transform: scale(.8)
+            }
+
+            30% {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+        /* SAVED FILES */
+        .saved-list {
+            list-style: none
+        }
+
+        .saved-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all var(--transition)
+        }
+
+        .saved-item:hover {
+            border-color: var(--accent);
+            background: var(--accent-dim)
+        }
+
+        .saved-item-name {
+            font-weight: 500;
+            color: var(--text)
+        }
+
+        .saved-item-meta {
+            font-size: 10px;
+            color: var(--text3)
+        }
+
+        .saved-item-actions {
+            display: flex;
+            gap: 4px
+        }
+
+        /* HISTORY */
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all var(--transition);
+            color: var(--text2)
+        }
+
+        .history-item:hover {
+            background: var(--surface2);
+            color: var(--text)
+        }
+
+        .history-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            flex-shrink: 0
+        }
+
+        .history-dot.ok {
+            background: var(--success)
+        }
+
+        .history-dot.fail {
+            background: var(--error)
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn .3s ease forwards
+        }
+
+        @media(max-width:900px) {
+            .sidebar {
+                width: 56px
+            }
+
+            .nav-item span,
+            .logo-text,
+            .logo-version,
+            .nav-label,
+            .sidebar-footer span {
+                display: none
+            }
+
+            .sidebar-header {
+                padding: 12px 8px
+            }
+
+            .logo-row {
+                justify-content: center
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 8px
+            }
+
+            .panel-form {
+                width: 300px
+            }
+
+            .content {
+                padding: 12px;
+                gap: 12px
+            }
+        }
+
+        @media(max-width:700px) {
+            .content {
+                flex-direction: column
+            }
+
+            .panel-form {
+                width: 100%
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-row">
+                <div class="logo-icon">📸</div>
+                <div>
+                    <div class="logo-text">InstaAPI</div>
+                    <div class="logo-version">Playground v2</div>
+                </div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-label">🤖 AI</div>
+            <div class="nav-item active" data-panel="ai" onclick="switchPanel(this)"><span
+                    class="nav-icon">🤖</span><span>AI Chat</span></div>
+
+            <div class="nav-label">API Modules</div>
+            <div class="nav-item" data-panel="users" onclick="switchPanel(this)"><span
+                    class="nav-icon">👤</span><span>Users</span></div>
+            <div class="nav-item" data-panel="media" onclick="switchPanel(this)"><span
+                    class="nav-icon">📷</span><span>Media</span></div>
+            <div class="nav-item" data-panel="feed" onclick="switchPanel(this)"><span
+                    class="nav-icon">📰</span><span>Feed</span></div>
+            <div class="nav-item" data-panel="search" onclick="switchPanel(this)"><span
+                    class="nav-icon">🔍</span><span>Search</span></div>
+            <div class="nav-item" data-panel="stories" onclick="switchPanel(this)"><span
+                    class="nav-icon">📖</span><span>Stories</span></div>
+            <div class="nav-item" data-panel="friendships" onclick="switchPanel(this)"><span
+                    class="nav-icon">🤝</span><span>Friendships</span></div>
+            <div class="nav-item" data-panel="account" onclick="switchPanel(this)"><span
+                    class="nav-icon">⚙️</span><span>Account</span></div>
+            <div class="nav-item" data-panel="public" onclick="switchPanel(this)"><span
+                    class="nav-icon">🌐</span><span>Public</span></div>
+            <div class="nav-item" data-panel="hashtags" onclick="switchPanel(this)"><span
+                    class="nav-icon">#️⃣</span><span>Hashtags</span></div>
+            <div class="nav-item" data-panel="notifications" onclick="switchPanel(this)"><span
+                    class="nav-icon">🔔</span><span>Notifications</span></div>
+            <div class="nav-item" data-panel="direct" onclick="switchPanel(this)"><span
+                    class="nav-icon">💬</span><span>Direct</span></div>
+
+            <div class="nav-label">Tools</div>
+            <div class="nav-item" data-panel="saved" onclick="switchPanel(this);loadSaved()"><span
+                    class="nav-icon">💾</span><span>Saved</span></div>
+            <div class="nav-item" data-panel="history" onclick="switchPanel(this)"><span
+                    class="nav-icon">📜</span><span>History</span></div>
+            <div class="nav-item" data-panel="dashboard" onclick="switchPanel(this)"><span
+                    class="nav-icon">📊</span><span>Dashboard</span></div>
+
+            <div class="nav-label">🚀 New Tools</div>
+            <div class="nav-item" data-panel="downloads" onclick="switchPanel(this)"><span
+                    class="nav-icon">📥</span><span>Downloads</span></div>
+            <div class="nav-item" data-panel="analytics" onclick="switchPanel(this)"><span
+                    class="nav-icon">📈</span><span>Analytics</span></div>
+            <div class="nav-item" data-panel="scheduler" onclick="switchPanel(this)"><span
+                    class="nav-icon">⏰</span><span>Scheduler</span></div>
+            <div class="nav-item" data-panel="compare" onclick="switchPanel(this)"><span
+                    class="nav-icon">🔄</span><span>Compare</span></div>
+            <div class="nav-item" data-panel="batch" onclick="switchPanel(this)"><span
+                    class="nav-icon">📋</span><span>Batch</span></div>
+            <div class="nav-item" data-panel="session" onclick="switchPanel(this)"><span
+                    class="nav-icon">🔐</span><span>Session</span></div>
+            <div class="nav-item" data-panel="activity" onclick="switchPanel(this)"><span
+                    class="nav-icon">📡</span><span>Activity</span></div>
+            <div class="nav-item" data-panel="collections" onclick="switchPanel(this)"><span
+                    class="nav-icon">🗂️</span><span>Collections</span></div>
+            <div class="nav-item" data-panel="exporter" onclick="switchPanel(this)"><span
+                    class="nav-icon">📤</span><span>Export</span></div>
+            <div class="nav-item" data-panel="hashtrack" onclick="switchPanel(this)"><span
+                    class="nav-icon">🎯</span><span>Hashtag Track</span></div>
+        </nav>
+        <div class="sidebar-footer"><span class="status-dot"></span><span id="statusText">...</span></div>
+    </aside>
+
+    <main class="main">
+        <div class="main-header">
+            <div>
+                <div class="main-title" id="mainTitle">🤖 AI Chat</div>
+                <div class="main-subtitle" id="mainSubtitle">Talk to AI Agent — it controls Instagram for you</div>
+            </div>
+            <div class="header-badges">
+                <span class="badge badge-accent" id="reqCount">0 req</span>
+                <span class="badge badge-success" id="serverStatus">● Live</span>
+                <span class="badge badge-warning" id="aiStatus" style="display:none">🤖 AI</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="panel-form">
+
+                <!-- ═══ AI CHAT ═══ -->
+                <div class="panel-content active ai-full" id="panel-ai">
+                    <div class="card">
+                        <div class="card-header">🤖 AI Agent Chat
+                            <span style="margin-left:auto;display:flex;gap:6px;align-items:center">
+                                <span style="font-size:10px;color:var(--text3)" id="aiProviderLabel"></span>
+                                <button class="chat-action-btn" onclick="aiReset()" title="Clear conversation">🗑
+                                    Reset</button>
+                            </span>
+                        </div>
+                        <div class="chat-wrap">
+                            <div class="chat-messages" id="chatMessages">
+                                <div id="chatWelcome" style="text-align:center;padding:50px 20px;color:var(--text3)">
+                                    <div style="font-size:48px;margin-bottom:16px;opacity:.3">🤖</div>
+                                    <div style="font-size:16px;font-weight:600;color:var(--text)">InstaAPI AI Agent
+                                    </div>
+                                    <div
+                                        style="font-size:12px;margin-top:6px;max-width:350px;margin-left:auto;margin-right:auto">
+                                        Give commands in natural language — AI does everything for you. Get profiles,
+                                        analyze posts,
+                                        compare followers, and more.</div>
+                                    <div
+                                        style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:20px">
+                                        <button class="quick-btn"
+                                            onclick="aiSend('How many followers does cristiano have?')">👤 Follower
+                                            Count</button>
+                                        <button class="quick-btn"
+                                            onclick="aiSend('Show me the last 3 posts of therock')">📷 Recent
+                                            Posts</button>
+                                        <button class="quick-btn"
+                                            onclick="aiSend('Compare messi and ronaldo follower counts')">⚖️
+                                            Compare</button>
+                                        <button class="quick-btn"
+                                            onclick="aiSend('Get info about the fashion hashtag')">🔖 Hashtag
+                                            Info</button>
+                                        <button class="quick-btn" onclick="aiSend('Show my notifications')">🔔
+                                            Notifications</button>
+                                        <button class="quick-btn"
+                                            onclick="aiSend('Search for the location Tashkent')">📍
+                                            Location Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-toolbar">
+                                <button class="chat-action-btn" onclick="aiSend('continue')" title="Continue">▶
+                                    Continue</button>
+                                <button class="chat-action-btn" onclick="aiSend('explain in detail')" title="Explain">💡
+                                    Explain</button>
+                                <button class="chat-action-btn" onclick="aiSend('show the result in JSON format')">📋
+                                    JSON</button>
+                            </div>
+                            <div class="chat-input-area">
+                                <textarea class="chat-input" id="chatInput"
+                                    placeholder="Type a command for the AI... (Shift+Enter for new line)" rows="1"
+                                    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();aiSendInput()}"
+                                    oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+                                <button class="chat-send" id="chatSendBtn" onclick="aiSendInput()">➤</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ USERS ═══ -->
+                <div class="panel-content" id="panel-users">
+                    <div class="card">
+                        <div class="card-header">👤 Get User by Username</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Username</label><input class="form-input"
+                                    id="inp-username" placeholder="cristiano"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/users/username/'+v('inp-username'))">🚀 Get Profile</button>
+                            <div class="quick-actions">
+                                <button class="quick-btn"
+                                    onclick="setRun('inp-username','cristiano','/api/users/username/')">cristiano</button>
+                                <button class="quick-btn"
+                                    onclick="setRun('inp-username','instagram','/api/users/username/')">instagram</button>
+                                <button class="quick-btn"
+                                    onclick="setRun('inp-username','therock','/api/users/username/')">therock</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📊 Full Profile</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Username</label><input class="form-input"
+                                    id="inp-full" placeholder="cristiano"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/users/full/'+v('inp-full'))">📊 Full
+                                Profile</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🔎 Search Users</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Query</label><input class="form-input"
+                                    id="inp-usearch" placeholder="fashion blogger"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/users/search?q='+v('inp-usearch'))">🔍 Search</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🆔 Get by ID</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">User ID</label><input class="form-input"
+                                    id="inp-uid" placeholder="173560420"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/users/id/'+v('inp-uid'))">📋
+                                Get</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📝 Parse Bio</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Username</label><input class="form-input"
+                                    id="inp-bio" placeholder="cristiano"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/users/bio/'+v('inp-bio'))">📝 Parse
+                                Bio</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ MEDIA ═══ -->
+                <div class="panel-content" id="panel-media">
+                    <div class="card">
+                        <div class="card-header">📷 Media Info</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Media PK</label><input class="form-input"
+                                    id="inp-mpk" placeholder="3456789012345678901"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/media/info/'+v('inp-mpk'))">📋
+                                Info</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">⚡ Full Media Info</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Media PK</label><input class="form-input"
+                                    id="inp-mfull" placeholder="3456789012345678901"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/media/full/'+v('inp-mfull'))">⚡ Full
+                                Info</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🔗 Media by URL</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Instagram URL</label><input
+                                    class="form-input" id="inp-murl" placeholder="https://instagram.com/p/ABC123/">
+                            </div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/media/by-url?url='+encodeURIComponent(v('inp-murl')))">🔗
+                                Get</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">❤️ Likers</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Media PK</label><input class="form-input"
+                                    id="inp-mlk" placeholder="3456789012345678901"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/media/likers/'+v('inp-mlk'))">❤️
+                                Likers</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">💬 Comments</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Media PK</label><input class="form-input"
+                                    id="inp-mcm" placeholder="3456789012345678901"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/media/comments/'+v('inp-mcm'))">💬
+                                Comments</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ FEED ═══ -->
+                <div class="panel-content" id="panel-feed">
+                    <div class="card">
+                        <div class="card-header">📰 User Feed</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">User PK</label><input class="form-input"
+                                    id="inp-fpk" placeholder="173560420"></div>
+                            <div class="form-group"><label class="form-label">Count</label><input class="form-input"
+                                    id="inp-fcnt" type="number" value="12" min="1" max="50"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/feed/user/'+v('inp-fpk')+'?count='+v('inp-fcnt'))">📰
+                                Feed</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">#️⃣ Tag Feed</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Hashtag</label><input class="form-input"
+                                    id="inp-ftag" placeholder="fashion"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/feed/tag/'+v('inp-ftag'))">#️⃣ Tag
+                                Feed</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">❤️ Liked Posts</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/feed/liked')">❤️ My Liked</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🔖 Saved Posts</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/feed/saved')">🔖 My Saved</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ SEARCH ═══ -->
+                <div class="panel-content" id="panel-search">
+                    <div class="card">
+                        <div class="card-header">🔍 Top Search</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Query</label><input class="form-input"
+                                    id="inp-stop" placeholder="fashion"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/search/top?q='+v('inp-stop'))">🔍
+                                Search</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">👤 Users</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Query</label><input class="form-input"
+                                    id="inp-su" placeholder="cristiano"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/search/users?q='+v('inp-su'))">👤
+                                Search</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">#️⃣ Hashtags</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Query</label><input class="form-input"
+                                    id="inp-sh" placeholder="travel"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/search/hashtags?q='+v('inp-sh'))">#️⃣
+                                Search</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📍 Places</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Query</label><input class="form-input"
+                                    id="inp-sp" placeholder="Tashkent"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/search/places?q='+v('inp-sp'))">📍
+                                Search</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🔥 Explore</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/search/explore')">🔥 Explore</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ STORIES ═══ -->
+                <div class="panel-content" id="panel-stories">
+                    <div class="card">
+                        <div class="card-header">📖 User Stories</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">User PK</label><input class="form-input"
+                                    id="inp-stpk" placeholder="173560420"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/stories/user/'+v('inp-stpk'))">📖
+                                Stories</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">⭐ Highlights</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">User PK</label><input class="form-input"
+                                    id="inp-hlpk" placeholder="173560420"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/stories/highlights/'+v('inp-hlpk'))">⭐ Highlights</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📋 Stories Tray</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/stories/tray')">📋 Get Tray</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ FRIENDSHIPS ═══ -->
+                <div class="panel-content" id="panel-friendships">
+                    <div class="card">
+                        <div class="card-header">👥 Followers</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">User PK</label><input class="form-input"
+                                    id="inp-flw" placeholder="173560420"></div>
+                            <div class="form-group"><label class="form-label">Count</label><input class="form-input"
+                                    id="inp-flwc" type="number" value="20" min="1" max="200"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/friendships/followers/'+v('inp-flw')+'?count='+v('inp-flwc'))">👥
+                                Followers</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">➡️ Following</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">User PK</label><input class="form-input"
+                                    id="inp-fng" placeholder="173560420"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/friendships/following/'+v('inp-fng'))">➡️ Following</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🔗 Friendship Status</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">User PK</label><input class="form-input"
+                                    id="inp-fst" placeholder="173560420"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/friendships/status/'+v('inp-fst'))">🔗 Status</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🤝 Mutual Followers</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">User PK</label><input class="form-input"
+                                    id="inp-fmt" placeholder="173560420"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/friendships/mutual/'+v('inp-fmt'))">🤝 Mutual</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">⏳ Pending Requests</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/friendships/pending')">⏳
+                                Pending</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ ACCOUNT ═══ -->
+                <div class="panel-content" id="panel-account">
+                    <div class="card">
+                        <div class="card-header">👤 My Profile</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/account/me')">👤 Get</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">ℹ️ Account Info</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/account/info')">ℹ️ Info</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🚫 Blocked Users</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/account/blocked')">🚫
+                                Blocked</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🔒 Restricted Users</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/account/restricted')">🔒
+                                Restricted</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📱 Login Activity</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/account/login-activity')">📱
+                                Activity</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🔐 Privacy Settings</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/account/privacy')">🔐
+                                Privacy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ PUBLIC ═══ -->
+                <div class="panel-content" id="panel-public">
+                    <div class="card">
+                        <div class="card-header">🌐 Public Profile</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Username</label><input class="form-input"
+                                    id="inp-pub" placeholder="cristiano"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/public/profile/'+v('inp-pub'))">🌐
+                                Profile</button>
+                            <div class="quick-actions">
+                                <button class="quick-btn"
+                                    onclick="setRun('inp-pub','cristiano','/api/public/profile/')">cristiano</button>
+                                <button class="quick-btn"
+                                    onclick="setRun('inp-pub','leomessi','/api/public/profile/')">leomessi</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📷 Public Posts</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Username</label><input class="form-input"
+                                    id="inp-pubp" placeholder="cristiano"></div>
+                            <div class="form-group"><label class="form-label">Count</label><input class="form-input"
+                                    id="inp-pubc" type="number" value="12" min="1" max="50"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/public/posts/'+v('inp-pubp')+'?count='+v('inp-pubc'))">📷
+                                Posts</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ HASHTAGS ═══ -->
+                <div class="panel-content" id="panel-hashtags">
+                    <div class="card">
+                        <div class="card-header">#️⃣ Hashtag Info</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Hashtag</label><input class="form-input"
+                                    id="inp-htag" placeholder="fashion"></div>
+                            <button class="btn btn-primary" onclick="callAPI('/api/hashtags/info/'+v('inp-htag'))">#️⃣
+                                Info</button>
+                            <div class="quick-actions">
+                                <button class="quick-btn"
+                                    onclick="setRun('inp-htag','fashion','/api/hashtags/info/')">fashion</button>
+                                <button class="quick-btn"
+                                    onclick="setRun('inp-htag','travel','/api/hashtags/info/')">travel</button>
+                                <button class="quick-btn"
+                                    onclick="setRun('inp-htag','food','/api/hashtags/info/')">food</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ NOTIFICATIONS ═══ -->
+                <div class="panel-content" id="panel-notifications">
+                    <div class="card">
+                        <div class="card-header">🔔 Activity Feed (Raw)</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/notifications')">🔔 All
+                                Notifications</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📊 Notification Counts</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/notifications/counts')">📊
+                                Counts</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📋 All Parsed</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/notifications/parsed')">📋
+                                Parsed</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">👤 Follow Notifications</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/notifications/follows')">👤
+                                Follows</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">❤️ Like Notifications</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/notifications/likes')">❤️
+                                Likes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ DIRECT ═══ -->
+                <div class="panel-content" id="panel-direct">
+                    <div class="card">
+                        <div class="card-header">💬 DM Inbox</div>
+                        <div class="card-body">
+                            <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Get your Direct Message
+                                inbox.</p>
+                            <button class="btn btn-primary" onclick="callAPI('/api/direct/inbox')">💬 Get Inbox</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ SAVED ═══ -->
+                <div class="panel-content" id="panel-saved">
+                    <div class="card">
+                        <div class="card-header">💾 Saved Results</div>
+                        <div class="card-body">
+                            <div id="savedList">
+                                <p style="font-size:12px;color:var(--text3)">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ HISTORY ═══ -->
+                <div class="panel-content" id="panel-history">
+                    <div class="card">
+                        <div class="card-header">📜 Request History</div>
+                        <div class="card-body">
+                            <div id="historyList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ DASHBOARD ═══ -->
+                <div class="panel-content" id="panel-dashboard">
+                    <div class="card">
+                        <div class="card-header">📊 Dashboard</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/dashboard')">📊 Get Stats</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📡 Server Status</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/status')">📡 Status</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ DOWNLOADS ═══ -->
+                <div class="panel-content" id="panel-downloads">
+                    <div class="card">
+                        <div class="card-header">📥 Download Profile Pic</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Username</label><input class="form-input"
+                                    id="inp-dl-user" placeholder="cristiano"></div>
+                            <button class="btn btn-primary" onclick="dlProfilePic()">📥 Download Profile Pic</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📷 Download Posts</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Username</label><input class="form-input"
+                                    id="inp-dl-posts-user" placeholder="cristiano"></div>
+                            <div class="form-group"><label class="form-label">Count</label><input class="form-input"
+                                    id="inp-dl-posts-count" type="number" value="4" min="1" max="20"></div>
+                            <button class="btn btn-primary" onclick="dlPosts()">📷 Download Posts</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📁 Downloaded Files</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/download/list')">📁 List
+                                Files</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ ANALYTICS ═══ -->
+                <div class="panel-content" id="panel-analytics">
+                    <div class="card">
+                        <div class="card-header">📈 Profile Analytics</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Username</label><input class="form-input"
+                                    id="inp-analytics-user" placeholder="cristiano"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/analytics/profile/'+v('inp-analytics-user'))">📈 Analyze</button>
+                            <div class="quick-actions">
+                                <button class="quick-btn"
+                                    onclick="document.getElementById('inp-analytics-user').value='cristiano';callAPI('/api/analytics/profile/cristiano')">cristiano</button>
+                                <button class="quick-btn"
+                                    onclick="document.getElementById('inp-analytics-user').value='leomessi';callAPI('/api/analytics/profile/leomessi')">leomessi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ SCHEDULER ═══ -->
+                <div class="panel-content" id="panel-scheduler">
+                    <div class="card">
+                        <div class="card-header">⏰ Create Monitoring Task</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Username to monitor</label><input
+                                    class="form-input" id="inp-task-user" placeholder="cristiano"></div>
+                            <div class="form-group"><label class="form-label">Interval (minutes)</label><input
+                                    class="form-input" id="inp-task-interval" type="number" value="60" min="1"
+                                    max="1440"></div>
+                            <button class="btn btn-primary" onclick="createTask()">⏰ Create Task</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📋 Active Tasks</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/tasks/list')">📋 List Tasks</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ COMPARE ═══ -->
+                <div class="panel-content" id="panel-compare">
+                    <div class="card">
+                        <div class="card-header">🔄 Compare Profiles</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Usernames (comma-separated)</label><input
+                                    class="form-input" id="inp-compare" placeholder="cristiano,leomessi,neymarjr"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/compare?users='+encodeURIComponent(v('inp-compare')))">🔄
+                                Compare</button>
+                            <div class="quick-actions">
+                                <button class="quick-btn"
+                                    onclick="document.getElementById('inp-compare').value='cristiano,leomessi';callAPI('/api/compare?users=cristiano,leomessi')">CR7
+                                    vs Messi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ BATCH ═══ -->
+                <div class="panel-content" id="panel-batch">
+                    <div class="card">
+                        <div class="card-header">📋 Batch Scrape</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Usernames (one per line or
+                                    comma-separated)</label>
+                                <textarea class="form-input" id="inp-batch" rows="4"
+                                    placeholder="cristiano&#10;leomessi&#10;neymarjr"
+                                    style="resize:vertical"></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="batchScrape()">📋 Scrape All</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📄 Import from Text</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Paste usernames</label>
+                                <textarea class="form-input" id="inp-batch-import" rows="3"
+                                    placeholder="@user1, @user2, user3" style="resize:vertical"></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="batchImport()">📄 Parse</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ SESSION ═══ -->
+                <div class="panel-content" id="panel-session">
+                    <div class="card">
+                        <div class="card-header">🔐 Session Status</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/session/status')">🔐 Check
+                                Status</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🔑 Login</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Username</label><input class="form-input"
+                                    id="inp-login-user" placeholder="username"></div>
+                            <div class="form-group"><label class="form-label">Password</label><input class="form-input"
+                                    id="inp-login-pass" type="password" placeholder="password"></div>
+                            <button class="btn btn-primary" onclick="sessionLogin()">🔑 Login</button>
+                            <button class="btn btn-outline" onclick="sessionLogout()">🚪 Logout</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ ACTIVITY ═══ -->
+                <div class="panel-content" id="panel-activity">
+                    <div class="card">
+                        <div class="card-header">📡 Activity Feed</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/activity/feed')">📡 Get Activity
+                                Log</button>
+                            <button class="btn btn-outline" onclick="callAPI('/api/activity/live')">🔔 Live
+                                Notifications</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ COLLECTIONS ═══ -->
+                <div class="panel-content" id="panel-collections">
+                    <div class="card">
+                        <div class="card-header">🗂️ Create Collection</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Collection Name</label><input
+                                    class="form-input" id="inp-col-name" placeholder="Competitors"></div>
+                            <button class="btn btn-primary" onclick="createCollection()">🗂️ Create</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">➕ Add to Collection</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Collection</label><input
+                                    class="form-input" id="inp-col-target" placeholder="Competitors"></div>
+                            <div class="form-group"><label class="form-label">Username to add</label><input
+                                    class="form-input" id="inp-col-user" placeholder="cristiano"></div>
+                            <button class="btn btn-primary" onclick="addToCollection()">➕ Add</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📋 All Collections</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/collections/list')">📋 List
+                                All</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ EXPORTER ═══ -->
+                <div class="panel-content" id="panel-exporter">
+                    <div class="card">
+                        <div class="card-header">📤 Export Last Result</div>
+                        <div class="card-body">
+                            <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Export the last API result
+                                to different formats.</p>
+                            <div class="form-group"><label class="form-label">Filename (optional)</label><input
+                                    class="form-input" id="inp-export-name" placeholder="auto-generated"></div>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap">
+                                <button class="btn btn-primary" onclick="exportData('json')">📄 JSON</button>
+                                <button class="btn btn-primary" onclick="exportData('csv')">📊 CSV</button>
+                                <button class="btn btn-primary" onclick="exportData('xlsx')">📗 Excel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ HASHTAG TRACKER ═══ -->
+                <div class="panel-content" id="panel-hashtrack">
+                    <div class="card">
+                        <div class="card-header">🎯 Track Hashtag</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Hashtag</label><input class="form-input"
+                                    id="inp-ht-tag" placeholder="fashion"></div>
+                            <button class="btn btn-primary" onclick="trackHashtag()">🎯 Start Tracking</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">📋 Tracked Hashtags</div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="callAPI('/api/hashtags/list')">📋 List
+                                Tracked</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">🔝 Top Posts</div>
+                        <div class="card-body">
+                            <div class="form-group"><label class="form-label">Hashtag</label><input class="form-input"
+                                    id="inp-ht-top" placeholder="fashion"></div>
+                            <button class="btn btn-primary"
+                                onclick="callAPI('/api/hashtags/'+v('inp-ht-top')+'/top_posts')">🔝 Top Posts</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- panel-form -->
+
+            <!-- ═══ RESULT PANEL ═══ -->
+            <div class="panel-result" style="display:none">
+                <div class="result-card">
+                    <div class="result-header">
+                        <div class="result-title"><span>📋</span><span id="resultLabel">Response</span></div>
+                        <div class="result-actions">
+                            <span class="result-meta" id="resultMeta"></span>
+                            <button class="btn btn-outline btn-sm" onclick="saveResult()" id="saveBtn"
+                                style="display:none">💾 Save</button>
+                            <button class="btn btn-outline btn-sm" onclick="exportCSV()" id="csvBtn"
+                                style="display:none">📥 CSV</button>
+                            <button class="btn btn-outline btn-sm" onclick="copyResult()" id="copyBtn"
+                                style="display:none">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="result-body" id="resultBody">
+                        <div class="result-empty" id="resultEmpty">
+                            <div class="result-empty-icon">🧪</div>
+                            <div class="result-empty-text">Ready to test</div>
+                            <div class="result-empty-sub">Select an API and run, or chat with AI Agent</div>
+                        </div>
+                        <div class="json-output" id="jsonOutput" style="display:none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let totalRequests = 0, lastJsonRaw = '', lastJsonData = null;
+        const PI = {
+            ai: { title: '🤖 AI Chat', sub: 'Talk to AI Agent — it controls Instagram for you' },
+            users: { title: '👤 Users API', sub: 'Profiles, search, bio parsing, full data' },
+            media: { title: '📷 Media API', sub: 'Full info, by URL, likers, comments' },
+            feed: { title: '📰 Feed API', sub: 'User feeds, tags, liked, saved' },
+            search: { title: '🔍 Search API', sub: 'Users, hashtags, places, explore' },
+            stories: { title: '📖 Stories API', sub: 'User stories, highlights, tray' },
+            friendships: { title: '🤝 Friendships API', sub: 'Followers, following, mutual, status' },
+            account: { title: '⚙️ Account API', sub: 'Profile, blocked, restricted, login activity, privacy' },
+            public: { title: '🌐 Public API', sub: 'Anonymous access — no login required' },
+            hashtags: { title: '#️⃣ Hashtags API', sub: 'Hashtag info and statistics' },
+            notifications: { title: '🔔 Notifications', sub: 'Activity feed and notifications' },
+            direct: { title: '💬 Direct Messages', sub: 'DM inbox' },
+            saved: { title: '💾 Saved Results', sub: 'View and manage saved API results' },
+            history: { title: '📜 Request History', sub: 'Recent API calls and results' },
+            dashboard: { title: '📊 Dashboard', sub: 'Stats, rate limits, server health' },
+            downloads: { title: '📥 Download Manager', sub: 'Download profile pics, posts, stories' },
+            analytics: { title: '📈 Analytics', sub: 'Deep profile analysis and engagement metrics' },
+            scheduler: { title: '⏰ Scheduler', sub: 'Create monitoring tasks with alerts' },
+            compare: { title: '🔄 Compare', sub: 'Side-by-side profile comparison' },
+            batch: { title: '📋 Batch Operations', sub: 'Scrape multiple profiles at once' },
+            session: { title: '🔐 Session Manager', sub: 'Login, logout, session status' },
+            activity: { title: '📡 Activity Feed', sub: 'Real-time activity log and notifications' },
+            collections: { title: '🗂️ Collections', sub: 'Organize profiles into groups' },
+            exporter: { title: '📤 Export Center', sub: 'Export data as JSON, CSV, or Excel' },
+            hashtrack: { title: '🎯 Hashtag Tracker', sub: 'Track and monitor hashtag trends' },
+        };
+
+        function v(id) { return document.getElementById(id).value.trim() }
+        function setRun(id, val, base) { document.getElementById(id).value = val; callAPI(base + val) }
+
+        function switchPanel(el) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+            const p = el.dataset.panel;
+            document.querySelectorAll('.panel-content').forEach(x => x.classList.remove('active'));
+            const t = document.getElementById('panel-' + p);
+            if (t) { t.classList.add('active'); t.classList.add('fade-in') }
+            const i = PI[p] || { title: p, sub: '' };
+            document.getElementById('mainTitle').textContent = i.title;
+            document.getElementById('mainSubtitle').textContent = i.sub;
+            // AI Chat — full width mode
+            const pf = document.querySelector('.panel-form'), pr = document.querySelector('.panel-result');
+            if (p === 'ai') { pf.style.width = '100%'; pf.style.flex = '1'; pr.style.display = 'none' }
+            else { pf.style.width = '360px'; pf.style.flex = ''; pr.style.display = '' }
+            if (p === 'history') renderHistory();
+        }
+
+        // ═══ API CALL ═══
+        async function callAPI(url) {
+            const rBody = document.getElementById('resultBody'), jOut = document.getElementById('jsonOutput'), rEmpty = document.getElementById('resultEmpty'), rLabel = document.getElementById('resultLabel'), rMeta = document.getElementById('resultMeta');
+            const saveBtn = document.getElementById('saveBtn'), csvBtn = document.getElementById('csvBtn'), copyBtn = document.getElementById('copyBtn');
+            rEmpty.style.display = 'none'; jOut.style.display = 'none'; jOut.innerHTML = ''; saveBtn.style.display = 'none'; csvBtn.style.display = 'none'; copyBtn.style.display = 'none';
+            const ld = document.createElement('div'); ld.className = 'loading-overlay'; ld.innerHTML = '<div class="spinner"></div><div class="loading-text">Fetching...</div>'; rBody.appendChild(ld);
+            rLabel.textContent = 'Loading...'; rMeta.textContent = '';
+            const t0 = performance.now();
+            try {
+                const res = await fetch(url); const data = await res.json(); const elapsed = ((performance.now() - t0) / 1000).toFixed(2);
+                if (ld.parentNode) ld.remove();
+                totalRequests++; document.getElementById('reqCount').textContent = totalRequests + ' req';
+                lastJsonRaw = JSON.stringify(data, null, 2); lastJsonData = data;
+                jOut.innerHTML = syntaxHL(lastJsonRaw); jOut.style.display = 'block';
+                saveBtn.style.display = ''; csvBtn.style.display = ''; copyBtn.style.display = '';
+                rLabel.innerHTML = data.success ? '<span class="success-badge">✅ ' + (data.message || 'OK') + '</span>' : '<span class="error-badge">❌ ' + (data.error || 'Error') + '</span>';
+                rMeta.textContent = '⏱ ' + elapsed + 's · 📦 ' + fmtB(lastJsonRaw.length);
+            } catch (err) {
+                if (ld.parentNode) ld.remove(); jOut.style.display = 'block';
+                jOut.innerHTML = '<div style="padding:14px;color:var(--error)"><div class="error-badge">❌ Network Error</div><br>' + escH(err.message) + '</div>';
+                rLabel.textContent = 'Error';
+            }
+        }
+
+        // ═══ AI CHAT (enhanced) ═══
+        let aiProcessing = false;
+        function aiSend(msg) { document.getElementById('chatInput').value = msg; aiSendInput() }
+        async function aiSendInput() {
+            const inp = document.getElementById('chatInput'), msg = inp.value.trim();
+            if (!msg || aiProcessing) return;
+            aiProcessing = true; document.getElementById('chatSendBtn').disabled = true; inp.value = ''; inp.style.height = 'auto';
+            const cm = document.getElementById('chatMessages');
+            const wel = document.getElementById('chatWelcome'); if (wel) wel.remove();
+            addChat('user', msg);
+
+            // Create a steps container placeholder in chat
+            const stepsWrapper = document.createElement('div');
+            stepsWrapper.className = 'chat-msg agent';
+            stepsWrapper.innerHTML = '<div class="chat-bubble" style="color:var(--text)"><div class="agent-steps" id="liveSteps"></div><div id="liveStepsSpinner" style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px;color:var(--text3)"><div class="step-spinner"></div> AI is thinking...</div></div>';
+            cm.appendChild(stepsWrapper);
+            cm.scrollTop = cm.scrollHeight;
+
+            const stepsEl = document.getElementById('liveSteps');
+            const spinnerEl = document.getElementById('liveStepsSpinner');
+            let lastCode = '';
+            let stepMeta = {};
+
+            try {
+                const res = await fetch('/api/ai/ask/stream', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg }),
+                });
+
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+
+                    // Parse SSE lines
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop(); // keep incomplete line
+
+                    for (const line of lines) {
+                        if (!line.startsWith('data: ')) continue;
+                        try {
+                            const event = JSON.parse(line.slice(6));
+                            renderStepEvent(event, stepsEl, spinnerEl);
+
+                            if (event.type === 'code') lastCode = event.content || '';
+
+                            if (event.type === 'done') {
+                                stepMeta = { steps: event.steps, tokens: event.tokens, duration: event.duration };
+                                spinnerEl.style.display = 'none';
+
+                                // Render final answer
+                                let ans = event.answer || '';
+                                if (event.code && !ans.includes(event.code)) {
+                                    ans += '\n\n\ud83d\udcdd Executed code:\n```python\n' + event.code + '\n```';
+                                }
+                                if (event.files && event.files.length) {
+                                    ans += '\n\n\ud83d\udcc2 Files: ' + event.files.join(', ');
+                                }
+                                if (event.error && !event.answer) {
+                                    addChat('agent', '\u274c ' + event.error);
+                                } else {
+                                    addChat('agent', ans, stepMeta);
+                                }
+                            } else if (event.type === 'error') {
+                                spinnerEl.style.display = 'none';
+                                addChat('agent', '\u274c ' + (event.message || 'Unknown error'));
+                            }
+                        } catch (parseErr) {
+                            console.warn('SSE parse error:', parseErr, line);
+                        }
+                    }
+                }
+
+                // Process remaining data in buffer after stream ends
+                if (buffer.trim()) {
+                    const remaining = buffer.split('\n');
+                    for (const line of remaining) {
+                        if (!line.startsWith('data: ')) continue;
+                        try {
+                            const event = JSON.parse(line.slice(6));
+                            renderStepEvent(event, stepsEl, spinnerEl);
+                            if (event.type === 'done') {
+                                stepMeta = { steps: event.steps, tokens: event.tokens, duration: event.duration };
+                                spinnerEl.style.display = 'none';
+                                let ans = event.answer || '';
+                                if (event.code && !ans.includes(event.code)) {
+                                    ans += '\n\n\ud83d\udcdd Executed code:\n```python\n' + event.code + '\n```';
+                                }
+                                if (event.error && !event.answer) {
+                                    addChat('agent', '\u274c ' + event.error);
+                                } else {
+                                    addChat('agent', ans, stepMeta);
+                                }
+                            } else if (event.type === 'error') {
+                                spinnerEl.style.display = 'none';
+                                addChat('agent', '\u274c ' + (event.message || 'Unknown error'));
+                            }
+                        } catch (e) { }
+                    }
+                }
+            } catch (err) {
+                addChat('agent', '\u274c ' + err.message);
+            } finally {
+                // ALWAYS hide spinner and re-enable input
+                if (spinnerEl) spinnerEl.style.display = 'none';
+            }
+            aiProcessing = false; document.getElementById('chatSendBtn').disabled = false; inp.focus();
+        }
+
+        function renderStepEvent(event, stepsEl, spinnerEl) {
+            if (!stepsEl) return;
+            const cm = document.getElementById('chatMessages');
+
+            if (event.type === 'status') {
+                spinnerEl.innerHTML = '<div class="step-spinner"></div> ' + escH(event.message || 'Working...');
+            } else if (event.type === 'thinking') {
+                spinnerEl.innerHTML = '<div class="step-spinner"></div> ' + escH(event.message || 'Analyzing...');
+                const step = document.createElement('div');
+                step.className = 'agent-step step-thinking';
+                step.innerHTML = '<div class="step-icon">\ud83e\udde0</div><div class="step-body"><div class="step-title">' + escH(event.message || 'Thinking...') + '</div></div>';
+                stepsEl.appendChild(step);
+            } else if (event.type === 'code') {
+                const code = event.content || '';
+                const step = document.createElement('div');
+                step.className = 'agent-step step-code';
+                const shortCode = code.length > 300 ? code.substring(0, 300) + '...' : code;
+                step.innerHTML = '<div class="step-icon">\ud83d\udcbb</div><div class="step-body"><div class="step-title">Python code generated</div><div class="step-code-block">' + escH(shortCode) + '</div>' +
+                    (code.length > 300 ? '<div class="step-toggle" onclick="this.previousElementSibling.textContent=this.dataset.full;this.remove()" data-full="' + escH(code).replace(/"/g, '&quot;') + '">Show full code \u25bc</div>' : '') + '</div>';
+                stepsEl.appendChild(step);
+                spinnerEl.innerHTML = '<div class="step-spinner"></div> Executing code...';
+            } else if (event.type === 'tool_call') {
+                const name = event.name || 'tool';
+                const step = document.createElement('div');
+                step.className = 'agent-step step-tool-call';
+                step.id = 'tc-' + name + '-' + Date.now();
+                step.innerHTML = '<div class="step-icon">\u2699\ufe0f</div><div class="step-body"><div class="step-title">Tool: ' + escH(name) + '</div><div class="step-detail">Executing...</div></div>';
+                stepsEl.appendChild(step);
+                spinnerEl.innerHTML = '<div class="step-spinner"></div> Running ' + escH(name) + '...';
+            } else if (event.type === 'tool_result') {
+                const output = event.output || '';
+                const success = event.success !== false;
+                const step = document.createElement('div');
+                step.className = 'agent-step step-tool-result';
+                const icon = success ? '\u2705' : '\u274c';
+                const shortOut = output.length > 200 ? output.substring(0, 200) + '...' : output;
+                step.innerHTML = '<div class="step-icon">' + icon + '</div><div class="step-body"><div class="step-title">' + escH(event.name || 'Tool') + ' — ' + (success ? 'Success' : 'Error') + '</div>' +
+                    (output ? '<div class="step-output">' + escH(shortOut) + '</div>' : '') +
+                    (output.length > 200 ? '<div class="step-toggle" onclick="this.previousElementSibling.textContent=this.dataset.full;this.remove()" data-full="' + escH(output).replace(/"/g, '&quot;') + '">Show all \u25bc</div>' : '') + '</div>';
+                stepsEl.appendChild(step);
+                spinnerEl.innerHTML = '<div class="step-spinner"></div> Analyzing result...';
+            }
+            cm.scrollTop = cm.scrollHeight;
+        }
+        async function aiReset() {
+            await fetch('/api/ai/reset', { method: 'POST' });
+            const cm = document.getElementById('chatMessages');
+            cm.innerHTML = '<div id="chatWelcome" style="text-align:center;padding:50px 20px;color:var(--text3)"><div style="font-size:48px;margin-bottom:16px;opacity:.3">🤖</div><div style="font-size:16px;font-weight:600;color:var(--text)">Conversation cleared</div><div style="font-size:12px;margin-top:6px">Start a new conversation</div></div>';
+        }
+        function fmtChat(text) {
+            if (!text) return '';
+            try {
+                let src = String(text);
+                // Step 1: Extract code blocks to protect them
+                const codeBlocks = [];
+                src = src.replace(/```(\w*)\n([\s\S]*?)```/g, function (_, lang, code) {
+                    codeBlocks.push('<pre><code>' + escH(code.trim()) + '</code></pre>');
+                    return '\x00CB' + (codeBlocks.length - 1) + '\x00';
+                });
+
+                // Step 2: Process line by line
+                const lines = src.split('\n');
+                let html = '';
+                let i = 0;
+
+                while (i < lines.length) {
+                    const line = lines[i];
+                    const trimmed = line.trim();
+
+                    // Table detection: line starts/ends with | and next line is separator
+                    if (trimmed.startsWith('|') && trimmed.endsWith('|') &&
+                        i + 1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1])) {
+                        let t = '<table><thead><tr>';
+                        const hdrs = trimmed.split('|').filter(function (c) { return c.trim() !== ''; });
+                        for (let h = 0; h < hdrs.length; h++) {
+                            t += '<th>' + inlineFmt(hdrs[h].trim()) + '</th>';
+                        }
+                        t += '</tr></thead><tbody>';
+                        i += 2; // skip header + separator
+                        while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+                            t += '<tr>';
+                            const cells = lines[i].trim().split('|').filter(function (c) { return c.trim() !== ''; });
+                            for (let c = 0; c < cells.length; c++) {
+                                t += '<td>' + inlineFmt(cells[c].trim()) + '</td>';
+                            }
+                            t += '</tr>';
+                            i++;
+                        }
+                        t += '</tbody></table>';
+                        html += '<div class="table-wrap">' + t + '</div>';
+                        continue;
+                    }
+
+                    // Headers
+                    if (trimmed.startsWith('### ')) { html += '<h3>' + inlineFmt(trimmed.slice(4)) + '</h3>'; i++; continue; }
+                    if (trimmed.startsWith('## ')) { html += '<h2>' + inlineFmt(trimmed.slice(3)) + '</h2>'; i++; continue; }
+                    if (trimmed.startsWith('# ')) { html += '<h1>' + inlineFmt(trimmed.slice(2)) + '</h1>'; i++; continue; }
+
+                    // Horizontal rule
+                    if (/^[-*_]{3,}\s*$/.test(trimmed)) { html += '<hr>'; i++; continue; }
+
+                    // Blockquote
+                    if (trimmed.startsWith('> ')) { html += '<blockquote>' + inlineFmt(trimmed.slice(2)) + '</blockquote>'; i++; continue; }
+
+                    // Unordered list
+                    if (/^\s*[-*+]\s/.test(line)) {
+                        html += '<ul>';
+                        while (i < lines.length && /^\s*[-*+]\s/.test(lines[i])) {
+                            html += '<li>' + inlineFmt(lines[i].replace(/^\s*[-*+]\s/, '')) + '</li>';
+                            i++;
+                        }
+                        html += '</ul>';
+                        continue;
+                    }
+
+                    // Ordered list
+                    if (/^\s*\d+[.)]\s/.test(line)) {
+                        html += '<ol>';
+                        while (i < lines.length && /^\s*\d+[.)]\s/.test(lines[i])) {
+                            html += '<li>' + inlineFmt(lines[i].replace(/^\s*\d+[.)]\s/, '')) + '</li>';
+                            i++;
+                        }
+                        html += '</ol>';
+                        continue;
+                    }
+
+                    // Code block placeholder
+                    if (trimmed.indexOf('\x00CB') !== -1) {
+                        var cbMatch = trimmed.match(/\x00CB(\d+)\x00/);
+                        if (cbMatch) { html += codeBlocks[parseInt(cbMatch[1])]; i++; continue; }
+                    }
+
+                    // Empty line
+                    if (trimmed === '') { html += '<br>'; i++; continue; }
+
+                    // Regular paragraph
+                    html += '<p>' + inlineFmt(line) + '</p>';
+                    i++;
+                }
+                return html;
+            } catch (e) {
+                console.error('fmtChat error:', e);
+                return escH(String(text));
+            }
+        }
+        function inlineFmt(text) {
+            var s = escH(text);
+            s = s.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>');
+            s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+            s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color:var(--accent2)">$1</a>');
+            return s;
+        }
+        function addChat(role, text, meta) {
+            const cm = document.getElementById('chatMessages');
+            const d = document.createElement('div');
+            d.className = 'chat-msg ' + role;
+            const safeText = String(text || '');
+            let metaH = '';
+            if (meta) {
+                const p = [];
+                if (meta.steps) p.push('🔄 ' + meta.steps + ' step');
+                if (meta.duration) p.push('⏱ ' + meta.duration + 's');
+                if (meta.tokens) p.push('🪙 ' + meta.tokens);
+                if (p.length) metaH = '<div class="chat-meta">' + p.join(' · ') + '</div>';
+            }
+            let actions = '';
+            if (role === 'agent' && safeText.length > 20) {
+                actions = '<div class="chat-actions"><button class="chat-action-btn" onclick="copyBubble(this)">📋 Copy</button></div>';
+            }
+            const formatted = role === 'agent' ? fmtChat(safeText) : escH(safeText);
+            d.innerHTML = '<div class="chat-bubble" style="color:var(--text)">' + formatted + '</div>' + metaH + actions;
+            cm.appendChild(d);
+            cm.scrollTop = cm.scrollHeight;
+            console.log('[AI Chat]', role, safeText.substring(0, 100));
+        }
+        function copyBubble(btn) {
+            const bubble = btn.closest('.chat-msg').querySelector('.chat-bubble');
+            navigator.clipboard.writeText(bubble.textContent).then(() => {
+                btn.textContent = '✅ Done';
+                setTimeout(() => btn.textContent = '📋 Copy', 1500);
+            });
+        }
+
+        // ═══ SAVE / EXPORT ═══
+        async function saveResult() {
+            if (!lastJsonData) return;
+            const name = prompt('Save name:', 'result_' + Date.now()); if (!name) return;
+            try {
+                const res = await fetch('/api/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ data: lastJsonData, name: name }) });
+                const d = await res.json();
+                if (d.success) alert('✅ Saved: ' + d.filename); else alert('❌ ' + d.error);
+            } catch (e) { alert('❌ ' + e.message) }
+        }
+        async function exportCSV() {
+            if (!lastJsonData) return;
+            try {
+                const res = await fetch('/api/export/csv', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ data: lastJsonData }) });
+                if (res.ok) { const blob = await res.blob(); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'export.csv'; a.click(); URL.revokeObjectURL(url) }
+                else { const d = await res.json(); alert('❌ ' + (d.error || 'Export failed')) }
+            } catch (e) { alert('❌ ' + e.message) }
+        }
+        function copyResult() { navigator.clipboard.writeText(lastJsonRaw).then(() => { const b = document.getElementById('copyBtn'); b.textContent = '✅ Done'; setTimeout(() => b.textContent = '📋 Copy', 1500) }) }
+
+        // ═══ SAVED FILES ═══
+        async function loadSaved() {
+            try {
+                const res = await fetch('/api/saved'); const d = await res.json();
+                const el = document.getElementById('savedList');
+                if (!d.files || !d.files.length) { el.innerHTML = '<p style="font-size:12px;color:var(--text3)">No saved files yet</p>'; return }
+                el.innerHTML = d.files.map(f => '<div class="saved-item" onclick="loadSavedFile(\'' + f.name + '\')"><div><div class="saved-item-name">' + f.name + '</div><div class="saved-item-meta">' + fmtB(f.size) + ' · ' + f.modified + '</div></div><div class="saved-item-actions"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();deleteSaved(\'' + f.name + '\')">🗑</button></div></div>').join('');
+            } catch (e) { document.getElementById('savedList').innerHTML = '<p style="color:var(--error)">' + e.message + '</p>' }
+        }
+        async function loadSavedFile(name) { callAPI('/api/saved/' + name) }
+        async function deleteSaved(name) { if (!confirm('Delete ' + name + '?')) return; await fetch('/api/saved/' + name, { method: 'DELETE' }); loadSaved() }
+
+        // ═══ HISTORY ═══
+        function renderHistory() {
+            fetch('/api/history').then(r => r.json()).then(d => {
+                const el = document.getElementById('historyList');
+                if (!d.history || !d.history.length) { el.innerHTML = '<p style="font-size:12px;color:var(--text3)">No history yet</p>'; return }
+                el.innerHTML = d.history.map(h => '<div class="history-item"><div class="history-dot ' + (h.success ? 'ok' : 'fail') + '"></div><span style="color:var(--text3)">' + h.time + '</span><span>' + escH(h.message) + '</span></div>').join('');
+            }).catch(() => { });
+        }
+
+        // ═══ HELPERS ═══
+        function syntaxHL(j) { j = escH(j); return j.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?|\bnull\b)/g, m => { let c = 'number'; if (/^"/.test(m)) { c = /:$/.test(m) ? 'key' : 'string' } else if (/true|false/.test(m)) c = 'boolean'; else if (/null/.test(m)) c = 'null'; return '<span class="' + c + '">' + m + '</span>' }) }
+        function escH(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML }
+        function fmtB(b) { if (b < 1024) return b + ' B'; if (b < 1048576) return (b / 1024).toFixed(1) + ' KB'; return (b / 1048576).toFixed(1) + ' MB' }
+
+        // ═══ STATUS ═══
+        async function checkStatus() {
+            try {
+                const r = await fetch('/api/status'); const d = await r.json();
+                document.getElementById('statusText').textContent = 'Live · ' + d.total_requests + ' req';
+                document.getElementById('serverStatus').textContent = '● Live';
+                document.getElementById('serverStatus').className = 'badge badge-success';
+                const ai = document.getElementById('aiStatus');
+                if (d.ai_available) { ai.style.display = ''; ai.textContent = '🤖 ' + d.ai_provider; document.getElementById('aiProviderLabel').textContent = d.ai_provider }
+                else { ai.style.display = 'none' }
+            } catch {
+                document.getElementById('statusText').textContent = 'Offline';
+                document.getElementById('serverStatus').textContent = '● Offline'; document.getElementById('serverStatus').className = 'badge'; document.getElementById('serverStatus').style.cssText = 'background:var(--error-dim);color:var(--error);border:1px solid rgba(239,68,68,.25)';
+            }
+        }
+        // ═══ SHOW RESULT (for POST-based new tools) ═══
+        function showResult(data, label) {
+            const rBody = document.getElementById('resultBody'), jOut = document.getElementById('jsonOutput'), rEmpty = document.getElementById('resultEmpty'), rLabel = document.getElementById('resultLabel'), rMeta = document.getElementById('resultMeta');
+            const saveBtn = document.getElementById('saveBtn'), csvBtn = document.getElementById('csvBtn'), copyBtn = document.getElementById('copyBtn');
+            rEmpty.style.display = 'none';
+            const raw = JSON.stringify(data, null, 2);
+            lastJsonRaw = raw; lastJsonData = data;
+            jOut.style.display = 'block'; jOut.innerHTML = '<pre>' + syntaxHL(raw) + '</pre>';
+            rLabel.textContent = label || 'Result'; rMeta.textContent = (raw.length / 1024).toFixed(1) + ' KB';
+            saveBtn.style.display = ''; csvBtn.style.display = ''; copyBtn.style.display = '';
+            totalRequests++; document.getElementById('reqCount').textContent = totalRequests + ' req';
+        }
+
+        // ═══ NEW TOOLS ═══
+
+        // Download Manager
+        async function dlProfilePic() {
+            const u = v('inp-dl-user'); if (!u) return alert('Username required');
+            try { const r = await fetch('/api/download/profile_pic', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: u }) }); const d = await r.json(); showResult(d, 'download/profile_pic') } catch (e) { alert(e.message) }
+        }
+        async function dlPosts() {
+            const u = v('inp-dl-posts-user'), c = v('inp-dl-posts-count') || '4'; if (!u) return alert('Username required');
+            try { const r = await fetch('/api/download/posts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: u, count: parseInt(c) }) }); const d = await r.json(); showResult(d, 'download/posts') } catch (e) { alert(e.message) }
+        }
+
+        // Scheduler
+        async function createTask() {
+            const u = v('inp-task-user'), iv = v('inp-task-interval') || '60'; if (!u) return alert('Username required');
+            try { const r = await fetch('/api/tasks/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: u, interval: parseInt(iv), type: 'profile_check' }) }); const d = await r.json(); showResult(d, 'tasks/create') } catch (e) { alert(e.message) }
+        }
+
+        // Batch Operations
+        async function batchScrape() {
+            const text = document.getElementById('inp-batch').value; if (!text.trim()) return alert('Enter usernames');
+            const usernames = text.split(/[,\n]+/).map(u => u.trim().replace(/^@/, '')).filter(u => u.length > 1);
+            try { const r = await fetch('/api/batch/scrape', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ usernames }) }); const d = await r.json(); showResult(d, 'batch/scrape') } catch (e) { alert(e.message) }
+        }
+        async function batchImport() {
+            const text = document.getElementById('inp-batch-import').value; if (!text.trim()) return alert('Enter text');
+            try { const r = await fetch('/api/batch/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) }); const d = await r.json(); showResult(d, 'batch/import') } catch (e) { alert(e.message) }
+        }
+
+        // Session Manager
+        async function sessionLogin() {
+            const u = v('inp-login-user'), p = v('inp-login-pass'); if (!u || !p) return alert('Username and password required');
+            try { const r = await fetch('/api/session/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: u, password: p }) }); const d = await r.json(); showResult(d, 'session/login') } catch (e) { alert(e.message) }
+        }
+        async function sessionLogout() {
+            try { const r = await fetch('/api/session/logout', { method: 'POST' }); const d = await r.json(); showResult(d, 'session/logout') } catch (e) { alert(e.message) }
+        }
+
+        // Collections
+        async function createCollection() {
+            const n = v('inp-col-name'); if (!n) return alert('Collection name required');
+            try { const r = await fetch('/api/collections/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: n }) }); const d = await r.json(); showResult(d, 'collections/create') } catch (e) { alert(e.message) }
+        }
+        async function addToCollection() {
+            const n = v('inp-col-target'), u = v('inp-col-user'); if (!n || !u) return alert('Collection name and username required');
+            try { const r = await fetch('/api/collections/' + encodeURIComponent(n) + '/add', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: u }) }); const d = await r.json(); showResult(d, 'collections/add') } catch (e) { alert(e.message) }
+        }
+
+        // Export Center
+        async function exportData(fmt) {
+            const fn = v('inp-export-name') || undefined;
+            try { const r = await fetch('/api/export/' + fmt, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ filename: fn }) }); const d = await r.json(); showResult(d, 'export/' + fmt) } catch (e) { alert(e.message) }
+        }
+
+        // Hashtag Tracker
+        async function trackHashtag() {
+            const t = v('inp-ht-tag'); if (!t) return alert('Hashtag required');
+            try { const r = await fetch('/api/hashtags/track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tag: t }) }); const d = await r.json(); showResult(d, 'hashtags/track') } catch (e) { alert(e.message) }
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.classList.contains('form-input')) { const c = e.target.closest('.card'); if (c) { const b = c.querySelector('.btn-primary'); if (b) b.click() } } });
+        checkStatus(); setInterval(checkStatus, 10000);
+    </script>
+</body>
+
+</html>

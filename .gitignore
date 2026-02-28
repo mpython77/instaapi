@@ -1,0 +1,78 @@
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+.tox/
+.nox/
+
+# Debug/dump files
+_*.json
+_*.txt
+_*.py
+*.log
+debug_logs/
+
+# Session & data files
+session.json
+session_*.json
+saved_session.json
+device_cookies.json
+anon_profiles.json
+anon_comments_dump.json
+all_comments.json
+comments_dump.json
+production_test_results.json
+stories_test_results.json
+*_raw.json
+*_results.json
+following_*.json
+hashtag_results.json
+cristiano_posts.json
+littlebluedoor_posts.json
+
+# Temp test scripts (root level only)
+/test_*.py
+/do_login.py
+/scrape_*.py
+
+# User data
+/users.txt
+
+# Lead generation (contains large data & credentials)
+lead/
+
+# Generated MkDocs site
+site/
+
+# Generated downloads
+downloads/
+
+# Smart proxy config
+smart_proxy/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+.DS_Store

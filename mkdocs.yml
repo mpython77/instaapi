@@ -1,0 +1,150 @@
+site_name: InstaAPI Documentation
+site_description: Powerful Instagram Private API Library — 32 sync + 32 async modules, AI Agent, anti-detection, curl_cffi engine
+site_url: https://insaapi.github.io
+repo_url: https://github.com/insaapi/insaapi
+repo_name: insaapi/insaapi
+
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: slate
+      primary: deep purple
+      accent: pink
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: deep purple
+      accent: pink
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/instagram
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables
+  - attr_list
+  - md_in_html
+  - def_list
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/insaapi/insaapi
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/insaapi/
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quick-start.md
+    - Configuration: getting-started/configuration.md
+  - Core Concepts:
+    - Architecture: core/architecture.md
+    - Speed Modes: core/speed-modes.md
+    - Proxy Management: core/proxy-management.md
+    - Anti-Detection: core/anti-detection.md
+    - Error Handling: core/error-handling.md
+    - Data Models: core/models.md
+  - Anonymous Scraping:
+    - Overview: anonymous/overview.md
+    - Public Data: anonymous/public-data.md
+    - PublicAPI: anonymous/public-api.md
+    - AsyncPublicAPI: anonymous/async-public-api.md
+    - AnonClient: anonymous/anon-client.md
+    - Bulk Operations: anonymous/bulk-operations.md
+  - Authenticated API:
+    - Login & Sessions: authenticated/login.md
+    - Users: authenticated/users.md
+    - Media: authenticated/media.md
+    - Feed: authenticated/feed.md
+    - Stories: authenticated/stories.md
+    - Direct Messages: authenticated/direct.md
+    - Upload: authenticated/upload.md
+    - Search: authenticated/search.md
+    - Hashtags: authenticated/hashtags.md
+    - Location: authenticated/location.md
+    - Friendships: authenticated/friendships.md
+    - Insights: authenticated/insights.md
+    - Notifications: authenticated/notifications.md
+    - GraphQL: authenticated/graphql.md
+  - Advanced:
+    - Async Guide: advanced/async-guide.md
+    - Plugin System: advanced/plugins.md
+    - Event System: advanced/events.md
+    - Smart Rotation: advanced/smart-rotation.md
+    - Challenge Resolver: advanced/challenge-resolver.md
+    - Batch Operations: advanced/batch-operations.md
+    - Multi-Account: advanced/multi-account.md
+    - Web Playground: advanced/playground.md
+  - AI Agent:
+    - Overview: agent/overview.md
+    - Architecture: agent/architecture.md
+    - Multi-Agent: agent/multi-agent.md
+    - Tools & Plugins: agent/tools-plugins.md
+    - Memory & Streaming: agent/memory-streaming.md
+    - Vision: agent/vision.md
+    - Webhooks & Scheduler: agent/webhooks.md
+    - CLI & Web UI: agent/interfaces.md
+  - Tools:
+    - Analytics: tools/analytics.md
+    - Growth: tools/growth.md
+    - Scheduler: tools/scheduler.md
+    - Export: tools/export.md
+    - Automation: tools/automation.md
+    - AI Suggest: tools/ai-suggest.md
+    - Monitor: tools/monitor.md
+    - Bulk Download: tools/bulk-download.md
+    - Hashtag Research: tools/hashtag-research.md
+    - Data Pipeline: tools/pipeline.md
+    - Audience Finder: tools/audience.md
+    - Comment Manager: tools/comment-manager.md
+    - A/B Testing: tools/ab-test.md
+  - Reference:
+    - Exceptions: reference/exceptions.md
+    - Models: reference/models.md
+    - Utilities: reference/utilities.md
