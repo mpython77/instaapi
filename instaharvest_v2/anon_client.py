@@ -382,12 +382,16 @@ class AnonClient:
         - <title>Full Name (&#064;username) • Instagram photos and videos</title>
         - Meta content contains: "NNN Followers, NNN Following, NNN Posts"
         - og:image has profile picture URL
+        
+        Fallback: title may contain follower info directly, or
+        description text like "Sahifa ... tomonidan yuritiladi" which is the bio.
         """
         import html as html_module
         data = {}
 
         # --- Username + Full name from <title> ---
         title_match = re.search(r'<title>([^<]*)</title>', html)
+        title_text = ""
         if title_match:
             title_text = html_module.unescape(title_match.group(1))
             # Format: "Full Name (@username) • Instagram photos and videos"
@@ -414,19 +418,45 @@ class AnonClient:
         if posts_m:
             data["posts_count"] = self._parse_count(posts_m.group(1))
 
+        # --- Fallback: try title text for follower counts ---
+        if "followers" not in data and title_text:
+            tf = re.search(r'([\d,.]+[KMBkmb]?)\s*Followers', title_text, re.IGNORECASE)
+            tg = re.search(r'([\d,.]+[KMBkmb]?)\s*Following', title_text, re.IGNORECASE)
+            tp = re.search(r'([\d,.]+[KMBkmb]?)\s*Posts', title_text, re.IGNORECASE)
+            if tf:
+                data["followers"] = self._parse_count(tf.group(1))
+            if tg:
+                data["following"] = self._parse_count(tg.group(1))
+            if tp:
+                data["posts_count"] = self._parse_count(tp.group(1))
+
         # --- Bio from description ---
-        # Bio usually appears after "Posts" or after a dash
+        desc_text = ""
         desc_match = re.search(r'<meta[^>]+(?:name|property)="description"[^>]+content="([^"]*)"', html)
         if not desc_match:
             desc_match = re.search(r'<meta[^>]+content="([^"]*)"[^>]+(?:name|property)="description"', html)
         if desc_match:
-            desc = html_module.unescape(desc_match.group(1))
+            desc_text = html_module.unescape(desc_match.group(1))
             # Bio text is often after "Posts - " or "Posts – "
-            bio_match = re.search(r'Posts\s*[-–—:]\s*(.*)', desc, re.DOTALL)
+            bio_match = re.search(r'Posts\s*[-–—:]\s*(.*)', desc_text, re.DOTALL)
             if bio_match:
                 bio = bio_match.group(1).strip()
                 if bio:
                     data["biography"] = bio
+
+        # --- Fallback bio from og:description ---
+        if "biography" not in data:
+            og_desc = re.search(r'<meta[^>]+property="og:description"[^>]+content="([^"]*)"', html)
+            if not og_desc:
+                og_desc = re.search(r'<meta[^>]+content="([^"]*)"[^>]+property="og:description"', html)
+            if og_desc:
+                desc = html_module.unescape(og_desc.group(1))
+                if desc:
+                    data["biography"] = desc
+
+        # --- Fallback bio: use full title text if no bio found yet ---
+        if "biography" not in data and title_text and data.get("username"):
+            data["biography"] = title_text
 
         # --- Profile picture from og:image ---
         og_image = re.search(r'<meta[^>]+property="og:image"[^>]+content="([^"]*)"', html)
