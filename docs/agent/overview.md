@@ -1,6 +1,6 @@
 # AI Agent
 
-InstaAPI's built-in AI Agent lets you control Instagram using **natural language**. No code needed — just tell the agent what you want, and it writes, executes, and returns results automatically.
+InstaHarvest v2's built-in AI Agent lets you control Instagram using **natural language**. No code needed — just tell the agent what you want, and it writes, executes, and returns results automatically.
 
 ## Why Use the Agent?
 
@@ -102,7 +102,7 @@ The agent has 10 tools it can use to complete tasks:
 
 | # | Tool | Description |
 |---|---|---|
-| 1 | `run_instaapi_code` | Execute Python code in a secure sandbox |
+| 1 | `run_InstaHarvest v2_code` | Execute Python code in a secure sandbox |
 | 2 | `save_to_file` | Save results to CSV/JSON/TXT files |
 | 3 | `ask_user` | Ask the user for clarification |
 | 4 | `read_file` | Read existing files (CSV, JSON, TXT) |
@@ -136,7 +136,7 @@ InstaAgent(
 
 ## Cross-Platform Support
 
-InstaAPI Agent works on **Windows**, **Linux**, and **macOS**:
+InstaHarvest v2 Agent works on **Windows**, **Linux**, and **macOS**:
 
 - **Paths**: Automatically uses OS-appropriate directories (`%APPDATA%` on Windows, `~/.local/share` on Linux, `~/Library` on macOS)
 - **Console**: Unicode/emoji auto-detection with ASCII fallback for legacy terminals

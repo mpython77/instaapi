@@ -39,7 +39,7 @@ class ActionType(Enum):
     DELETE = "delete"
 
 
-# Map InstaAPI methods to action types
+# Map instaharvest_v2 methods to action types
 ACTION_CLASSIFICATION = {
     # READ — safe, information only
     "users.get_by_username": ActionType.READ,
@@ -139,7 +139,7 @@ ACTION_CLASSIFICATION = {
 
 
 def classify_action(method_name: str) -> ActionType:
-    """Classify an InstaAPI method into an action type."""
+    """Classify an instaharvest_v2 method into an action type."""
     if method_name in ACTION_CLASSIFICATION:
         return ACTION_CLASSIFICATION[method_name]
     # Heuristic fallback
@@ -179,7 +179,7 @@ class PermissionManager:
         Check if an action is permitted.
 
         Args:
-            method_name: InstaAPI method (e.g., "media.like")
+            method_name: instaharvest_v2 method (e.g., "media.like")
             description: Human-readable description of what agent wants to do
 
         Returns:

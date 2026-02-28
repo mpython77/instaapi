@@ -11,9 +11,9 @@ Features:
     - /login and /logout support
 
 Storage:
-    Windows: %APPDATA%/instaapi/auth.json
-    macOS:   ~/Library/Application Support/instaapi/auth.json
-    Linux:   ~/.config/instaapi/auth.json
+    Windows: %APPDATA%/instaharvest_v2/auth.json
+    macOS:   ~/Library/Application Support/instaharvest_v2/auth.json
+    Linux:   ~/.config/instaharvest_v2/auth.json
 """
 
 import json
@@ -286,7 +286,7 @@ class AuthManager:
 
         panel = Panel(
             auth_text,
-            title="[bold cyan]✻ InstaAPI Agent — Authentication[/]",
+            title="[bold cyan]✻ InstaHarvest v2 Agent — Authentication[/]",
             title_align="left",
             border_style="cyan",
             box=ROUNDED,
@@ -457,7 +457,7 @@ class AuthManager:
         """Fallback plain-text auth dialog (no Rich)."""
 
         print("\n" + "=" * 50)
-        print("  InstaAPI Agent — Authentication")
+        print("  InstaHarvest v2 Agent — Authentication")
         print("=" * 50)
         print()
         print("  [1] Enter API Key")

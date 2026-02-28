@@ -1,6 +1,6 @@
 # Event System
 
-InstaAPI includes a robust synchronous `EventEmitter` natively built into the `HttpClient`. Every major action, request, error, and proxy shift broadcasts a standardized event string that any plugin or script can hook into.
+InstaHarvest v2 includes a robust synchronous `EventEmitter` natively built into the `HttpClient`. Every major action, request, error, and proxy shift broadcasts a standardized event string that any plugin or script can hook into.
 
 ## Quick Example
 

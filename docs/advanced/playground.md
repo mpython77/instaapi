@@ -1,6 +1,6 @@
 # Web Playground
 
-InstaAPI Web Playground — a full-featured browser-based interface for testing and interacting with the entire InstaAPI library. Includes AI Chat, real-time API testing, data saving, and CSV export.
+InstaHarvest v2 Web Playground — a full-featured browser-based interface for testing and interacting with the entire InstaHarvest v2 library. Includes AI Chat, real-time API testing, data saving, and CSV export.
 
 ## Quick Start
 

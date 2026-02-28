@@ -77,7 +77,7 @@ class AgentConsole:
         console = AgentConsole()
         console.welcome(provider="gemini", model="gemini-2.5-pro")
         console.thinking()
-        console.tool_call("run_instaapi_code", code="...")
+        console.tool_call("run_instaharvest_v2_code", code="...")
         console.tool_result("Success", success=True)
         console.response("Here is the answer...")
         console.step_footer(steps=2, tokens=450, duration=1.8)
@@ -100,7 +100,7 @@ class AgentConsole:
         if not HAS_RICH:
             raise ImportError(
                 "Rich is required for the modern CLI. "
-                "Install with: pip install instaapi[agent]"
+                "Install with: pip install instaharvest_v2[agent]"
             )
 
         self.console = Console(theme=AGENT_THEME, highlight=False)
@@ -136,7 +136,7 @@ class AgentConsole:
         # Banner
         banner_text = Text()
         banner_text.append("  ✻  ", style="bold cyan")
-        banner_text.append("InstaAPI Agent", style="bold white")
+        banner_text.append("InstaHarvest v2 Agent", style="bold white")
         banner_text.append(f"  v{version}", style="dim")
 
         panel = Panel(
@@ -230,7 +230,7 @@ class AgentConsole:
         # Show code if it's a code execution tool
         if code:
             self.show_code(code)
-        elif name == "run_instaapi_code" and args:
+        elif name == "run_instaharvest_v2_code" and args:
             code_content = args.get("code", "")
             if code_content:
                 desc = args.get("description", "")
@@ -656,7 +656,7 @@ class FallbackConsole:
 
     def welcome(self, **kwargs):
         print("\n" + "=" * 50)
-        print(f"  InstaAPI Agent v{kwargs.get('version', '3.0')}")
+        print(f"  InstaHarvest v2 Agent v{kwargs.get('version', '3.0')}")
         print(f"  Provider: {kwargs.get('provider', '?')}")
         print(f"  /help for commands")
         print("=" * 50 + "\n")

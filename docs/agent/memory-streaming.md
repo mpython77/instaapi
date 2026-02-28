@@ -12,12 +12,12 @@ agent = InstaAgent(
     provider="gemini",
     api_key="...",
     memory=True,                              # Enable persistence
-    memory_dir=".instaapi_memory",            # Custom directory (optional)
+    memory_dir=".InstaHarvest v2_memory",            # Custom directory (optional)
 )
 
 # Conversations auto-save after each ask()
 result = agent.ask("Get Cristiano's followers")
-# Session saved to .instaapi_memory/
+# Session saved to .InstaHarvest v2_memory/
 ```
 
 ### Memory API
@@ -25,7 +25,7 @@ result = agent.ask("Get Cristiano's followers")
 ```python
 from instaharvest_v2.agent.memory import AgentMemory
 
-mem = AgentMemory(memory_dir=".instaapi_memory")
+mem = AgentMemory(memory_dir=".InstaHarvest v2_memory")
 
 # Save a session
 mem.save_session("session_001", messages, metadata={"topic": "followers"})
@@ -50,7 +50,7 @@ results = mem.search("cristiano followers", limit=5)
 Sessions are stored as JSON files:
 
 ```text
-.instaapi_memory/
+.InstaHarvest v2_memory/
 ├── index.json              # Session index
 ├── session_abc123.json     # Session data
 ├── session_def456.json
@@ -59,7 +59,7 @@ Sessions are stored as JSON files:
 
 | Setting | Default | Description |
 | --- | --- | --- |
-| `memory_dir` | `.instaapi_memory` | Storage directory |
+| `memory_dir` | `.InstaHarvest v2_memory` | Storage directory |
 | `max_sessions` | 50 | Max stored sessions |
 | `max_history` | 100 | Max messages per session |
 
@@ -87,7 +87,7 @@ CLI output:
 
 ```text
 🤖 
-  🔧 run_instaapi_code: Getting nike posts...
+  🔧 run_InstaHarvest v2_code: Getting nike posts...
   ✅ ExecutionResult: 10 posts loaded
   📍 Step 2/15...
   🔧 analyze_data: Computing engagement...

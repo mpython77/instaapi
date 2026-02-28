@@ -43,7 +43,7 @@ graph TB
 | `webhook.py` | `WebhookNotifier` | Telegram/Discord/Email notifications |
 | `scheduler.py` | `AgentScheduler` | Cron-like task scheduling |
 | `tools.py` | `TOOL_HANDLERS` | 10 built-in tool implementations |
-| `knowledge.py` | `SYSTEM_PROMPT` | Full InstaAPI knowledge base |
+| `knowledge.py` | `SYSTEM_PROMPT` | Full InstaHarvest v2 knowledge base |
 | `providers/` | `BaseProvider` | 14 AI provider adapters |
 | `cli.py` | `main()` | Terminal interface |
 | `web.py` | `create_app()` | FastAPI web UI |
@@ -59,7 +59,7 @@ sequenceDiagram
 
     U->>A: agent.ask("Get Cristiano's followers")
     A->>L: System prompt + user message
-    L-->>A: tool_call: run_instaapi_code
+    L-->>A: tool_call: run_InstaHarvest v2_code
     A->>A: Permission check ✅
     A->>E: Execute code in sandbox
     E-->>A: ExecutionResult (output, variables)
@@ -74,7 +74,7 @@ sequenceDiagram
 
 `SafeExecutor` provides sandboxed code execution:
 
-- ✅ **Whitelisted imports only**: `json`, `csv`, `datetime`, `math`, `re`, `collections`, `statistics`, `instaapi`
+- ✅ **Whitelisted imports only**: `json`, `csv`, `datetime`, `math`, `re`, `collections`, `statistics`, `InstaHarvest v2`
 - ❌ **Blocked**: `subprocess`, `os.system`, `eval`, `exec`, `socket`, `ctypes`, `pickle.loads`
 - 🔒 **File access**: Read/write only in current directory
 - ⏱️ **Timeout**: Configurable (default 30s)

@@ -4,7 +4,7 @@ Agent Tools — Built-in Tool Handlers
 Handlers for all 10 built-in agent tools.
 
 Tools:
-    1. run_instaapi_code  — Execute Python code in sandbox
+    1. run_instaharvest_v2_code  — Execute Python code in sandbox
     2. save_to_file       — Save content to a file
     3. ask_user           — Ask the user a question
     4. read_file          — Read file contents
@@ -524,7 +524,7 @@ def handle_http_request(args: Dict) -> str:
         req = urllib.request.Request(url, method=method)
 
         # Set headers
-        req.add_header("User-Agent", "InstaAPI-Agent/1.0")
+        req.add_header("User-Agent", "InstaHarvest v2-Agent/1.0")
         for key, val in headers.items():
             req.add_header(key, val)
 
@@ -628,7 +628,7 @@ def handle_search_web(args: Dict) -> str:
         url = f"https://lite.duckduckgo.com/lite/?q={encoded_query}"
 
         req = urllib.request.Request(url)
-        req.add_header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) InstaAPI-Agent/1.0")
+        req.add_header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) InstaHarvest v2-Agent/1.0")
 
         with urllib.request.urlopen(req, timeout=10) as resp:
             html = resp.read().decode("utf-8", errors="replace")

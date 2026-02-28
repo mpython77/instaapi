@@ -1,6 +1,6 @@
 # Async Guide
 
-InstaAPI is built ground-up to support **True Python Async I/O** via the `curl_cffi` event loop integration. The async pattern makes large-scale scraping 50x to 100x faster than traditional synchronous models.
+InstaHarvest v2 is built ground-up to support **True Python Async I/O** via the `curl_cffi` event loop integration. The async pattern makes large-scale scraping 50x to 100x faster than traditional synchronous models.
 
 ## Async vs Sync Comparison
 

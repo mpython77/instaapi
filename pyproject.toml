@@ -10,7 +10,7 @@ readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [
-    {name = "InstaAPI Team"},
+    {name = "InstaHarvest v2 Team"},
 ]
 keywords = [
     "instagram", "api", "private-api", "scraper",
@@ -67,27 +67,27 @@ all = [
 ]
 
 [project.scripts]
-instaapi-agent = "instaharvest_v2.agent.cli:main"
+instaharvest_v2-agent = "instaharvest_v2.agent.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/mpython77/instaharvest_v2"
-Documentation = "https://mpython77.github.io/instaapi/"
+Documentation = "https://mpython77.github.io/instaharvest_v2/"
 Issues = "https://github.com/mpython77/instaharvest_v2/issues"
 
 [tool.setuptools.packages.find]
-include = ["instaapi*"]
+include = ["instaharvest_v2*"]
 exclude = ["tests*", "_test_*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
-addopts = "-v --tb=short --cov=instaapi --cov-report=term-missing"
+addopts = "-v --tb=short --cov=instaharvest_v2 --cov-report=term-missing"
 
 [tool.coverage.run]
 source = ["instaharvest_v2"]
 omit = [
-    "instaapi/agent/*",
-    "instaapi/web/*",
+    "instaharvest_v2/agent/*",
+    "instaharvest_v2/web/*",
     "*/test_*",
 ]
 
@@ -108,4 +108,4 @@ exclude_lines = [
 directory = "htmlcov"
 
 [tool.setuptools.package-data]
-instaapi = ["py.typed", "agent/static/*"]
+instaharvest_v2 = ["py.typed", "agent/static/*"]

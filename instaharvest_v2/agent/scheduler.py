@@ -99,7 +99,7 @@ class AgentScheduler:
         scheduler.stop()
     """
 
-    def __init__(self, agent=None, persist_path: str = ".instaapi_schedule.json"):
+    def __init__(self, agent=None, persist_path: str = ".instaharvest_v2_schedule.json"):
         self._agent = agent
         self._tasks: Dict[str, ScheduledTask] = {}
         self._running = False

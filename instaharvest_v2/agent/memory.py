@@ -22,7 +22,7 @@ from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("instaharvest_v2.agent.memory")
 
-DEFAULT_MEMORY_DIR = ".instaapi_memory"
+DEFAULT_MEMORY_DIR = ".instaharvest_v2_memory"
 MAX_SESSIONS = 50
 MAX_HISTORY_SIZE = 100  # messages per session
 

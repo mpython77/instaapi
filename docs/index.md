@@ -1,4 +1,4 @@
-# InstaAPI
+# InstaHarvest v2
 
 <div align="center" markdown>
 
@@ -13,9 +13,9 @@
 
 ---
 
-## Why InstaAPI?
+## Why InstaHarvest v2?
 
-| Feature | InstaAPI | instagrapi | instaloader |
+| Feature | InstaHarvest v2 | instagrapi | instaloader |
 |---|---|---|---|
 | Anonymous scraping | ✅ 5 strategies | ⚠️ Limited | ⚠️ Basic |
 | Async support | ✅ 32 async modules | ❌ | ❌ |
@@ -95,16 +95,16 @@
 ## Installation { #installation }
 
 ```bash
-pip install instaapi
+pip install InstaHarvest v2
 ```
 
 **With extras:**
 
 ```bash
-pip install instaapi[dev]      # pytest, pytest-cov, pytest-asyncio
-pip install instaapi[agent]    # AI providers (Gemini, OpenAI, Claude)
-pip install instaapi[web]      # FastAPI web playground
-pip install instaapi[all]      # everything
+pip install InstaHarvest v2[dev]      # pytest, pytest-cov, pytest-asyncio
+pip install InstaHarvest v2[agent]    # AI providers (Gemini, OpenAI, Claude)
+pip install InstaHarvest v2[web]      # FastAPI web playground
+pip install InstaHarvest v2[all]      # everything
 ```
 
 ## Quick Example

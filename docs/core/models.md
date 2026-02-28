@@ -1,6 +1,6 @@
 # Data Models
 
-InstaAPI uses Pydantic models for structured, validated data.
+InstaHarvest v2 uses Pydantic models for structured, validated data.
 
 ## Available Models
 

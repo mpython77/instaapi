@@ -47,7 +47,7 @@ notifier.notify("Task completed successfully!")
 # With title and data
 notifier.notify(
     message="Follower analysis done for @cristiano",
-    title="InstaAPI Report",
+    title="InstaHarvest v2 Report",
     data={
         "followers": 650_000_000,
         "engagement_rate": 2.5,
@@ -147,12 +147,12 @@ scheduler.task_count   # int
 
 ### Persistence
 
-Schedule is automatically saved to `.instaapi_schedule.json` and restored on restart:
+Schedule is automatically saved to `.InstaHarvest v2_schedule.json` and restored on restart:
 
 ```python
 scheduler = AgentScheduler(
     agent,
-    persist_path=".instaapi_schedule.json",  # Custom path
+    persist_path=".InstaHarvest v2_schedule.json",  # Custom path
 )
 ```
 

@@ -1,6 +1,6 @@
 # Architecture
 
-InstaAPI is built with a modular, layered architecture.
+InstaHarvest v2 is built with a modular, layered architecture.
 
 ## System Overview
 

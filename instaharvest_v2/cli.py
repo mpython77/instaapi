@@ -1,16 +1,16 @@
 """
-InstaAPI CLI — Command-line Interface
+InstaHarvest v2 CLI — Command-line Interface
 ======================================
 CLI tool for direct usage from the terminal.
 
 Usage:
-    python -m instaapi profile cristiano
-    python -m instaapi profile cristiano --json
-    python -m instaapi export followers cristiano -o followers.csv
-    python -m instaapi analytics engagement cristiano
-    python -m instaapi analytics compare cristiano messi neymar
-    python -m instaapi hashtag analyze python
-    python -m instaapi download all cristiano -o downloads/
+    python -m instaharvest_v2 profile cristiano
+    python -m instaharvest_v2 profile cristiano --json
+    python -m instaharvest_v2 export followers cristiano -o followers.csv
+    python -m instaharvest_v2 analytics engagement cristiano
+    python -m instaharvest_v2 analytics compare cristiano messi neymar
+    python -m instaharvest_v2 hashtag analyze python
+    python -m instaharvest_v2 download all cristiano -o downloads/
 """
 
 import argparse
@@ -22,7 +22,7 @@ import os
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="instaharvest_v2",
-        description="🔥 InstaAPI — Instagram Private API CLI",
+        description="🔥 InstaHarvest v2 — Instagram Private API CLI",
     )
     parser.add_argument("--env", default=".env", help="Path to .env file (default: .env)")
     parser.add_argument("--debug", action="store_true", help="Enable debug logging")

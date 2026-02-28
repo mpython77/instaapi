@@ -18,7 +18,7 @@ import logging
 import uuid
 from typing import Any, Dict, List, Optional
 
-from .base import BaseProvider, ProviderResponse, ToolCall, INSTAAPI_TOOLS
+from .base import BaseProvider, ProviderResponse, ToolCall, instaharvest_v2_TOOLS
 
 logger = logging.getLogger("instaharvest_v2.agent.providers.claude")
 
@@ -40,7 +40,7 @@ class ClaudeProvider(BaseProvider):
                 raise ImportError(
                     "Anthropic library not found. Install with:\n"
                     "  pip install anthropic\n"
-                    "  or: pip install instaapi[agent]"
+                    "  or: pip install instaharvest_v2[agent]"
                 )
             self._client = Anthropic(api_key=self.api_key)
         return self._client
@@ -82,7 +82,7 @@ class ClaudeProvider(BaseProvider):
         claude_messages = self._merge_messages(claude_messages)
 
         # Format tools for Claude
-        claude_tools = self._format_claude_tools(tools or INSTAAPI_TOOLS)
+        claude_tools = self._format_claude_tools(tools or instaharvest_v2_TOOLS)
 
         kwargs = {
             "model": self.model,

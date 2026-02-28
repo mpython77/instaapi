@@ -1,6 +1,6 @@
 # Speed Modes
 
-InstaAPI provides 4 speed modes that control concurrency, delays, and rate limiting.
+InstaHarvest v2 provides 4 speed modes that control concurrency, delays, and rate limiting.
 
 ## Overview
 

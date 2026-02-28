@@ -86,7 +86,7 @@ class VisionAnalyzer:
         # For other providers, download first
         try:
             req = urllib.request.Request(image_url)
-            req.add_header("User-Agent", "InstaAPI-Agent/1.0")
+            req.add_header("User-Agent", "instaharvest_v2-Agent/1.0")
             with urllib.request.urlopen(req, timeout=15) as resp:
                 image_data = resp.read()
                 if len(image_data) > MAX_IMAGE_SIZE:

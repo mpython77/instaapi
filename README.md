@@ -1,39 +1,39 @@
 <p align="center">
-  <h1 align="center">📸 InstaAPI</h1>
+  <h1 align="center">📸 InstaHarvest v2</h1>
   <p align="center">
     <strong>Powerful Instagram Private API</strong> — async, anti-detection, Pydantic models, AI Agent
   </p>
   <p align="center">
-    <img src="https://img.shields.io/pypi/v/instaapi?color=blue" alt="PyPI">
-    <img src="https://img.shields.io/pypi/pyversions/instaapi" alt="Python">
+    <img src="https://img.shields.io/pypi/v/instaharvest_v2?color=blue" alt="PyPI">
+    <img src="https://img.shields.io/pypi/pyversions/instaharvest_v2" alt="Python">
     <img src="https://img.shields.io/github/license/mpython77/instaharvest_v2" alt="License">
     <img src="https://img.shields.io/badge/modules-32+32-green" alt="Modules">
     <img src="https://img.shields.io/badge/async-full_parity-brightgreen" alt="Async">
     <img src="https://img.shields.io/badge/tests-475_passed-success" alt="Tests">
     <img src="https://img.shields.io/badge/coverage-35%25-green" alt="Coverage">
-    <a href="https://mpython77.github.io/instaapi/"><img src="https://img.shields.io/badge/docs-online-blue?logo=readthedocs" alt="Docs"></a>
+    <a href="https://mpython77.github.io/instaharvest_v2/"><img src="https://img.shields.io/badge/docs-online-blue?logo=readthedocs" alt="Docs"></a>
   </p>
 </p>
 
 > 32 sync + 32 async modules • 230+ functions • Pydantic models • AI Agent • CI/CD • 475 tests passed
 >
-> 📖 **Documentation:** [mpython77.github.io/instaapi](https://mpython77.github.io/instaapi/)
+> 📖 **Documentation:** [mpython77.github.io/instaharvest_v2](https://mpython77.github.io/instaharvest_v2/)
 
 ---
 
 ## Installation
 
 ```bash
-pip install instaapi
+pip install instaharvest-v2
 ```
 
 **With extras:**
 
 ```bash
-pip install instaapi[dev]      # pytest, pytest-cov, pytest-asyncio
-pip install instaapi[agent]    # AI providers (Gemini, OpenAI, Claude)
-pip install instaapi[web]      # FastAPI web playground
-pip install instaapi[all]      # everything
+pip install instaharvest-v2[dev]      # pytest, pytest-cov, pytest-asyncio
+pip install instaharvest-v2[agent]    # AI providers (Gemini, OpenAI, Claude)
+pip install instaharvest-v2[web]      # FastAPI web playground
+pip install instaharvest-v2[all]      # everything
 ```
 
 ---
@@ -480,7 +480,7 @@ async with AsyncInstagram.from_env(mode="turbo") as ig: ...
 pytest tests/ -v
 
 # Run with coverage
-pytest tests/ --cov=instaapi --cov-report=term-missing
+pytest tests/ --cov=instaharvest_v2 --cov-report=term-missing
 ```
 
 **Current status:**
@@ -493,7 +493,7 @@ pytest tests/ --cov=instaapi --cov-report=term-missing
 ## Project Structure
 
 ```
-instaapi/
+instaharvest_v2/
 ├── instagram.py           # Main class (sync)
 ├── async_instagram.py     # Main class (async)
 ├── client.py              # HTTP client (curl_cffi)

@@ -1,6 +1,6 @@
 # Smart Rotation
 
-When doing heavy authenticated scraping, using a single account/IP will get you banned quickly. InstaAPI provides a `SmartRotation` system that automatically juggles multiple sessions and proxies to distribute load.
+When doing heavy authenticated scraping, using a single account/IP will get you banned quickly. InstaHarvest v2 provides a `SmartRotation` system that automatically juggles multiple sessions and proxies to distribute load.
 
 ## Quick Example
 

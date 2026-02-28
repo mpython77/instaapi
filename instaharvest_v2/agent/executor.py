@@ -32,7 +32,7 @@ ALLOWED_IMPORTS = {
     "urllib", "urllib.request",
     # Data export
     "openpyxl",
-    # InstaAPI
+    # instaharvest_v2
     "instaharvest_v2",
 }
 

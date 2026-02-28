@@ -1,7 +1,7 @@
 """
-InstaAPI Web Playground v2 — Enhanced Demo Server
+instaharvest_v2 Web Playground v2 — Enhanced Demo Server
 ===================================================
-Full-featured web playground for testing InstaAPI library.
+Full-featured web playground for testing instaharvest_v2 library.
 Features: AI Chat, Data Saving, Full API Coverage, Export.
 
 Usage:
@@ -31,7 +31,7 @@ except ImportError:
     print("❌ FastAPI not found. Install:\n  pip install fastapi uvicorn")
     sys.exit(1)
 
-# ── InstaAPI ────────────────────────────────────────────
+# ── instaharvest_v2 ────────────────────────────────────────────
 sys.path.insert(0, str(Path(__file__).parent))
 from instaharvest_v2 import Instagram
 
@@ -43,7 +43,7 @@ SAVED_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── Create app ──────────────────────────────────────────
 
-app = FastAPI(title="InstaAPI Playground", version="2.0.0")
+app = FastAPI(title="instaharvest_v2 Playground", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -68,7 +68,7 @@ _history: List[Dict] = []
 def get_ig() -> Instagram:
     global _ig
     if _ig is None:
-        env_path = os.environ.get("INSTAAPI_ENV", ".env")
+        env_path = os.environ.get("instaharvest_v2_ENV", ".env")
         _ig = Instagram.from_env(env_path)
         logger.info("Instagram client initialized from %s", env_path)
     return _ig
@@ -174,7 +174,7 @@ async def index():
     html_path = DEMO_DIR / "index.html"
     if html_path.exists():
         return HTMLResponse(html_path.read_text(encoding="utf-8"))
-    return HTMLResponse("<h1>InstaAPI Playground</h1><p>demo/index.html not found</p>")
+    return HTMLResponse("<h1>instaharvest_v2 Playground</h1><p>demo/index.html not found</p>")
 
 
 # ══════════════════════════════════════════════════════════
@@ -1939,13 +1939,13 @@ if __name__ == "__main__":
         print("❌ uvicorn not found: pip install uvicorn")
         sys.exit(1)
 
-    parser = argparse.ArgumentParser(description="🧪 InstaAPI Web Playground v2")
+    parser = argparse.ArgumentParser(description="🧪 instaharvest_v2 Web Playground v2")
     parser.add_argument("--port", type=int, default=8877, help="Port (default: 8877)")
     parser.add_argument("--host", default="127.0.0.1", help="Host")
     parser.add_argument("--env", default=".env", help=".env file path")
     args = parser.parse_args()
 
-    os.environ["INSTAAPI_ENV"] = args.env
+    os.environ["instaharvest_v2_ENV"] = args.env
 
     # Load env for AI keys
     try:
@@ -1956,7 +1956,7 @@ if __name__ == "__main__":
 
     print()
     print("  ╔══════════════════════════════════════════╗")
-    print("  ║   🧪  InstaAPI Web Playground v2         ║")
+    print("  ║   🧪  instaharvest_v2 Web Playground v2         ║")
     print(f"  ║   🌐  http://{args.host}:{args.port:<5d}              ║")
     print("  ║   🤖  AI Chat: Enabled                   ║")
     print("  ║   💾  Data Saving: Enabled                ║")

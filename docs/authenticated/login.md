@@ -1,6 +1,6 @@
 # Login & Sessions
 
-Authenticated requests require a valid Instagram session. InstaAPI provides multiple ways to manage sessions and handle login challenges.
+Authenticated requests require a valid Instagram session. InstaHarvest v2 provides multiple ways to manage sessions and handle login challenges.
 
 ## Loading from .env (Recommended)
 
@@ -68,11 +68,11 @@ ig = Instagram.from_session_file("my_session.json")
 
 Cookies expire. If a configured session is no longer valid, you'll receive a `LoginRequired` exception (HTTP 401 or 302 redirect to login screen).
 
-If you started with `from_session_file`, InstaAPI will attempt to transparently reload it or re-auth if possible (using the built-in `_build_refresh_callback`).
+If you started with `from_session_file`, InstaHarvest v2 will attempt to transparently reload it or re-auth if possible (using the built-in `_build_refresh_callback`).
 
 ## Challenge Handling
 
-When logging in from a new IP, Instagram often asks for email or SMS verification. InstaAPI includes the `ChallengeHandler` class to resolve these:
+When logging in from a new IP, Instagram often asks for email or SMS verification. InstaHarvest v2 includes the `ChallengeHandler` class to resolve these:
 
 ```python
 from instaharvest_v2 import Instagram, ChallengeHandler

@@ -1,6 +1,6 @@
 # Error Handling
 
-InstaAPI uses a structured exception hierarchy for precise error handling.
+InstaHarvest v2 uses a structured exception hierarchy for precise error handling.
 
 ## Exception Hierarchy
 
@@ -89,7 +89,7 @@ All exceptions have:
 
 ## Auto-Retry
 
-InstaAPI automatically retries on transient errors:
+InstaHarvest v2 automatically retries on transient errors:
 
 ```python
 from instaharvest_v2 import Instagram

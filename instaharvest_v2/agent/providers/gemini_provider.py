@@ -15,7 +15,7 @@ import logging
 import uuid
 from typing import Any, Dict, List, Optional
 
-from .base import BaseProvider, ProviderResponse, ToolCall, INSTAAPI_TOOLS
+from .base import BaseProvider, ProviderResponse, ToolCall, instaharvest_v2_TOOLS
 
 logger = logging.getLogger("instaharvest_v2.agent.providers.gemini")
 
@@ -37,7 +37,7 @@ class GeminiProvider(BaseProvider):
                 raise ImportError(
                     "Google GenAI library not found. Install with:\n"
                     "  pip install google-genai\n"
-                    "  or: pip install instaapi[agent]"
+                    "  or: pip install instaharvest_v2[agent]"
                 )
             self._client = genai.Client(api_key=self.api_key)
         return self._client
@@ -56,7 +56,7 @@ class GeminiProvider(BaseProvider):
             raise ImportError("google-genai o'rnatilmagan: pip install google-genai")
 
         # Build Gemini tools
-        gemini_tools = self._build_gemini_tools(tools or INSTAAPI_TOOLS)
+        gemini_tools = self._build_gemini_tools(tools or instaharvest_v2_TOOLS)
 
         # Convert messages to Gemini format
         gemini_contents = self._convert_messages(messages)
@@ -179,21 +179,21 @@ class GeminiProvider(BaseProvider):
         3-layer retry for MALFORMED_FUNCTION_CALL.
 
         Layer 1: Retry with same tools (intermittent error)
-        Layer 2: Retry with only run_instaapi_code tool (fewer tools = less confusion)
+        Layer 2: Retry with only run_instaharvest_v2_code tool (fewer tools = less confusion)
         Layer 3: Retry without tools (text-only fallback)
 
         Returns: candidate object or None if all retries fail.
         """
-        # Build minimal tool set — only run_instaapi_code
+        # Build minimal tool set — only run_instaharvest_v2_code
         minimal_tool = None
-        for tool_def in INSTAAPI_TOOLS:
-            if tool_def["name"] == "run_instaapi_code":
+        for tool_def in instaharvest_v2_TOOLS:
+            if tool_def["name"] == "run_instaharvest_v2_code":
                 minimal_tool = self._build_gemini_tools([tool_def])
                 break
 
         retry_configs = [
             ("same tools", gemini_tools),
-            ("minimal tool (run_instaapi_code only)", minimal_tool),
+            ("minimal tool (run_instaharvest_v2_code only)", minimal_tool),
             ("no tools", None),
         ]
 
@@ -244,7 +244,7 @@ class GeminiProvider(BaseProvider):
                     ))
             elif role == "tool":
                 # Tool result
-                tool_name = msg.get("name", "run_instaapi_code")
+                tool_name = msg.get("name", "run_instaharvest_v2_code")
                 try:
                     result_data = json.loads(content_val) if isinstance(content_val, str) else content_val
                 except (json.JSONDecodeError, TypeError):

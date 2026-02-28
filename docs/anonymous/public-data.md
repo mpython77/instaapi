@@ -104,7 +104,7 @@ print(analysis["rating"]) # Output: 'Excellent', 'Good', etc.
 
 ### `track_profile(username: str) -> ProfileSnapshot`
 
-Records the profile's current state and saves it to a local historical database (`.instaapi/public_history.json`). Allowing you to measure follower growth over time.
+Records the profile's current state and saves it to a local historical database (`.InstaHarvest v2/public_history.json`). Allowing you to measure follower growth over time.
 
 ---
 

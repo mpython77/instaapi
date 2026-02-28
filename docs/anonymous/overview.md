@@ -1,6 +1,6 @@
 # Anonymous Scraping — Overview
 
-InstaAPI's anonymous scraping system can access public Instagram data **without login** using a 5-strategy fallback chain.
+InstaHarvest v2's anonymous scraping system can access public Instagram data **without login** using a 5-strategy fallback chain.
 
 ## How It Works
 

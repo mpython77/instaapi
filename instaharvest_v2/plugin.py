@@ -13,7 +13,7 @@ logger = logging.getLogger("instaharvest_v2.plugin")
 
 class Plugin:
     """
-    Base class for InstaAPI plugins.
+    Base class for instaharvest_v2 plugins.
 
     Subclass this to create custom plugins:
 

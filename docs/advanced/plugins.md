@@ -1,6 +1,6 @@
 # Plugin System
 
-InstaAPI is built around a flexible plugin architecture. Every internal module (UsersAPI, SearchAPI, etc.) is technically a plugin hooked into the core client context.
+InstaHarvest v2 is built around a flexible plugin architecture. Every internal module (UsersAPI, SearchAPI, etc.) is technically a plugin hooked into the core client context.
 
 You can create your own plugins to inject custom middleware, handle state, or automate complex multi-step processes securely.
 
@@ -78,4 +78,4 @@ ig.cleaner.unfollow_non_followers()
 
 ## Default Core Plugins
 
-InstaAPI uses the plugin system internally for extending "Tools" (like Batch, Automation, Scheduler). If you examine the code for `GrowthAPI`, you will see it relies heavily on the `Plugin` class structure.
+InstaHarvest v2 uses the plugin system internally for extending "Tools" (like Batch, Automation, Scheduler). If you examine the code for `GrowthAPI`, you will see it relies heavily on the `Plugin` class structure.

@@ -2,7 +2,7 @@
 
 When logging into an old account from a new IP, Instagram often presents a "Suspicious Login Attempt" challenge requiring 6-digit Email or SMS verification.
 
-InstaAPI provides built-in tools to resolve these automatically (`resolve()`) and headless integrations with Gmail to completely bypass manual intervention.
+InstaHarvest v2 provides built-in tools to resolve these automatically (`resolve()`) and headless integrations with Gmail to completely bypass manual intervention.
 
 ## Standard Callback Approach
 
@@ -21,7 +21,7 @@ ig = Instagram(challenge_callback=prompt_for_code)
 try:
     ig.login("my_username", "my_password")
 except ChallengeRequired as e:
-    # InstaAPI will automatically trigger the prompt_for_code callback, 
+    # InstaHarvest v2 will automatically trigger the prompt_for_code callback, 
     # submit the returned code, and if successful, complete the login.
     print("Handled challenge successfully!")
 ```

@@ -91,7 +91,7 @@ class WebhookNotifier:
     def notify(
         self,
         message: str,
-        title: str = "InstaAPI Agent",
+        title: str = "instaharvest_v2 Agent",
         data: Optional[Dict] = None,
     ) -> Dict[str, bool]:
         """Send notification to all registered channels."""

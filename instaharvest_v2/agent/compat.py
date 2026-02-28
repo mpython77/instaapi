@@ -1,7 +1,7 @@
 """
 Cross-Platform Compatibility Layer
 ====================================
-Ensures InstaAPI Agent works smoothly on Windows, Linux, and macOS.
+Ensures InstaHarvest v2 Agent works smoothly on Windows, Linux, and macOS.
 
 Handles:
     - Path separators and temp directories
@@ -57,9 +57,9 @@ def get_data_dir(app_name: str = "instaharvest_v2") -> Path:
     """
     Get platform-appropriate data directory.
 
-    Windows: %APPDATA%/instaapi
-    macOS:   ~/Library/Application Support/instaapi
-    Linux:   ~/.local/share/instaapi
+    Windows: %APPDATA%/instaharvest_v2
+    macOS:   ~/Library/Application Support/instaharvest_v2
+    Linux:   ~/.local/share/instaharvest_v2
     """
     if IS_WINDOWS:
         base = os.environ.get("APPDATA", os.path.expanduser("~"))
@@ -82,9 +82,9 @@ def get_config_dir(app_name: str = "instaharvest_v2") -> Path:
     """
     Get platform-appropriate config directory.
 
-    Windows: %APPDATA%/instaapi
-    macOS:   ~/Library/Preferences/instaapi
-    Linux:   ~/.config/instaapi
+    Windows: %APPDATA%/instaharvest_v2
+    macOS:   ~/Library/Preferences/instaharvest_v2
+    Linux:   ~/.config/instaharvest_v2
     """
     if IS_WINDOWS:
         base = os.environ.get("APPDATA", os.path.expanduser("~"))

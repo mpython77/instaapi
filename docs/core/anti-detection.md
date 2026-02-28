@@ -1,6 +1,6 @@
 # Anti-Detection System
 
-InstaAPI uses `curl_cffi` to impersonate real browsers at the TLS level — making requests indistinguishable from genuine browser traffic.
+InstaHarvest v2 uses `curl_cffi` to impersonate real browsers at the TLS level — making requests indistinguishable from genuine browser traffic.
 
 ## How It Works
 
@@ -68,7 +68,7 @@ Each request gets unique, browser-accurate headers:
 
 ## Device Fingerprint
 
-For mobile API requests, InstaAPI generates realistic device fingerprints:
+For mobile API requests, InstaHarvest v2 generates realistic device fingerprints:
 
 ```python
 from instaharvest_v2.device_fingerprint import DeviceFingerprint

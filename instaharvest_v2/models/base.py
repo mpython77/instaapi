@@ -1,7 +1,7 @@
 """
 Base Model
 ==========
-Shared configuration and utilities for all InstaAPI models.
+Shared configuration and utilities for all instaharvest_v2 models.
 """
 
 from pydantic import BaseModel, ConfigDict

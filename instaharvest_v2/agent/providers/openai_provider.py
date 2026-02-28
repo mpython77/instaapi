@@ -15,7 +15,7 @@ import logging
 import uuid
 from typing import Any, Dict, List, Optional
 
-from .base import BaseProvider, ProviderResponse, ToolCall, INSTAAPI_TOOLS
+from .base import BaseProvider, ProviderResponse, ToolCall, instaharvest_v2_TOOLS
 
 logger = logging.getLogger("instaharvest_v2.agent.providers.openai")
 
@@ -37,7 +37,7 @@ class OpenAIProvider(BaseProvider):
                 raise ImportError(
                     "OpenAI library not found. Install with:\n"
                     "  pip install openai\n"
-                    "  or: pip install instaapi[agent]"
+                    "  or: pip install instaharvest_v2[agent]"
                 )
             self._client = OpenAI(api_key=self.api_key)
         return self._client
@@ -51,7 +51,7 @@ class OpenAIProvider(BaseProvider):
         client = self._get_client()
 
         # Format tools for OpenAI
-        openai_tools = self._format_openai_tools(tools or INSTAAPI_TOOLS)
+        openai_tools = self._format_openai_tools(tools or instaharvest_v2_TOOLS)
 
         kwargs = {
             "model": self.model,

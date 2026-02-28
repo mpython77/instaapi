@@ -136,7 +136,7 @@ class Dashboard:
 
         lines.append("")
         lines.append("╔══════════════════════════════════════════╗")
-        lines.append("║       📊  InstaAPI Dashboard             ║")
+        lines.append("║       📊  instaharvest_v2 Dashboard             ║")
         lines.append("╠══════════════════════════════════════════╣")
         lines.append(f"║  ⏱  Uptime:    {stats['uptime_human']:>24s} ║")
         lines.append(f"║  📨 Requests:  {stats['total_requests']:>24d} ║")

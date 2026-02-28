@@ -50,7 +50,7 @@ class TestDashboard:
     def test_show_returns_string(self):
         dashboard = Dashboard()
         output = dashboard.show()
-        assert "InstaAPI Dashboard" in output
+        assert "instaharvest_v2 Dashboard" in output
 
     def test_repr(self):
         dashboard = Dashboard()

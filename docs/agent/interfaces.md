@@ -17,7 +17,7 @@ python -m instaharvest_v2.agent.cli --interactive
 ```
 
 ```text
-🤖 InstaAPI Agent (Gemini)
+🤖 InstaHarvest v2 Agent (Gemini)
 Type 'exit' to quit.
 
 You: Get Cristiano's followers

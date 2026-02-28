@@ -91,7 +91,7 @@ def create_app(
         verbose=False,
     )
 
-    app = FastAPI(title="InstaAPI Agent", version="1.0.0")
+    app = FastAPI(title="instaharvest_v2 Agent", version="1.0.0")
 
     # Static files
     if STATIC_DIR.exists():
@@ -105,7 +105,7 @@ def create_app(
         html_path = STATIC_DIR / "index.html"
         if html_path.exists():
             return HTMLResponse(html_path.read_text(encoding="utf-8"))
-        return HTMLResponse("<h1>InstaAPI Agent</h1><p>static/index.html not found</p>")
+        return HTMLResponse("<h1>instaharvest_v2 Agent</h1><p>static/index.html not found</p>")
 
     @app.post("/api/ask")
     async def ask(request: Request):
@@ -194,7 +194,7 @@ def main():
     """Run web server."""
     import argparse
 
-    parser = argparse.ArgumentParser(description="🤖 InstaAPI Agent Web UI")
+    parser = argparse.ArgumentParser(description="🤖 instaharvest_v2 Agent Web UI")
     parser.add_argument("--port", type=int, default=8899, help="Port (default: 8899)")
     parser.add_argument("--host", default="127.0.0.1", help="Host (default: 127.0.0.1)")
     parser.add_argument("--provider", default="gemini", help="AI provider")
@@ -218,7 +218,7 @@ def main():
         permission_level=args.permission,
     )
 
-    print(f"\nInstaAPI Agent Web UI")
+    print(f"\ninstaharvest_v2 Agent Web UI")
     print(f"   http://{args.host}:{args.port}")
     print(f"   Provider: {args.provider}")
     print(f"   Press Ctrl+C to stop\n")

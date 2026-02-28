@@ -31,7 +31,7 @@ class LogConfig:
     """
     Centralized logging configuration for instaharvest_v2.
 
-    One-call setup for all 15+ instaapi loggers.
+    One-call setup for all 15+ instaharvest_v2 loggers.
     Supports console (colored) and file (rotating) handlers.
 
     Usage:
@@ -53,7 +53,7 @@ class LogConfig:
         backup_count: int = 3,
     ) -> logging.Logger:
         """
-        Configure logging for all instaapi modules.
+        Configure logging for all instaharvest_v2 modules.
 
         Args:
             level: Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
@@ -65,7 +65,7 @@ class LogConfig:
             backup_count: Number of backup log files (default: 3)
 
         Returns:
-            Root instaapi logger instance
+            Root instaharvest_v2 logger instance
         """
         root = logging.getLogger(ROOT_LOGGER)
         root.setLevel(getattr(logging, level.upper(), logging.INFO))
@@ -110,7 +110,7 @@ class LogConfig:
             filename: Optional log file path
 
         Returns:
-            Root instaapi logger
+            Root instaharvest_v2 logger
         """
         return cls.configure(
             level="DEBUG",

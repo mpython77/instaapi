@@ -42,7 +42,7 @@ Properties attached to all exceptions:
 ### ConsentRequired
 
 **Trigger:** Required to accept updated Terms of Service.
-**Fix:** Usually auto-resolved by InstaAPI natively.
+**Fix:** Usually auto-resolved by InstaHarvest v2 natively.
 
 ---
 
@@ -51,7 +51,7 @@ Properties attached to all exceptions:
 ### RateLimitError
 
 **Trigger:** You hit HTTP 429 (Too Many Requests).
-**Fix:** Catch it, back off. If using `SpeedModes` effectively, InstaAPI handles this backing-off delay transparently without crashing your script.
+**Fix:** Catch it, back off. If using `SpeedModes` effectively, InstaHarvest v2 handles this backing-off delay transparently without crashing your script.
 
 ---
 

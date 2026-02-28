@@ -102,4 +102,4 @@ All notable changes to instaharvest_v2.
 
 - Full MkDocs Material documentation site
 - Getting Started, API Reference, Tools, Advanced guides
-- Live at <https://mpython77.github.io/instaapi/>
+- Live at <https://mpython77.github.io/instaharvest_v2/>

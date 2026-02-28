@@ -1,5 +1,5 @@
 """
-Pytest fixtures for InstaAPI tests.
+Pytest fixtures for instaharvest_v2 tests.
 """
 
 import pytest

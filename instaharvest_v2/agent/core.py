@@ -1,7 +1,7 @@
 """
 InstaAgent — Core AI Agent
 ===========================
-Main agent class that connects LLM + InstaAPI + Executor + Permissions.
+Main agent class that connects LLM + InstaHarvest v2 + Executor + Permissions.
 
 Usage:
     from instaharvest_v2 import Instagram
@@ -80,7 +80,7 @@ class InstaAgent:
     """
     AI Agent for instaharvest_v2.
 
-    Connects any LLM with InstaAPI library.
+    Connects any LLM with InstaHarvest v2 library.
     User speaks naturally, agent writes and executes code.
 
     Supported modes:
@@ -222,7 +222,7 @@ class InstaAgent:
         """Build a compact system prompt for local models with limited context."""
         mode = "anonymous" if not self._is_logged_in else "logged_in"
         parts = [
-            "You are InstaAPI Agent — an Instagram analytics assistant.",
+            "You are InstaHarvest v2 Agent — an Instagram analytics assistant.",
             "You write Python code using the `ig` object to interact with Instagram.",
             "",
             "RULES:",
@@ -568,7 +568,7 @@ Example: if 'cristiano' in _cache: user = _cache['cristiano']
         """
         print("\n" + "\u2550" * 50)
         _e = emoji('\U0001f916', '[BOT]')
-        safe_print(f"{_e} InstaAPI Agent \u2014 Interactive mode")
+        safe_print(f"{_e} InstaHarvest v2 Agent \u2014 Interactive mode")
         print(f"   Provider: {self._provider.provider_name}")
         print(f"   Permission: {self._permissions.level.value}")
         print("   'exit' \u2014 quit | 'reset' \u2014 new conversation")
@@ -805,7 +805,7 @@ Example: if 'cristiano' in _cache: user = _cache['cristiano']
                     self._history.append({"role": "assistant", "content": content})
 
                     # Execute the extracted code
-                    _emit({"type": "tool_call", "name": "run_instaapi_code", "arguments": {"description": "auto-extracted"}})
+                    _emit({"type": "tool_call", "name": "run_instaharvest_v2_code", "arguments": {"description": "auto-extracted"}})
                     exec_result = self._handle_code_execution(
                         {"code": extracted_code, "description": "auto-extracted"},
                         step_callback=step_callback,
@@ -822,12 +822,12 @@ Example: if 'cristiano' in _cache: user = _cache['cristiano']
                         result_str = result_str[:3000] + "\n... (truncated)"
 
                     # Emit: tool result
-                    _emit({"type": "tool_result", "name": "run_instaapi_code", "output": result_str[:2000],
+                    _emit({"type": "tool_result", "name": "run_instaharvest_v2_code", "output": result_str[:2000],
                            "success": isinstance(exec_result, ExecutionResult) and exec_result.success})
 
                     self._history.append({
                         "role": "tool",
-                        "name": "run_instaapi_code",
+                        "name": "run_instaharvest_v2_code",
                         "content": result_str,
                     })
 
@@ -868,7 +868,7 @@ Example: if 'cristiano' in _cache: user = _cache['cristiano']
                        "success": not tool_output.startswith("Error")})
 
                 # Track code and files
-                if tc.name == "run_instaapi_code":
+                if tc.name == "run_instaharvest_v2_code":
                     result.code_executed = tc.arguments.get("code", "")
                     if isinstance(tool_result, ExecutionResult):
                         result.execution_result = tool_result
@@ -933,7 +933,7 @@ Example: if 'cristiano' in _cache: user = _cache['cristiano']
         args = tool_call.arguments
 
         # Core tools (handled directly)
-        if name == "run_instaapi_code":
+        if name == "run_instaharvest_v2_code":
             return self._handle_code_execution(args, step_callback=step_callback)
         elif name == "save_to_file":
             return self._handle_save_file(args)
@@ -975,7 +975,7 @@ Example: if 'cristiano' in _cache: user = _cache['cristiano']
         args: Dict,
         step_callback: Optional[Callable[[Dict[str, Any]], None]] = None,
     ) -> str:
-        """Handle run_instaapi_code tool call."""
+        """Handle run_instaharvest_v2_code tool call."""
         code = args.get("code", "")
         description = args.get("description", "Code execution")
 

@@ -8,20 +8,20 @@
 ## Install from PyPI
 
 ```bash
-pip install instaapi
+pip install InstaHarvest v2
 ```
 
 ## Install from source
 
 ```bash
 git clone https://github.com/mpython77/instaharvest_v2.git
-cd instaapi
+cd InstaHarvest v2
 pip install -e .
 ```
 
 ## Dependencies
 
-InstaAPI automatically installs these:
+InstaHarvest v2 automatically installs these:
 
 | Package | Purpose |
 |---|---|
@@ -42,14 +42,14 @@ print(instaharvest_v2.__version__)
 
 ```bash
 # AI Agent providers
-pip install instaapi[agent]    # openai, google-genai, anthropic, rich
+pip install InstaHarvest v2[agent]    # openai, google-genai, anthropic, rich
 
 # Web playground (FastAPI)
-pip install instaapi[web]      # fastapi, uvicorn + agent deps
+pip install InstaHarvest v2[web]      # fastapi, uvicorn + agent deps
 
 # Development tools
-pip install instaapi[dev]      # pytest, pytest-asyncio, pytest-cov
+pip install InstaHarvest v2[dev]      # pytest, pytest-asyncio, pytest-cov
 
 # Everything
-pip install instaapi[all]
+pip install InstaHarvest v2[all]
 ```

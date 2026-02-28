@@ -26,7 +26,7 @@ import json
 import logging
 from typing import Any, Dict, List, Optional
 
-from .base import BaseProvider, ProviderResponse, ToolCall, INSTAAPI_TOOLS
+from .base import BaseProvider, ProviderResponse, ToolCall, instaharvest_v2_TOOLS
 
 logger = logging.getLogger("instaharvest_v2.agent.providers.compatible")
 
@@ -130,7 +130,7 @@ class OpenAICompatibleProvider(BaseProvider):
                 raise ImportError(
                     "OpenAI library not found. Install with:\n"
                     "  pip install openai\n"
-                    "  or: pip install instaapi[agent]"
+                    "  or: pip install instaharvest_v2[agent]"
                 )
             kwargs = {
                 "api_key": self.api_key,
@@ -152,7 +152,7 @@ class OpenAICompatibleProvider(BaseProvider):
         client = self._get_client()
 
         # Format tools
-        openai_tools = self._format_tools(tools or INSTAAPI_TOOLS)
+        openai_tools = self._format_tools(tools or instaharvest_v2_TOOLS)
 
         # Clean messages — some providers don't support all fields
         clean_messages = self._clean_messages(messages)

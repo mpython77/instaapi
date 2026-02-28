@@ -4,7 +4,7 @@
 
 The agent automatically selects the right tool for each task:
 
-### 1. `run_instaapi_code`
+### 1. `run_InstaHarvest v2_code`
 
 Execute Python code in a secure sandbox with access to `ig` (Instagram client).
 

@@ -1,4 +1,4 @@
-name: InstaAPI CI/CD
+name: InstaHarvest v2 CI/CD
 
 on:
   push:
@@ -20,8 +20,8 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install flake8 mypy
-      - run: flake8 instaapi/ --max-line-length=120 --ignore=E501,W503,E402,E731
-      - run: mypy instaapi/ --ignore-missing-imports --no-error-summary || true
+      - run: flake8 instaharvest_v2/ --max-line-length=120 --ignore=E501,W503,E402,E731
+      - run: mypy instaharvest_v2/ --ignore-missing-imports --no-error-summary || true
 
   test:
     name: Tests (Python ${{ matrix.python-version }})
@@ -41,7 +41,7 @@ jobs:
           pip install pytest pytest-cov pytest-asyncio
       - name: Run tests with coverage
         run: |
-          pytest tests/ -v --tb=short --cov=instaapi --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html:htmlcov -x
+          pytest tests/ -v --tb=short --cov=instaharvest_v2 --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html:htmlcov -x
       - name: Upload coverage report
         if: matrix.python-version == '3.11'
         uses: actions/upload-artifact@v4
@@ -73,7 +73,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install bandit safety
-      - run: bandit -r instaapi/ -ll -ii --skip B101,B311 || true
+      - run: bandit -r instaharvest_v2/ -ll -ii --skip B101,B311 || true
       - run: pip install -e ".[dev]" && safety check || true
 
   build:
@@ -93,5 +93,3 @@ jobs:
           name: dist
           path: dist/
           retention-days: 30
-
-

@@ -29,8 +29,8 @@ from typing import Any, Dict, Optional
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="instaapi-agent",
-        description="✻ InstaAPI Agent — Control Instagram with natural language",
+        prog="instaharvest_v2-agent",
+        description="✻ InstaHarvest v2 Agent — Control Instagram with natural language",
     )
     parser.add_argument(
         "question",
@@ -168,7 +168,7 @@ class RichStepCallback:
             name = event.get("name", "?")
             args = event.get("arguments", {})
             code = ""
-            if name == "run_instaapi_code":
+            if name == "run_instaharvest_v2_code":
                 code = args.get("code", "")
             self.console.tool_call(name, args=args, code=code)
 
@@ -526,7 +526,7 @@ def main():
         sys.exit(1)
     except ImportError as e:
         console.error(f"Required package not found: {e}")
-        console.info("Install with: pip install instaapi[agent]")
+        console.info("Install with: pip install instaharvest_v2[agent]")
         sys.exit(1)
 
     # Override permission prompt to use TUI

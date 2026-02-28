@@ -34,12 +34,12 @@ class ProviderResponse:
         return len(self.tool_calls) > 0
 
 
-# InstaAPI tools schema — shared across providers
-INSTAAPI_TOOLS = [
+# InstaHarvest v2 tools schema — shared across providers
+instaharvest_v2_TOOLS = [
     {
-        "name": "run_instaapi_code",
+        "name": "run_instaharvest_v2_code",
         "description": (
-            "Execute Python code that uses the InstaAPI library. "
+            "Execute Python code that uses the InstaHarvest v2 library. "
             "The `ig` variable is a pre-configured Instagram client. "
             "Output results via print() or assign to a `result` variable. "
             "The sandbox includes: json, csv, re, math, datetime, pathlib."
@@ -49,7 +49,7 @@ INSTAAPI_TOOLS = [
             "properties": {
                 "code": {
                     "type": "string",
-                    "description": "Python code using InstaAPI (ig variable is available)",
+                    "description": "Python code using InstaHarvest v2 (ig variable is available)",
                 },
                 "description": {
                     "type": "string",
@@ -271,7 +271,7 @@ INSTAAPI_TOOLS = [
         "description": (
             "Search the web for information. Use when you need "
             "current data, trends, news, or facts that are not "
-            "available in the InstaAPI library."
+            "available in the InstaHarvest v2 library."
         ),
         "parameters": {
             "type": "object",
@@ -312,7 +312,7 @@ class BaseProvider(ABC):
 
         Args:
             messages: Chat history [{role, content}, ...]
-            tools: Tool definitions (default: INSTAAPI_TOOLS)
+            tools: Tool definitions (default: instaharvest_v2_TOOLS)
             temperature: Creativity (0=precise, 1=creative)
 
         Returns:
@@ -332,4 +332,4 @@ class BaseProvider(ABC):
 
     def format_tools(self, tools: Optional[List[Dict]] = None) -> List[Dict]:
         """Get tools in provider-specific format. Override if needed."""
-        return tools or INSTAAPI_TOOLS
+        return tools or instaharvest_v2_TOOLS
