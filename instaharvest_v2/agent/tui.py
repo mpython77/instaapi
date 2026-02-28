@@ -188,9 +188,13 @@ class AgentConsole:
         self._live.start()
 
     def stop_thinking(self):
-        """Stop the thinking spinner."""
-        if self._live:
-            self._live.stop()
+        """Stop the thinking spinner. Safe to call multiple times."""
+        try:
+            if self._live:
+                self._live.stop()
+        except Exception:
+            pass
+        finally:
             self._live = None
 
     def update_thinking(self, text: str):

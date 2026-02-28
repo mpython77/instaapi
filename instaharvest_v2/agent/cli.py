@@ -70,8 +70,8 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--permission",
         choices=["ask_every", "ask_once", "full_access"],
-        default="ask_once",
-        help="Permission level (default: ask_once)",
+        default="full_access",
+        help="Permission level (default: full_access)",
     )
     parser.add_argument(
         "--full-access",
@@ -87,8 +87,8 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--max-steps",
         type=int,
-        default=15,
-        help="Maximum agent steps (default: 15)",
+        default=25,
+        help="Maximum agent steps (default: 25)",
     )
     parser.add_argument(
         "--timeout",
@@ -378,17 +378,21 @@ def interactive_chat(agent, console, templates_runner=None, auth_manager=None):
         try:
             result = agent.ask(user_input, step_callback=callback)
         except KeyboardInterrupt:
+            console.stop_thinking()
             callback.finish()
             console.warning("Interrupted")
             continue
         except Exception as e:
+            console.stop_thinking()
             callback.finish()
             console.error(f"Agent error: {e}")
             continue
+        finally:
+            # GUARANTEED spinner stop — never leave it spinning
+            console.stop_thinking()
 
-        # Always stop spinner after agent finishes
         callback.finish()
-        console.stop_thinking()
+        console.stop_thinking()  # Triple safety
 
         # Display response
         if result.success:
@@ -417,16 +421,21 @@ def one_shot(agent, console, question: str):
     try:
         result = agent.ask(question, step_callback=callback)
     except KeyboardInterrupt:
+        console.stop_thinking()
         callback.finish()
         console.error("Interrupted")
         sys.exit(130)
     except Exception as e:
+        console.stop_thinking()
         callback.finish()
         console.error(f"Agent error: {e}")
         sys.exit(1)
+    finally:
+        # GUARANTEED spinner stop
+        console.stop_thinking()
 
     callback.finish()
-    console.stop_thinking()
+    console.stop_thinking()  # Triple safety
 
     if result.success:
         console.response(result.answer)
