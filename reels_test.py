@@ -1,30 +1,45 @@
 """
-Instagram Reels ma'lumotlarini olish testi.
-instaapi kutubxonasi orqali anonim (login talab qilinmaydi).
+Har xil turdagi postlarni test qilish:
+reel, oddiy video, rasm, carousel
 """
 from instaapi import Instagram
 
-# Anonim klient yaratish (login shart emas)
-ig = Instagram.anonymous()
+ig = Instagram()
 
-username = "cristiano"
-print(f"'{username}' foydalanuvchisining reels'larini olmoqdamiz...\n")
+# Har xil turdagi shortcode'lar
+tests = [
+    ("DU8nFS-DK03", "Reel"),           # User test qilgan reel
+    ("CtjoC2BNsB2", "Reel (pankocat)"),  # Reel
+]
 
-# Reels'larni olish (max 3 ta)
-reels = ig.public.get_reels(username, max_count=3)
+for sc, label in tests:
+    print(f"[{label}] Shortcode: {sc}")
+    print("-" * 50)
 
-if not reels:
-    print("Reels topilmadi yoki xato yuz berdi.")
-else:
-    print(f"Jami {len(reels)} ta reel topildi:\n")
-    for i, reel in enumerate(reels, 1):
-        print(f"--- Reel #{i} ---")
-        print(f"  ID:         {reel.get('id', 'N/A')}")
-        print(f"  Caption:    {(reel.get('caption', '') or '')[:80]}")
-        print(f"  Likes:      {reel.get('likes', 0):,}")
-        print(f"  Comments:   {reel.get('comments', 0):,}")
-        print(f"  Views:      {reel.get('play_count', 0):,}")
-        audio = reel.get('audio') or {}
-        print(f"  Audio:      {audio.get('title', 'N/A')}")
-        print(f"  Timestamp:  {reel.get('timestamp', 'N/A')}")
-        print()
+    post = ig.public.get_post_by_shortcode(sc)
+
+    if not post:
+        print("  Topilmadi\n")
+        continue
+
+    mtype = post.get('media_type', 'N/A')
+    ptype = post.get('product_type', 'N/A')
+    is_video = post.get('is_video', False)
+
+    print(f"  media_type:    {mtype}")
+    print(f"  product_type:  {ptype}")
+    print(f"  is_video:      {is_video}")
+    print(f"  Likes:         {post.get('likes', 0):,}")
+
+    if is_video:
+        print(f"  Video URL:     {'BOR' if post.get('video_url') else 'YOQ'}")
+        views = post.get('video_view_count') or post.get('video_views', 0)
+        print(f"  Views:         {views:,}" if views else "  Views:         N/A")
+    
+    print(f"  Display URL:   {'BOR' if post.get('display_url') else 'YOQ'}")
+
+    carousel = post.get('carousel_media')
+    if carousel:
+        print(f"  Carousel:      {len(carousel)} ta rasm/video")
+    print(post)
+    print()

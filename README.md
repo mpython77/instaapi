@@ -96,6 +96,24 @@ profile = ig.public.get_profile("cristiano")
 posts = ig.public.get_posts("cristiano", max_count=12)
 ```
 
+### 🎬 Reel / Post Scraping (no login, no cookies!)
+
+```python
+ig = Instagram()
+
+# By shortcode (from URL: instagram.com/reel/ABC123/)
+post = ig.public.get_post_by_shortcode("ABC123")
+print(post["likes"])         # 69603
+print(post["video_url"])     # full video download URL
+print(post["audio"])         # {'title': 'Original audio', 'artist': '...'}
+
+# By full URL
+post = ig.public.get_post_by_url("https://instagram.com/reel/ABC123/")
+
+# Works for ALL types: Reels, Photos, Carousels, Videos
+# Returns: video_url, display_url, likes, views, comments, audio, owner, carousel_media
+```
+
 ### 🤖 AI Agent
 
 ```python

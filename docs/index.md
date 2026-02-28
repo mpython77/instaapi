@@ -119,6 +119,20 @@ pip install instaapi[all]      # everything
     print(f"{profile['username']}: {profile['followers']:,} followers")
     ```
 
+=== "Reel / Post Scraping :material-new-box:"
+
+    ```python
+    from instaapi import Instagram
+
+    ig = Instagram()  # no login needed!
+
+    # Get any reel/post by shortcode or URL — no cookies required
+    post = ig.public.get_post_by_shortcode("ABC123")
+    print(post["video_url"])    # full video download URL
+    print(post["likes"])        # 69603
+    print(post["audio"])        # music info for reels
+    ```
+
 === "Authenticated"
 
     ```python
