@@ -394,13 +394,13 @@ class StoriesAPI:
 
     def get_viewers(self, story_id: int | str) -> Dict[str, Any]:
         """
-        Storyni kim ko'rgan.
+        Get story viewers.
 
         Args:
             story_id: Story media PK
 
         Returns:
-            Ko'rganlar list
+            List of viewers
         """
         return self._client.get(
             f"/media/{story_id}/list_reel_media_viewer/",
@@ -414,7 +414,7 @@ class StoriesAPI:
         vote: int = 0,
     ) -> Dict[str, Any]:
         """
-        Story requestsnomada ovoz berish.
+        Vote on a story poll.
 
         Args:
             story_id: Story media PK
@@ -462,7 +462,7 @@ class StoriesAPI:
         vote: float,
     ) -> Dict[str, Any]:
         """
-        Story emoji slider'da ovoz berish.
+        Vote on a story emoji slider.
 
         Args:
             story_id: Story media PK
@@ -486,7 +486,7 @@ class StoriesAPI:
         answer: int,
     ) -> Dict[str, Any]:
         """
-        Story quiz'da javob berish.
+        Answer a story quiz.
 
         Args:
             story_id: Story media PK
@@ -576,7 +576,7 @@ class StoriesAPI:
     def get_highlight_items_parsed(self, highlight_id: str) -> Dict[str, Any]:
         """
         Get highlight items in structured format.
-        Story itemlar with bir xil tuzilish — mentions, locations,
+        Story items with consistent structure — mentions, locations,
         hashtags, music, polls, links, and everything is parsed.
 
         Args:

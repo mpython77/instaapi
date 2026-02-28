@@ -23,12 +23,12 @@ logger = logging.getLogger("instaharvest_v2.search")
 
 
 class SearchAPI:
-    """Instagram qidiruv API"""
+    """Instagram Search API"""
 
     def __init__(self, client: HttpClient):
         self._client = client
 
-    # ─── UMUMIY QIDIRUV ─────────────────────────────────────
+    # ─── GENERAL SEARCH ─────────────────────────────────────
 
     def top_search(self, query: str, context: str = "blended") -> Dict[str, Any]:
         """
@@ -52,7 +52,7 @@ class SearchAPI:
         User search (parsed).
 
         Args:
-            query: Username or ism
+            query: Username or name
 
         Returns:
             List of UserShort models
@@ -73,7 +73,7 @@ class SearchAPI:
             query: Hashtag name (without #)
 
         Returns:
-            Topilgan hashtaglar list
+            List of matching hashtags
         """
         data = self._client.get(
             "/tags/search/",
@@ -90,7 +90,7 @@ class SearchAPI:
             query: Place name
 
         Returns:
-            Topilgan joylar list
+            List of matching places
         """
         data = self._client.get(
             "/fbsearch/places/",
@@ -153,7 +153,7 @@ class SearchAPI:
                 )
                 result = result.merge(more)
         """
-        # Hashtag formatlash
+        # Format hashtag
         if not hashtag.startswith("#"):
             hashtag = f"#{hashtag}"
 
@@ -174,7 +174,7 @@ class SearchAPI:
                 f"max_id={current_max_id}"
             )
 
-            # So'rov parametrlari
+            # Request parameters
             params: Dict[str, str] = {
                 "enable_metadata": "true",
                 "query": hashtag,
@@ -187,7 +187,7 @@ class SearchAPI:
             if current_rank_token:
                 params["rank_token"] = current_rank_token
 
-            # API so'rov
+            # API request
             try:
                 raw = self._client.get(
                     "/fbsearch/web/top_serp/",
@@ -202,7 +202,7 @@ class SearchAPI:
                 logger.warning(f"Invalid response: {raw}")
                 break
 
-            # Pagination ma'lumotlari
+            # Pagination data
             media_grid = raw.get("media_grid", {})
             has_more = media_grid.get("has_more", False)
             current_max_id = media_grid.get("next_max_id")
@@ -268,12 +268,12 @@ class SearchAPI:
                 if not media_data:
                     continue
 
-                # Post parse (Media modeli)
+                # Post parse (Media model)
                 try:
                     media = MediaModel.from_api(media_data)
                     posts.append(media)
                 except Exception as e:
-                    logger.warning(f"Media parse xato: {e}")
+                    logger.warning(f"Media parse error: {e}")
                     continue
 
                 # Post owner -> users dict
@@ -301,7 +301,7 @@ class SearchAPI:
         """
         Add tagged users from media to users dict.
 
-        Tekshiradigan joylar:
+        Locations checked:
         - usertags.in[]
         - fb_user_tags.in[]
         """
@@ -320,7 +320,7 @@ class SearchAPI:
                         except Exception:
                             pass
 
-    # ─── LEGACY: web_search (eski metod, backward compat) ────
+    # ─── LEGACY: web_search (old method, backward compat) ────
 
     def web_search(
         self,

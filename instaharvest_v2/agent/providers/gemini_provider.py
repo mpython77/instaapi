@@ -53,7 +53,7 @@ class GeminiProvider(BaseProvider):
         try:
             from google.genai import types
         except ImportError:
-            raise ImportError("google-genai o'rnatilmagan: pip install google-genai")
+            raise ImportError("google-genai not installed: pip install google-genai")
 
         # Build Gemini tools
         gemini_tools = self._build_gemini_tools(tools or instaharvest_v2_TOOLS)
@@ -106,7 +106,7 @@ class GeminiProvider(BaseProvider):
             if response is None:
                 logger.error(f"Gemini API failed after 3 retries: {last_error}")
                 return ProviderResponse(
-                    content=f"AI xizmati vaqtinchalik ishlamayapti. Iltimos qaytadan urinib ko'ring. ({last_error})",
+                    content=f"AI service temporarily unavailable. Please try again. ({last_error})",
                     finish_reason="error",
                 )
         except Exception as e:
@@ -132,7 +132,7 @@ class GeminiProvider(BaseProvider):
                 )
                 if candidate is None:
                     return ProviderResponse(
-                        content="Kechirasiz, AI javob bera olmadi. Iltimos qaytadan urinib ko'ring.",
+                        content="Sorry, AI could not respond. Please try again.",
                         finish_reason="error",
                     )
 

@@ -276,8 +276,8 @@ class OpenAICompatibleProvider(BaseProvider):
         if not profile:
             available = ", ".join(sorted(PROVIDER_PROFILES.keys()))
             raise ValueError(
-                f"Noma'lum profil: '{profile_name}'. "
-                f"Mavjud profillar: {available}"
+                f"Unknown profile: '{profile_name}'. "
+                f"Available profiles: {available}"
             )
 
         return cls(
