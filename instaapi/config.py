@@ -114,6 +114,7 @@ ANON_RATE_LIMITS = {
     "html_parse": {"requests": 10, "window": 60},
     "embed": {"requests": 20, "window": 60},
     "graphql": {"requests": 8, "window": 60},
+    "graphql_docid": {"requests": 15, "window": 60},
     "mobile_api": {"requests": 12, "window": 60},
     "web_api": {"requests": 10, "window": 60},
 }
@@ -123,6 +124,7 @@ ANON_RATE_LIMITS_UNLIMITED = {
     "html_parse": {"requests": 999999, "window": 1},
     "embed": {"requests": 999999, "window": 1},
     "graphql": {"requests": 999999, "window": 1},
+    "graphql_docid": {"requests": 999999, "window": 1},
     "mobile_api": {"requests": 999999, "window": 1},
     "web_api": {"requests": 999999, "window": 1},
 }
@@ -135,6 +137,14 @@ ANON_GRAPHQL_HASHES = {
     "user_info": "c9100bf9110dd6361671f113dd02e7d6",
     "post_info": "2b0673e0dc4580571e0d6623e10e557d",
 }
+
+# GraphQL doc_id API (POST /api/graphql) — cookie-free strategy
+# These doc_ids query Instagram's internal GraphQL by shortcode
+# Returns full media data including video_url, carousel, music info
+GRAPHQL_DOC_IDS = {
+    "media_shortcode": "10015901848480474",
+}
+GRAPHQL_LSD_TOKEN = "AVqbxe3J_YA"
 
 # Embed endpoint
 EMBED_URL = "https://www.instagram.com/p/{shortcode}/embed/captioned/"

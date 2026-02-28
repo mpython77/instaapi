@@ -32,6 +32,8 @@ from .config import (
     EMBED_URL,
     MOBILE_API_BASE,
     IG_APP_ID,
+    GRAPHQL_DOC_IDS,
+    GRAPHQL_LSD_TOKEN,
     MAX_RETRIES,
 )
 
@@ -637,7 +639,259 @@ class AnonClient:
         return data if len(data) > 1 else {}
 
     # ═══════════════════════════════════════════════════════════
-    # STRATEGY 3: GraphQL Public Queries
+    # STRATEGY 3a: GraphQL doc_id (cookie-free, POST /api/graphql)
+    # ═══════════════════════════════════════════════════════════
+
+    def _request_post(
+        self,
+        url: str,
+        strategy: str,
+        headers: Optional[Dict] = None,
+        data: Optional[Dict] = None,
+        timeout: int = 15,
+    ) -> Any:
+        """
+        Send anonymous POST request with anti-detect and proxy.
+        Used for GraphQL doc_id endpoint which requires POST.
+        """
+        identity = self._anti_detect.get_identity()
+
+        req_headers = {
+            "user-agent": identity.user_agent,
+            "accept": "*/*",
+            "accept-language": identity.accept_language,
+            "accept-encoding": "gzip, deflate, br",
+            "content-type": "application/x-www-form-urlencoded",
+            "x-ig-app-id": IG_APP_ID,
+            "x-fb-lsd": GRAPHQL_LSD_TOKEN,
+            "x-asbd-id": "129477",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-origin",
+            "referer": "https://www.instagram.com/",
+            "origin": "https://www.instagram.com",
+        }
+        if identity.sec_ch_ua:
+            req_headers["sec-ch-ua"] = identity.sec_ch_ua
+            req_headers["sec-ch-ua-mobile"] = identity.sec_ch_ua_mobile
+            req_headers["sec-ch-ua-platform"] = identity.sec_ch_ua_platform
+        if headers:
+            req_headers.update(headers)
+
+        # Proxy
+        proxy = None
+        if self._proxy_mgr and self._proxy_mgr.active_count > 0:
+            proxy = self._proxy_mgr.get_proxy()
+
+        self._human_delay()
+        self._rate_limiter.wait_if_needed(strategy)
+
+        kwargs = {
+            "url": url,
+            "headers": req_headers,
+            "data": data or {},
+            "timeout": timeout,
+            "impersonate": identity.impersonation,
+            "allow_redirects": True,
+            "verify": False,
+        }
+        if proxy:
+            kwargs["proxies"] = {"https": proxy, "http": proxy}
+
+        last_error = None
+        for attempt in range(MAX_RETRIES + 1):
+            try:
+                response = curl_requests.post(**kwargs)
+                self._request_count += 1
+
+                if response.status_code == 429:
+                    logger.warning(f"[Anon] Rate limited on {strategy} POST")
+                    self._anti_detect.on_error("rate_limit")
+                    wait = random.uniform(
+                        self._delays["after_rate_limit"]["min"],
+                        self._delays["after_rate_limit"]["max"],
+                    )
+                    if wait > 0:
+                        time.sleep(wait)
+                    identity = self._anti_detect.get_identity()
+                    kwargs["headers"]["user-agent"] = identity.user_agent
+                    kwargs["impersonate"] = identity.impersonation
+                    continue
+
+                if response.status_code == 404:
+                    return None
+
+                if response.status_code in (401, 403):
+                    raise StrategyFailed(f"Auth required: {response.status_code}")
+
+                if response.status_code >= 500:
+                    time.sleep(random.uniform(2, 5))
+                    continue
+
+                response.raise_for_status()
+                return response.json()
+
+            except StrategyFailed:
+                raise
+            except Exception as e:
+                last_error = e
+                self._error_count += 1
+                self._anti_detect.on_error("network")
+                if attempt < MAX_RETRIES:
+                    err_min = self._delays["after_error"]["min"]
+                    err_max = self._delays["after_error"]["max"]
+                    if err_max > 0:
+                        time.sleep(random.uniform(err_min, err_max))
+
+        raise StrategyFailed(f"All POST attempts failed for {strategy}: {last_error}")
+
+    def get_graphql_docid(
+        self,
+        shortcode: str,
+    ) -> Optional[Dict]:
+        """
+        Get post/reel data via GraphQL doc_id API (cookie-free!).
+
+        Uses Instagram's internal GraphQL POST endpoint with doc_id.
+        No cookies or authentication required.
+
+        Args:
+            shortcode: Post or reel shortcode
+
+        Returns:
+            Parsed media dict or None
+        """
+        doc_id = GRAPHQL_DOC_IDS.get("media_shortcode")
+        if not doc_id:
+            return None
+
+        url = "https://www.instagram.com/api/graphql"
+        post_data = {
+            "variables": json.dumps({"shortcode": shortcode}),
+            "doc_id": doc_id,
+            "lsd": GRAPHQL_LSD_TOKEN,
+        }
+
+        try:
+            data = self._request_post(
+                url, "graphql_docid",
+                data=post_data,
+            )
+        except StrategyFailed:
+            return None
+
+        if not data or not isinstance(data, dict):
+            return None
+
+        # Parse response — structure: data.xdt_shortcode_media
+        media = (
+            data.get("data", {})
+            .get("xdt_shortcode_media")
+        )
+        if not media:
+            return None
+
+        return self._parse_graphql_docid_media(media)
+
+    def _parse_graphql_docid_media(self, media: Dict) -> Dict:
+        """
+        Parse xdt_shortcode_media from GraphQL doc_id response.
+
+        Returns a standardized dict compatible with other strategies.
+        """
+        owner = media.get("owner", {})
+        caption_edges = media.get("edge_media_to_caption", {}).get("edges", [])
+        caption = caption_edges[0]["node"]["text"] if caption_edges else ""
+
+        result = {
+            "_strategy": "graphql_docid",
+            "pk": media.get("id"),
+            "shortcode": media.get("shortcode"),
+            "media_type": media.get("__typename"),
+            "product_type": media.get("product_type"),
+            "is_video": media.get("is_video", False),
+            "caption": caption,
+            "likes": (
+                media.get("edge_media_preview_like", {}).get("count", 0)
+            ),
+            "comments_count": (
+                media.get("edge_media_preview_comment", {}).get("count", 0)
+                or media.get("edge_media_to_parent_comment", {}).get("count", 0)
+            ),
+            "taken_at": media.get("taken_at_timestamp"),
+            "display_url": media.get("display_url"),
+            "thumbnail_src": media.get("thumbnail_src"),
+            "dimensions": media.get("dimensions"),
+            "owner": {
+                "pk": owner.get("id"),
+                "username": owner.get("username"),
+                "full_name": owner.get("full_name"),
+                "is_verified": owner.get("is_verified"),
+                "is_private": owner.get("is_private"),
+                "profile_pic_url": owner.get("profile_pic_url"),
+                "followers": owner.get("edge_followed_by", {}).get("count"),
+                "posts_count": owner.get("edge_owner_to_timeline_media", {}).get("count"),
+            },
+            # Video-specific
+            "video_url": media.get("video_url"),
+            "video_view_count": media.get("video_view_count"),
+            "video_play_count": media.get("video_play_count"),
+            "video_duration": media.get("video_duration"),
+            "has_audio": media.get("has_audio"),
+            # Display resources (multiple resolutions)
+            "display_resources": [
+                {
+                    "url": r.get("src"),
+                    "width": r.get("config_width"),
+                    "height": r.get("config_height"),
+                }
+                for r in media.get("display_resources", [])
+            ],
+            # Location
+            "location": media.get("location"),
+            "is_paid_partnership": media.get("is_paid_partnership"),
+        }
+
+        # Music info for reels
+        music = media.get("clips_music_attribution_info")
+        if music:
+            result["audio"] = {
+                "title": music.get("song_name"),
+                "artist": music.get("artist_name"),
+                "audio_id": music.get("audio_id"),
+                "uses_original_audio": music.get("uses_original_audio"),
+            }
+
+        # Carousel (sidecar)
+        sidecar = media.get("edge_sidecar_to_children")
+        if sidecar:
+            children = []
+            for edge in sidecar.get("edges", []):
+                child = edge.get("node", {})
+                children.append({
+                    "pk": child.get("id"),
+                    "shortcode": child.get("shortcode"),
+                    "display_url": child.get("display_url"),
+                    "is_video": child.get("is_video", False),
+                    "video_url": child.get("video_url"),
+                    "media_type": child.get("__typename"),
+                    "dimensions": child.get("dimensions"),
+                    "display_resources": [
+                        {
+                            "url": r.get("src"),
+                            "width": r.get("config_width"),
+                            "height": r.get("config_height"),
+                        }
+                        for r in child.get("display_resources", [])
+                    ],
+                })
+            result["carousel_media"] = children
+            result["carousel_count"] = len(children)
+
+        return result
+
+    # ═══════════════════════════════════════════════════════════
+    # STRATEGY 3b: GraphQL Public Queries (query_hash)
     # ═══════════════════════════════════════════════════════════
 
     def get_graphql_public(
@@ -1002,6 +1256,7 @@ class AnonClient:
         Tries all strategies in order.
         """
         strategies = [
+            ("graphql_docid", lambda: self.get_graphql_docid(shortcode)),
             ("embed", lambda: self.get_embed_data(shortcode)),
             ("graphql", lambda: self._graphql_post_fallback(shortcode)),
             ("web_api", lambda: self._web_post_fallback(shortcode)),
