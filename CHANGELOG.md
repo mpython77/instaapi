@@ -2,6 +2,17 @@
 
 All notable changes to instaharvest_v2.
 
+## [1.0.17] - 2026-03-01
+
+### 🔧 Web App Endpoint Enrichment
+
+- **Expanded `_pval()` helper** — 8 new field mappings: user_id, is_business, highlights, bio_links, pronouns, mutual, business_email, business_phone. Profile pic now prefers HD version.
+- **Analytics endpoint** — +8 fields: user_id, full_name, is_business, category, website, bio_links, highlights, profile_pic
+- **Compare endpoint** — +5 fields: user_id, is_business, category, website, highlights
+- **Batch scrape endpoint** — +7 fields: user_id, is_business, category, website, bio_links, highlights
+
+---
+
 ## [1.0.16] - 2026-03-01
 
 ### 🔧 Fix: Profile Data Completeness

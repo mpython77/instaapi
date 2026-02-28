@@ -1135,12 +1135,20 @@ def _pval(p, key, default=0):
         "following": ["following", "following_count", "edge_follow.count"],
         "posts_count": ["posts_count", "media_count", "edge_owner_to_timeline_media.count"],
         "bio": ["biography", "bio"],
-        "pic": ["profile_pic_url", "profile_pic_url_hd"],
+        "pic": ["profile_pic_url_hd", "profile_pic_url"],
         "name": ["full_name"],
         "verified": ["is_verified"],
         "private": ["is_private"],
-        "category": ["category_name", "category", "business_category_name"],
+        "category": ["category", "category_name", "business_category_name"],
         "url": ["external_url"],
+        "user_id": ["user_id", "id", "pk"],
+        "is_business": ["is_business", "is_business_account"],
+        "highlights": ["highlight_count", "highlight_reel_count"],
+        "bio_links": ["bio_links"],
+        "pronouns": ["pronouns"],
+        "mutual": ["mutual_followers", "edge_mutual_followed_by.count"],
+        "business_email": ["business_email"],
+        "business_phone": ["business_phone", "business_phone_number"],
     }
     keys = MAP.get(key, [key])
     if isinstance(p, dict):
@@ -1301,8 +1309,17 @@ async def analytics_profile(username: str):
             all_hashtags.extend(tags)
         from collections import Counter
         hashtag_freq = Counter(all_hashtags).most_common(10)
+        # Bio links
+        raw_links = _pval(profile, "bio_links", [])
+        bio_links = []
+        if isinstance(raw_links, list):
+            for lnk in raw_links[:5]:
+                if isinstance(lnk, dict):
+                    bio_links.append({"title": lnk.get("title", ""), "url": lnk.get("url", "")})
         return _success({
             "username": username,
+            "user_id": _pval(profile, "user_id", ""),
+            "full_name": _pval(profile, "name", ""),
             "followers": followers,
             "following": following,
             "follow_ratio": round(follow_ratio, 2),
@@ -1317,7 +1334,13 @@ async def analytics_profile(username: str):
             "top_hashtags": [{"tag": t, "count": c} for t, c in hashtag_freq],
             "is_verified": _pval(profile, "verified", False),
             "is_private": _pval(profile, "private", False),
+            "is_business": _pval(profile, "is_business", False),
+            "category": _pval(profile, "category", ""),
             "bio": _pval(profile, "bio", ""),
+            "website": _pval(profile, "url", ""),
+            "bio_links": bio_links,
+            "highlights": _pval(profile, "highlights", 0),
+            "profile_pic": _pval(profile, "pic", ""),
         }, "Analytics computed", "analytics/profile")
     except Exception as e:
         return _error(str(e), endpoint="analytics/profile")
@@ -1451,6 +1474,7 @@ async def compare_profiles(users: str = Query(..., description="Comma-separated 
                 engagement = ((avg_likes) / max(followers, 1)) * 100
                 profiles.append({
                     "username": uname,
+                    "user_id": _pval(p, "user_id", ""),
                     "full_name": _pval(p, "name", ""),
                     "followers": followers,
                     "following": following,
@@ -1459,7 +1483,11 @@ async def compare_profiles(users: str = Query(..., description="Comma-separated 
                     "engagement_rate": round(engagement, 3),
                     "is_verified": _pval(p, "verified", False),
                     "is_private": _pval(p, "private", False),
+                    "is_business": _pval(p, "is_business", False),
+                    "category": _pval(p, "category", ""),
                     "bio": str(_pval(p, "bio", "") or "")[:150],
+                    "website": _pval(p, "url", ""),
+                    "highlights": _pval(p, "highlights", 0),
                     "profile_pic": _pval(p, "pic", ""),
                 })
             except Exception as ex:
@@ -1497,8 +1525,16 @@ async def batch_scrape(request: Request):
         for uname in usernames:
             try:
                 p = ig.public.get_profile(uname)
+                # Extract bio links
+                raw_links = _pval(p, "bio_links", [])
+                bio_links = []
+                if isinstance(raw_links, list):
+                    for lnk in raw_links[:5]:
+                        if isinstance(lnk, dict):
+                            bio_links.append({"title": lnk.get("title", ""), "url": lnk.get("url", "")})
                 results.append({
                     "username": uname,
+                    "user_id": _pval(p, "user_id", ""),
                     "full_name": _pval(p, "name", ""),
                     "followers": _pval(p, "followers"),
                     "following": _pval(p, "following"),
@@ -1506,6 +1542,11 @@ async def batch_scrape(request: Request):
                     "bio": str(_pval(p, "bio", "") or "")[:200],
                     "is_verified": _pval(p, "verified", False),
                     "is_private": _pval(p, "private", False),
+                    "is_business": _pval(p, "is_business", False),
+                    "category": _pval(p, "category", ""),
+                    "website": _pval(p, "url", ""),
+                    "bio_links": bio_links,
+                    "highlights": _pval(p, "highlights", 0),
                     "profile_pic": _pval(p, "pic", ""),
                 })
             except Exception as ex:
