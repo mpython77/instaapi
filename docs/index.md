@@ -88,7 +88,7 @@
 
     ---
 
-    475 tests, pytest-cov, GitHub Actions pipeline — lint, test, security, build, benchmark.
+    475 tests, pytest-cov, GitHub Actions pipeline — lint, test, security, build.
 
 </div>
 
@@ -184,14 +184,3 @@ pip install instaapi[all]      # everything
     # A/B testing
     test = ig.ab_test.create("Test", variants={"A": {}, "B": {}})
     ```
-
-## Performance
-
-| Benchmark | Result |
-|-----------|--------|
-| Library import | ~170ms |
-| Pydantic model parsing | 190,840 ops/sec |
-| Rate limiter checks | 546,448 ops/sec |
-| AntiDetect init | 0.2ms |
-| API module init (12) | 1.0ms |
-| Memory footprint | 0.5KB peak |

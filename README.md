@@ -460,9 +460,6 @@ pytest tests/ -v
 
 # Run with coverage
 pytest tests/ --cov=instaapi --cov-report=term-missing
-
-# Run benchmark
-python benchmarks/benchmark.py
 ```
 
 **Current status:**
@@ -549,7 +546,6 @@ GitHub Actions pipeline (`.github/workflows/ci.yml`):
 | **Test** | Python 3.10, 3.11, 3.12 + coverage |
 | **Security** | bandit + safety |
 | **Build** | Package + twine check |
-| **Benchmark** | Auto-run on main push |
 
 ## ⚠️ Legal Disclaimer
 
