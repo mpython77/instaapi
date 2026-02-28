@@ -3173,10 +3173,10 @@
 <p><strong>Returns:</strong> <code>BioParsed</code> model</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">user</span> <span class="o">=</span> <span class="n">ig</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get_by_username</span><span class="p">(</span><span class="s2">&quot;nike&quot;</span><span class="p">)</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">bio</span> <span class="o">=</span> <span class="n">ig</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">parse_bio</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mentions:&quot;</span><span class="p">,</span> <span class="n">bio</span><span class="o">.</span><span class="n">mentions</span><span class="p">)</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hashtags:&quot;</span><span class="p">,</span> <span class="n">bio</span><span class="o">.</span><span class="n">hashtags</span><span class="p">)</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Emails:&quot;</span><span class="p">,</span> <span class="n">bio</span><span class="o">.</span><span class="n">emails</span><span class="p">)</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Phones:&quot;</span><span class="p">,</span> <span class="n">bio</span><span class="o">.</span><span class="n">phones</span><span class="p">)</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mentions:&quot;</span><span class="p">,</span> <span class="n">bio</span><span class="o">.</span><span class="n">bio_mentions</span><span class="p">)</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hashtags:&quot;</span><span class="p">,</span> <span class="n">bio</span><span class="o">.</span><span class="n">bio_hashtags</span><span class="p">)</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Emails:&quot;</span><span class="p">,</span> <span class="n">bio</span><span class="o">.</span><span class="n">bio_emails</span><span class="p">)</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Phones:&quot;</span><span class="p">,</span> <span class="n">bio</span><span class="o">.</span><span class="n">bio_phones</span><span class="p">)</span>
 </span></code></pre></div>
 <hr />
 <h3 id="get_full_profileusername">get_full_profile(username)<a class="headerlink" href="#get_full_profileusername" title="Permanent link">&para;</a></h3>
@@ -3202,10 +3202,10 @@
 <p><strong>Returns:</strong> <code>User</code> model (with full contact, bio counters, etc.)</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">user</span> <span class="o">=</span> <span class="n">ig</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get_full_profile</span><span class="p">(</span><span class="s2">&quot;nasa&quot;</span><span class="p">)</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">biography</span><span class="p">)</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">contact</span><span class="o">.</span><span class="n">public_email</span><span class="p">:</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Email:&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">contact</span><span class="o">.</span><span class="n">public_email</span><span class="p">)</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">contact</span><span class="o">.</span><span class="n">contact_phone_number</span><span class="p">:</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Phone:&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">contact</span><span class="o">.</span><span class="n">contact_phone_number</span><span class="p">)</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">contact</span><span class="o">.</span><span class="n">email</span><span class="p">:</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Email:&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">contact</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">contact</span><span class="o">.</span><span class="n">phone</span><span class="p">:</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Phone:&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">contact</span><span class="o">.</span><span class="n">phone</span><span class="p">)</span>
 </span></code></pre></div>
 <hr />
 <h2 id="models">Models<a class="headerlink" href="#models" title="Permanent link">&para;</a></h2>
@@ -3312,29 +3312,39 @@
 </thead>
 <tbody>
 <tr>
-<td><code>mentions</code></td>
+<td><code>bio_mentions</code></td>
 <td><code>list[str]</code></td>
 <td>@username mentions</td>
 </tr>
 <tr>
-<td><code>hashtags</code></td>
+<td><code>bio_hashtags</code></td>
 <td><code>list[str]</code></td>
 <td>#tag references</td>
 </tr>
 <tr>
-<td><code>emails</code></td>
+<td><code>bio_emails</code></td>
 <td><code>list[str]</code></td>
 <td>Extracted emails</td>
 </tr>
 <tr>
-<td><code>phones</code></td>
+<td><code>bio_phones</code></td>
 <td><code>list[str]</code></td>
 <td>Extracted phone numbers</td>
 </tr>
 <tr>
-<td><code>urls</code></td>
+<td><code>bio_urls</code></td>
 <td><code>list[str]</code></td>
 <td>Extracted URLs</td>
+</tr>
+<tr>
+<td><code>bio_links</code></td>
+<td><code>list</code></td>
+<td>Structured link objects</td>
+</tr>
+<tr>
+<td><code>bio_entities</code></td>
+<td><code>list[dict]</code></td>
+<td>Raw bio entities</td>
 </tr>
 </tbody>
 </table>
