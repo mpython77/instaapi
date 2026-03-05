@@ -2,6 +2,16 @@
 
 All notable changes to instaharvest_v2.
 
+## [1.0.20] - 2026-03-06
+
+### 🐛 Proxy Bugfixes — Full BRD/Residential Proxy Support
+
+- **SSL `verify` logic inverted** — `verify` was `True` when proxy present (should be `False`). Fixed in `_request_inner()` kwargs and `AsyncSession()` constructor (`_get_session`, `_rotate_session`). Residential proxies (BRD, Oxylabs, etc.) that MITM SSL now work correctly
+- **`response.elapsed` TypeError** — `report_success()` received `datetime.timedelta` instead of `float`. Added `.total_seconds()` conversion with fallback
+- **Verified**: 10 users, 100 posts, 12.7s via BRD residential proxy with per-request session rotation
+
+---
+
 ## [1.0.19] - 2026-03-06
 
 ### 🏗️ Architecture Refactoring & Feature Parity

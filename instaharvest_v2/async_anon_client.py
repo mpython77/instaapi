@@ -189,6 +189,7 @@ class AsyncAnonClient:
                     self._session = AsyncSession(
                         impersonate=identity.impersonation,
                         max_clients=self._max_concurrency,
+                        verify=not bool(self._proxy_mgr),
                     )
         return self._session
 
@@ -204,6 +205,7 @@ class AsyncAnonClient:
             self._session = AsyncSession(
                 impersonate=identity.impersonation,
                 max_clients=self._max_concurrency,
+                verify=not bool(self._proxy_mgr),
             )
 
     # ═══════════════════════════════════════════════════════════
@@ -290,7 +292,7 @@ class AsyncAnonClient:
             "headers": req_headers,
             "timeout": timeout,
             "allow_redirects": True,
-            "verify": proxy_dict is not None,  # SSL only disabled when using proxy
+            "verify": proxy_dict is None,  # SSL verify off when using proxy (MITM)
         }
         if params:
             kwargs["params"] = params
@@ -307,7 +309,9 @@ class AsyncAnonClient:
                 # Report proxy success
                 if proxy_url:
                     elapsed = getattr(response, 'elapsed', 0.0)
-                    self._proxy_mgr.report_success(proxy_url, elapsed)
+                    if hasattr(elapsed, 'total_seconds'):
+                        elapsed = elapsed.total_seconds()
+                    self._proxy_mgr.report_success(proxy_url, float(elapsed))
 
                 # Check status
                 if response.status_code == 429:
