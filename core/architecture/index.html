@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.4">
     
     
       
@@ -3007,6 +3007,11 @@
 <td><code>plugin.py</code></td>
 <td>Plugin architecture</td>
 </tr>
+<tr>
+<td><strong>Strategy</strong></td>
+<td><code>strategy.py</code></td>
+<td>Configurable strategy chain (ProfileStrategy, PostsStrategy)</td>
+</tr>
 </tbody>
 </table>
 <h2 id="two-operation-modes">Two Operation Modes<a class="headerlink" href="#two-operation-modes" title="Permanent link">&para;</a></h2>
@@ -3016,7 +3021,7 @@
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Instagram.anonymous()
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    → PublicAPI
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        → AnonClient
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>            → 5 strategies (no cookies needed)
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>            → configurable strategies (no cookies needed)
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                → curl_cffi (TLS fingerprint)
 </span></code></pre></div>
 </div>
@@ -3043,7 +3048,7 @@
 <tr>
 <td><strong>Strategy</strong></td>
 <td>AnonClient</td>
-<td>5 fallback strategies for resilience</td>
+<td>Configurable fallback strategies for resilience</td>
 </tr>
 <tr>
 <td><strong>Chain of Responsibility</strong></td>

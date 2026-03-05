@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.4">
     
     
       
@@ -1084,6 +1084,34 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#strategy-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strategy Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Strategy Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_profile_chainusername" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_profile_chain(username)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#strategy-methods" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1172,6 +1200,17 @@
     <span class="md-ellipsis">
       
         get_web_profile(username)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_get_web_profile_parsedusername" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _get_web_profile_parsed(username)
       
     </span>
   </a>
@@ -2957,6 +2996,34 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#strategy-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strategy Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Strategy Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_profile_chainusername" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_profile_chain(username)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#strategy-methods" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3045,6 +3112,17 @@
     <span class="md-ellipsis">
       
         get_web_profile(username)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_get_web_profile_parsedusername" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        _get_web_profile_parsed(username)
       
     </span>
   </a>
@@ -3196,76 +3274,87 @@
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">client</span> <span class="o">=</span> <span class="n">ig</span><span class="o">.</span><span class="n">_anon_client</span>  <span class="c1"># AnonClient instance</span>
 </span></code></pre></div>
 <hr />
+<h2 id="strategy-configuration">Strategy Configuration<a class="headerlink" href="#strategy-configuration" title="Permanent link">&para;</a></h2>
+<p>AnonClient uses a <strong>configurable fallback chain</strong> for profile and posts fetching.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">instaharvest_v2</span><span class="w"> </span><span class="kn">import</span> <span class="n">Instagram</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Custom strategy order:</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">ig</span> <span class="o">=</span> <span class="n">Instagram</span><span class="o">.</span><span class="n">anonymous</span><span class="p">(</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">profile_strategies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;web_api&quot;</span><span class="p">,</span> <span class="s2">&quot;html_parse&quot;</span><span class="p">],</span>  <span class="c1"># skip graphql</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">posts_strategies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mobile_feed&quot;</span><span class="p">,</span> <span class="s2">&quot;web_api&quot;</span><span class="p">],</span>    <span class="c1"># mobile first</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># Access strategies on client:</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">ig</span><span class="o">.</span><span class="n">_anon_client</span><span class="o">.</span><span class="n">_profile_strategies</span><span class="p">)</span>  <span class="c1"># [ProfileStrategy.WEB_API, ProfileStrategy.HTML_PARSE]</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nb">print</span><span class="p">(</span><span class="n">ig</span><span class="o">.</span><span class="n">_anon_client</span><span class="o">.</span><span class="n">_posts_strategies</span><span class="p">)</span>    <span class="c1"># [PostsStrategy.MOBILE_FEED, PostsStrategy.WEB_API]</span>
+</span></code></pre></div>
+<h3 id="get_profile_chainusername">get_profile_chain(username)<a class="headerlink" href="#get_profile_chainusername" title="Permanent link">&para;</a></h3>
+<p>Uses configurable <code>_profile_strategies</code> list. Default: Web API → GraphQL → HTML Parse.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_profile_chain</span><span class="p">(</span><span class="s2">&quot;cristiano&quot;</span><span class="p">)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;_strategy&quot;</span><span class="p">])</span>  <span class="c1"># &quot;web_api&quot;, &quot;graphql&quot;, or &quot;html_parse&quot;</span>
+</span></code></pre></div>
+<hr />
 <h2 id="strategy-methods">Strategy Methods<a class="headerlink" href="#strategy-methods" title="Permanent link">&para;</a></h2>
 <h3 id="get_profile_htmlusername">get_profile_html(username)<a class="headerlink" href="#get_profile_htmlusername" title="Permanent link">&para;</a></h3>
 <p>Parse profile from HTML page (SharedData + meta tags).</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">profile</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_profile_html</span><span class="p">(</span><span class="s2">&quot;cristiano&quot;</span><span class="p">)</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># Returns parsed profile dict or None</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">profile</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_profile_html</span><span class="p">(</span><span class="s2">&quot;cristiano&quot;</span><span class="p">)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># Returns parsed profile dict or None</span>
 </span></code></pre></div>
 <h3 id="get_embed_datashortcode">get_embed_data(shortcode)<a class="headerlink" href="#get_embed_datashortcode" title="Permanent link">&para;</a></h3>
 <p>Get post data from embed endpoint.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_embed_data</span><span class="p">(</span><span class="s2">&quot;ABC123&quot;</span><span class="p">)</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># Returns embed media dict or None</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_embed_data</span><span class="p">(</span><span class="s2">&quot;ABC123&quot;</span><span class="p">)</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># Returns embed media dict or None</span>
 </span></code></pre></div>
 <h3 id="get_graphql_publicquery_hash-variables">get_graphql_public(query_hash, variables)<a class="headerlink" href="#get_graphql_publicquery_hash-variables" title="Permanent link">&para;</a></h3>
 <p>Make public GraphQL query.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_graphql_public</span><span class="p">(</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">query_hash</span><span class="o">=</span><span class="s2">&quot;d4d88dc1500312af6f937f7b804c68c3&quot;</span><span class="p">,</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">variables</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="s2">&quot;173560420&quot;</span><span class="p">,</span> <span class="s2">&quot;first&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_graphql_public</span><span class="p">(</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">query_hash</span><span class="o">=</span><span class="s2">&quot;d4d88dc1500312af6f937f7b804c68c3&quot;</span><span class="p">,</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">variables</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="s2">&quot;173560420&quot;</span><span class="p">,</span> <span class="s2">&quot;first&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="get_web_apipath-paramsnone">get_web_api(path, params=None)<a class="headerlink" href="#get_web_apipath-paramsnone" title="Permanent link">&para;</a></h3>
-<p>Make web API request to <code>i.instagram.com/api/v1/</code>.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_web_api</span><span class="p">(</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="s2">&quot;/users/web_profile_info/&quot;</span><span class="p">,</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;cristiano&quot;</span><span class="p">}</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">)</span>
+<p>Make web API request to <code>www.instagram.com/api/v1/</code>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_web_api</span><span class="p">(</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="s2">&quot;/users/web_profile_info/&quot;</span><span class="p">,</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;cristiano&quot;</span><span class="p">}</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="get_mobile_apipath-paramsnone">get_mobile_api(path, params=None)<a class="headerlink" href="#get_mobile_apipath-paramsnone" title="Permanent link">&para;</a></h3>
 <p>Make mobile API request to <code>i.instagram.com/api/v1/</code>.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_mobile_api</span><span class="p">(</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="s2">&quot;/feed/user/173560420/&quot;</span><span class="p">,</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_mobile_api</span><span class="p">(</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="s2">&quot;/feed/user/173560420/&quot;</span><span class="p">,</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="p">)</span>
 </span></code></pre></div>
 <hr />
 <h2 id="endpoint-methods">Endpoint Methods<a class="headerlink" href="#endpoint-methods" title="Permanent link">&para;</a></h2>
 <h3 id="get_web_profileusername">get_web_profile(username)<a class="headerlink" href="#get_web_profileusername" title="Permanent link">&para;</a></h3>
-<p>Get profile via web API strategy.</p>
-<p><strong>Returns:</strong> <code>(profile_dict, posts_list)</code> or <code>(None, [])</code></p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">profile</span><span class="p">,</span> <span class="n">posts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_web_profile</span><span class="p">(</span><span class="s2">&quot;cristiano&quot;</span><span class="p">)</span>
+<p>Get raw profile via web API strategy.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">profile</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_web_profile</span><span class="p">(</span><span class="s2">&quot;cristiano&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="_get_web_profile_parsedusername">_get_web_profile_parsed(username)<a class="headerlink" href="#_get_web_profile_parsedusername" title="Permanent link">&para;</a></h3>
+<p>Get profile via web API and parse into <strong>standardized format</strong> (20+ fields).
+Returns the richest data — bio_links, category, business_email, external_url.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">profile</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">_get_web_profile_parsed</span><span class="p">(</span><span class="s2">&quot;cristiano&quot;</span><span class="p">)</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># Same format as get_profile_chain but always uses web_api strategy</span>
 </span></code></pre></div>
 <h3 id="get_user_info_mobileuser_id">get_user_info_mobile(user_id)<a class="headerlink" href="#get_user_info_mobileuser_id" title="Permanent link">&para;</a></h3>
 <p>Get user info via mobile API.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">info</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_user_info_mobile</span><span class="p">(</span><span class="mi">173560420</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">info</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_user_info_mobile</span><span class="p">(</span><span class="mi">173560420</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="search_webquery">search_web(query)<a class="headerlink" href="#search_webquery" title="Permanent link">&para;</a></h3>
 <p>Search via web API.</p>
 <p><strong>Returns:</strong></p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="s2">&quot;users&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;follower_count&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">}],</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="s2">&quot;hashtags&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;media_count&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">}],</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="s2">&quot;places&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="o">...</span><span class="p">}}],</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">}</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="s2">&quot;users&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;follower_count&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">}],</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="s2">&quot;hashtags&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;media_count&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">}],</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="s2">&quot;places&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="o">...</span><span class="p">}}],</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="get_user_reelsuser_id-max_idnone">get_user_reels(user_id, max_id=None)<a class="headerlink" href="#get_user_reelsuser_id-max_idnone" title="Permanent link">&para;</a></h3>
 <p>Get reels via mobile API.</p>
-<p><strong>Returns:</strong></p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;play_count&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;is_reel&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="o">...</span><span class="p">}],</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="s2">&quot;more_available&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="s2">&quot;next_max_id&quot;</span><span class="p">:</span> <span class="s2">&quot;cursor...&quot;</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="p">}</span>
-</span></code></pre></div>
 <h3 id="get_user_feed_mobileuser_id-count12-max_idnone">get_user_feed_mobile(user_id, count=12, max_id=None)<a class="headerlink" href="#get_user_feed_mobileuser_id-count12-max_idnone" title="Permanent link">&para;</a></h3>
 <p>Get user feed via mobile API.</p>
-<p><strong>Returns:</strong></p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;likes&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;shortcode&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="o">...</span><span class="p">}],</span>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="s2">&quot;more_available&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="s2">&quot;next_max_id&quot;</span><span class="p">:</span> <span class="s2">&quot;cursor...&quot;</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="p">}</span>
-</span></code></pre></div>
 <h3 id="get_media_info_mobilemedia_id">get_media_info_mobile(media_id)<a class="headerlink" href="#get_media_info_mobilemedia_id" title="Permanent link">&para;</a></h3>
 <p>Get single media details.</p>
 <h3 id="get_hashtag_sectionshashtag-max_idnone">get_hashtag_sections(hashtag, max_id=None)<a class="headerlink" href="#get_hashtag_sectionshashtag-max_idnone" title="Permanent link">&para;</a></h3>
@@ -3287,6 +3376,11 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>_get_web_profile_parsed(user)</code></td>
+<td>username str</td>
+<td>Standardized profile (richest)</td>
+</tr>
 <tr>
 <td><code>_parse_graphql_user(user)</code></td>
 <td>GraphQL user dict</td>
